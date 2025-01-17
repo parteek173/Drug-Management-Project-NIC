@@ -1,17 +1,10 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="DrugEntry.aspx.cs" Inherits="FrontEnd_DrugEntry" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.Master" CodeFile="DrugEntry.aspx.cs" Inherits="FrontEnd_DrugEntry" %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head runat="server">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Form</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <form id="form1" runat="server" class="min-h-screen flex items-center justify-center">
-        <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+
+
+       <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
             <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Contact Us</h1>
             
             <!-- Name Field -->
@@ -48,6 +41,5 @@
                 </button>
             </div>
         </div>
-    </form>
-</body>
-</html>
+
+</asp:Content>
