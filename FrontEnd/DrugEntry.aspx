@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
 
-
+    <div class="items-center">
        <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
             <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Contact Us</h1>
             
@@ -41,5 +41,6 @@
                 </button>
             </div>
         </div>
+      </div>
 
 </asp:Content>
