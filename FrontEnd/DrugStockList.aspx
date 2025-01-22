@@ -44,5 +44,31 @@
      });
  </script>
 
+     <style>
+    /* Adjust the overall width of the DataTables length menu select box */
+    .dataTables_length select {
+        width: auto; /* Allow the width to adjust based on content */
+        min-width: 7rem; /* Set a minimum width for the dropdown */
+        padding-right: 2rem; /* Add space for the dropdown arrow */
+        appearance: none; /* Remove native dropdown styling */
+        border: 1px solid #cbd5e1; /* Tailwind gray-300 */
+        border-radius: 0.375rem; /* Tailwind rounded-md */
+        background-color: #ffffff; /* White background */
+        color: #334155; /* Tailwind slate-700 for text */
+        font-size: 0.875rem; /* Tailwind text-sm */
+        line-height: 1.25rem; /* Tailwind leading-5 */
+        background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns%3d%22http://www.w3.org/2000/svg%22 width%3d%2224%22 height%3d%2224%22 viewBox%3d%220 0 24 24%22 fill%3d%22none%22 stroke%3d%22%234A5568%22 stroke-width%3d%222%22 stroke-linecap%3d%22round%22 stroke-linejoin%3d%22round%22%3e%3cpolyline points%3d%226 9 12 15 18 9%22/%3e%3c/svg%3e');
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center; /* Position dropdown arrow */
+        background-size: 1rem;
+        cursor: pointer; /* Pointer cursor for dropdown */
+    }
+
+    .dataTables_length select:focus {
+        outline: 2px solid #2563eb; /* Tailwind blue-600 */
+        outline-offset: 2px;
+    }
+</style>
+
 </asp:Content>
 
