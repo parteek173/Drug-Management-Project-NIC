@@ -34,9 +34,15 @@
                             <li>
                                 <a href="Dashboard.aspx">Dashboard</a>
                             </li>
+
+                             <li>
+                                 <a href="StockEntryForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock Entry Form</a>
+                             </li>
+
                             <li>
-                                <a href="StockEntryForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock Entry Form</a>
+                                <a href="DrugEntry.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Patient Entry Form</a>
                             </li>
+                           
                             <li class="relative group">
                                 <button id="dropdownNavbarLink" type="button" data-dropdown-toggle="dropdownNavbar" class="flex items-center justify-between w-full py-2 px-3 text-white hover:text-gray-300 md:p-0">
                                     Reports
@@ -56,9 +62,8 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li>
-                                <a href="DrugEntry.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Patient Entry Form</a>
-                            </li>
+
+                            
                             <li>
                                 <asp:LinkButton ID="btnLogout" ValidationGroup="logout" runat="server" CssClass="block py-2 px-3 text-white hover:text-gray-300 md:p-0" OnClick="btnLogout_Click">Logout</asp:LinkButton>
                             </li>
