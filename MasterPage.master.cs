@@ -9,6 +9,16 @@ public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["IsLoggedIn"] == null || !(bool)Session["IsLoggedIn"])
+        {
+            Response.Redirect("~/FrontEnd/Default.aspx");
 
+        }
+    }
+
+    protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Response.Redirect("~/FrontEnd/Default.aspx");
     }
 }

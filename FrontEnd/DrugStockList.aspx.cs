@@ -25,7 +25,7 @@ public partial class DrugStockList : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName FROM [Narcotics Drugs Management].[dbo].[StockEntryForm]";
+            string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName FROM [StockEntryForm]";
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataTable dt = new DataTable();
             da.Fill(dt);

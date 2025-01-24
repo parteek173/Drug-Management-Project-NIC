@@ -5,8 +5,16 @@
      <!-- Main Content -->
   <main class="py-10">
     <div class="container mx-auto px-4">
+
+        <!-- Content Section -->
+      <section>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome to Narcotics Management</h2>
+        <p class="text-gray-600">Manage your drug inventory efficiently with this responsive application.</p>
+      </section>
+
+
       <!-- Dashboard Section -->
-      <section class="mb-10">
+      <section class="mb-10 mt-8">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Card 1 -->
@@ -39,11 +47,7 @@
         </div>
       </section>
 
-      <!-- Content Section -->
-      <section>
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome to PharmaStockPro</h2>
-        <p class="text-gray-600">Manage your drug inventory efficiently with this responsive application.</p>
-      </section>
+      
     </div>
   </main>
 
