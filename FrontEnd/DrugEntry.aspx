@@ -42,6 +42,41 @@
                     <asp:RequiredFieldValidator ID="rfvPatientID" runat="server" ControlToValidate="txtPatientID" ErrorMessage="Patient ID is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
+                <div>
+                    <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
+                   <asp:DropDownList ID="ddlDrugName" runat="server" AutoPostBack="true" 
+                        CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        OnSelectedIndexChanged="ddlDrugName_SelectedIndexChanged">
+                        <asp:ListItem Text="Select Drug Name" Value="" />
+                    </asp:DropDownList>
+                    <asp:RequiredFieldValidator ID="rfvDrugName" runat="server" ControlToValidate="ddlDrugName" InitialValue="" 
+                        ErrorMessage="Drug name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                </div>
+
+                <div>
+                    <label for="txtCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                    <asp:TextBox ID="txtCategory" runat="server" ReadOnly="true" 
+                        CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></asp:TextBox>
+                </div>
+
+                <div>
+                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Total Quantity</label>
+                    <asp:TextBox ID="txtQuantity" runat="server" ReadOnly="true" 
+                        CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></asp:TextBox>
+                </div>
+
+                 <div>
+                    <label for="txtQuantitySold" class="block text-sm font-medium text-gray-600">Quantity Sold</label>
+                    <asp:TextBox ID="txtQuantitySold" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                 Placeholder="Enter quantity sold" />
+                    <asp:RequiredFieldValidator ID="rfvQuantitySold" runat="server" ControlToValidate="txtQuantitySold" 
+                                                ErrorMessage="Quantity sold is required" CssClass="text-red-500" />
+                    <asp:RangeValidator ID="rvQuantitySold" runat="server" ControlToValidate="txtQuantitySold" 
+                                        ErrorMessage="Quantity sold must be a positive number" CssClass="text-red-500" 
+                                        MinimumValue="1" MaximumValue="2147483647" Type="Integer" />
+                </div>
+
+
                 <!-- Prescribed By Field -->
                 <div>
                     <label for="txtPrescribedBy" class="block text-sm font-medium text-gray-600">Prescribed By</label>
