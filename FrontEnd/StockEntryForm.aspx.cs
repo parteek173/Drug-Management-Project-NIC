@@ -12,67 +12,84 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
     // Event handler for Submit button
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        // Retrieve connection string from web.config
         string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString();
 
-        // Retrieve values from form fields
-        string drugName = txtDrugName.Text.Trim();
-        string quantity = txtQuantity.Text.Trim();
+        string drugName = txtDrugName.SelectedItem.Value;
+        int quantity = int.Parse(txtQuantity.Text.Trim());
         string BatchNumber = batchNumber.Text.Trim();
         string SupplierName = supplierName.Text.Trim();
         string date = txtDate.Text.Trim();
         string category = ddlCategory.SelectedValue;
 
-        // SQL query to insert data into StockEntryForm table
-        string query = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName) " +
-                       "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @SupplierName)";
-
-        // Create and open the connection to the database
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
             try
             {
                 conn.Open();
 
-                // Create the command and set parameters
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                // Debugging: Check values before inserting/updating
+                //Response.Write("<script>alert('Debugging: DrugName=" + drugName + ", Category=" + category + ", BatchNumber=" + BatchNumber + ", SupplierName=" + SupplierName + "');</script>");
+
+                if (string.IsNullOrEmpty(drugName) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(BatchNumber) || string.IsNullOrEmpty(SupplierName))
                 {
-                    cmd.Parameters.AddWithValue("@DrugName", drugName);
-                    cmd.Parameters.AddWithValue("@Quantity", quantity);
-                    cmd.Parameters.AddWithValue("@Date", date);
-                    cmd.Parameters.AddWithValue("@Category", category);
-                    cmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
-                    cmd.Parameters.AddWithValue("@SupplierName", SupplierName);
+                    Response.Write("<script>alert('Error: Required fields are missing.');</script>");
+                    return;
+                }
 
-                    // Execute the query
-                    int result = cmd.ExecuteNonQuery();
+                // Check if the drug with the same name and category exists
+                string checkQuery = "SELECT Quantity FROM StockEntryForm WHERE DrugName = @DrugName AND Category = @Category";
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@DrugName", drugName);
+                    checkCmd.Parameters.AddWithValue("@Category", category);
+                    object existingQuantity = checkCmd.ExecuteScalar();
 
-                    // Check if the record was inserted successfully
-                    if (result > 0)
+                    if (existingQuantity != null) // Update quantity if drug exists with same category
                     {
-                        // Success message
-                        Response.Write("<script>alert('Record inserted successfully!');</script>");
-                        resetForm();
+                        int updatedQuantity = quantity + Convert.ToInt32(existingQuantity);
+                        string updateQuery = "UPDATE StockEntryForm SET Quantity = @UpdatedQuantity WHERE DrugName = @DrugName AND Category = @Category";
+
+                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                        {
+                            updateCmd.Parameters.AddWithValue("@UpdatedQuantity", updatedQuantity);
+                            updateCmd.Parameters.AddWithValue("@DrugName", drugName);
+                            updateCmd.Parameters.AddWithValue("@Category", category);
+                            updateCmd.ExecuteNonQuery();
+                        }
                     }
-                    else
+                    else // Insert new drug entry
                     {
-                        // Handle failure
-                        Response.Write("<script>alert('An error occurred while inserting the record.');</script>");
+                        string insertQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName) " +
+                                             "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @SupplierName)";
+
+                        using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                        {
+                            insertCmd.Parameters.AddWithValue("@DrugName", drugName);
+                            insertCmd.Parameters.AddWithValue("@Quantity", quantity);
+                            insertCmd.Parameters.AddWithValue("@Date", date);
+                            insertCmd.Parameters.AddWithValue("@Category", category);
+                            insertCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
+                            insertCmd.Parameters.AddWithValue("@SupplierName", SupplierName);
+                            insertCmd.ExecuteNonQuery();
+                        }
                     }
                 }
+
+                Response.Write("<script>alert('Record processed successfully!');</script>");
+                resetForm();
             }
             catch (Exception ex)
             {
-                // Log the exception or handle the error
                 Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
             }
         }
     }
 
+
     // Optional reset function
     protected void resetForm()
     {
-        txtDrugName.Text = "";
+        txtDrugName.SelectedIndex = 0;
         txtQuantity.Text = "";
         txtDate.Text = "";
         batchNumber.Text = "";

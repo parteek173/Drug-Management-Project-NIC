@@ -12,7 +12,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         if (!IsPostBack)
         {
             PopulateDrugNames();
-            txtCategory.Text = string.Empty;
+            ddlCategory.Items.Clear();
             txtQuantity.Text = string.Empty;
         }
     }
@@ -51,7 +51,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         }
         else
         {
-            txtCategory.Text = string.Empty;
+            ddlCategory.Items.Clear();
             txtQuantity.Text = string.Empty;
         }
     }
@@ -69,14 +69,28 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                 {
                     con.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
+
+                    ddlCategory.Items.Clear(); // Clear previous entries
+                    txtQuantity.Text = string.Empty; // Clear quantity field
+
+                    if (reader.HasRows)
                     {
-                        txtCategory.Text = reader["Category"].ToString();
-                        txtQuantity.Text = reader["Quantity"].ToString();
+                        while (reader.Read())
+                        {
+                            // Add each category to the dropdown list
+                            ddlCategory.Items.Add(new ListItem(reader["Category"].ToString(), reader["Quantity"].ToString()));
+                        }
+
+                        // Select the first category by default and update quantity
+                        if (ddlCategory.Items.Count > 0)
+                        {
+                            ddlCategory.SelectedIndex = 0;
+                            txtQuantity.Text = ddlCategory.SelectedItem.Value; // Set quantity based on first category
+                        }
                     }
                     else
                     {
-                        txtCategory.Text = string.Empty;
+                        ddlCategory.Items.Clear();
                         txtQuantity.Text = string.Empty;
                     }
                 }
@@ -87,6 +101,13 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
             }
         }
     }
+
+    protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        // Update quantity based on selected category
+        txtQuantity.Text = ddlCategory.SelectedItem.Value;
+    }
+
 
     // Event handler for Submit button
     //protected void btnSubmit_Click(object sender, EventArgs e)
@@ -150,7 +171,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
     //    }
     //}
 
-            protected void btnSubmit_Click(object sender, EventArgs e)
+    protected void btnSubmit_Click(object sender, EventArgs e)
             {
                 // Connection string (adjust according to your setup)
                 string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString();
@@ -255,7 +276,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         txtDoctorName.Text = "";
         txtDate.Text = "";
         ddlDrugName.SelectedIndex = 0;
-        txtCategory.Text = "";        
+        ddlCategory.SelectedIndex = 0;        
         txtQuantity.Text = "";       
         txtQuantitySold.Text = "";
     }
