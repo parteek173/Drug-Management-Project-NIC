@@ -21,6 +21,12 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         string date = txtDate.Text.Trim();
         string category = ddlCategory.SelectedValue;
 
+        string chemistID = string.Empty;
+        if (Session["UserID"] != null)
+        {
+            chemistID = Session["UserID"].ToString();
+        }
+
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
             try
@@ -59,8 +65,8 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                     }
                     else // Insert new drug entry
                     {
-                        string insertQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName) " +
-                                             "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @SupplierName)";
+                        string insertQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName, ChemistID) " +
+                                             "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @SupplierName, @ChemistID)";
 
                         using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
                         {
@@ -70,6 +76,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                             insertCmd.Parameters.AddWithValue("@Category", category);
                             insertCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
                             insertCmd.Parameters.AddWithValue("@SupplierName", SupplierName);
+                            insertCmd.Parameters.AddWithValue("@ChemistID", chemistID);
                             insertCmd.ExecuteNonQuery();
                         }
                     }
