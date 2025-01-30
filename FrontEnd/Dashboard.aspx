@@ -8,7 +8,8 @@
 
         <!-- Content Section -->
       <section>
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome to Narcotics Management</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6"><asp:Label ID="lblWelcomeUser" runat="server"></asp:Label>
+            to Narcotics Management</h2>
         <p class="text-gray-600">Manage your drug inventory efficiently with this responsive application.</p>
       </section>
 
