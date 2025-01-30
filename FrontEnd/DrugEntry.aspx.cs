@@ -186,10 +186,16 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                 string dateOfSale = txtDate.Text.Trim();
                 string drugName = ddlDrugName.SelectedValue; // Get the selected drug name
                 int quantitySold = int.Parse(txtQuantitySold.Text.Trim()); // Get the quantity sold
+                string chemistID = string.Empty;
+                if (Session["UserID"] != null)
+                {
+                    chemistID = Session["UserID"].ToString();
+                }
 
-                // SQL query to insert data into PatientEntryForm table
-                string query = "INSERT INTO PatientEntryForm (PatientName, MobileNumber, PatientID, PrescribedBy, HospitalName, DoctorName, DateOFSale, DrugName, QuantitySold) " +
-                               "VALUES (@PatientName, @MobileNumber, @PatientID, @PrescribedBy, @HospitalName, @DoctorName, @DateOFSale, @DrugName, @QuantitySold)";
+
+        // SQL query to insert data into PatientEntryForm table
+        string query = "INSERT INTO PatientEntryForm (PatientName, MobileNumber, PatientID, PrescribedBy, HospitalName, DoctorName, DateOFSale, DrugName, QuantitySold, ChemistID) " +
+                               "VALUES (@PatientName, @MobileNumber, @PatientID, @PrescribedBy, @HospitalName, @DoctorName, @DateOFSale, @DrugName, @QuantitySold, @ChemistID)";
 
                 // Create and open the connection to the database
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -210,9 +216,10 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                             cmd.Parameters.AddWithValue("@DateOFSale", dateOfSale);
                             cmd.Parameters.AddWithValue("@DrugName", drugName);
                             cmd.Parameters.AddWithValue("@QuantitySold", quantitySold);
+                            cmd.Parameters.AddWithValue("@ChemistID", chemistID);
 
-                            // Execute the query
-                            int result = cmd.ExecuteNonQuery();
+                    // Execute the query
+                    int result = cmd.ExecuteNonQuery();
 
                             // Check if the record was inserted successfully
                             if (result > 0)
