@@ -25,13 +25,26 @@ public partial class DrugStockList : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName FROM [StockEntryForm]";
-            SqlDataAdapter da = new SqlDataAdapter(query, con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            string chemistID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                chemistID = Session["UserID"].ToString();
+            }
 
-            stockGridView.DataSource = dt;
-            stockGridView.DataBind();
+            // Query with WHERE clause to filter by ChemistID
+            string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName FROM [StockEntryForm] WHERE ChemistID = @ChemistID";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                stockGridView.DataSource = dt;
+                stockGridView.DataBind();
+            }
         }
     }
 }

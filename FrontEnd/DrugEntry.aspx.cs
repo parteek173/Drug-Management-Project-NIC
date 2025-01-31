@@ -15,6 +15,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
             PopulateDrugNames();
             ddlCategory.Items.Clear();
             txtQuantity.Text = string.Empty;
+            txtDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
         }
     }
 
