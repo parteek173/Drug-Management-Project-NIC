@@ -12,6 +12,7 @@
                 <Columns>
                     <asp:BoundField DataField="PatientName" HeaderText="Patient Name" />
                     <asp:BoundField DataField="DrugName" HeaderText="Drug Name" />
+                    <asp:BoundField DataField="Category" HeaderText="Category" />
                     <asp:BoundField DataField="QuantitySold" HeaderText="Quantity Sold" />
                     <asp:BoundField DataField="MobileNumber" HeaderText="Mobile Number" />
                     <asp:BoundField DataField="DateOFSale" HeaderText="Date of Sale" DataFormatString="{0:MM/dd/yyyy}" />
@@ -36,6 +37,7 @@
                     columns: [
                         { title: "Patient Name" },
                         { title: "Drug Name" },
+                        { title: "Category" },
                         { title: "Quantity Sold" },
                         { title: "Mobile Number" },
                         { title: "Date of Sale" },

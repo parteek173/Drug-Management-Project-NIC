@@ -44,18 +44,16 @@
 
                 <div>
                     <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
-                   <asp:DropDownList ID="ddlDrugName" runat="server" AutoPostBack="true" 
+                    <asp:DropDownList ID="ddlDrugName" runat="server" AutoPostBack="true" 
                         CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         OnSelectedIndexChanged="ddlDrugName_SelectedIndexChanged">
-                        <asp:ListItem Text="Select Drug Name" Value="" />
                     </asp:DropDownList>
-                    <asp:RequiredFieldValidator ID="rfvDrugName" runat="server" ControlToValidate="ddlDrugName" InitialValue="" 
-                        ErrorMessage="Drug name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
                 <div>
-                    <label for="txtCategory" class="block text-sm font-medium text-gray-600">Category</label>
-                    <asp:DropDownList ID="ddlCategory" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
+                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                    <asp:DropDownList ID="ddlCategory" runat="server" AutoPostBack="true" 
+                        OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
                         CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </asp:DropDownList>
                 </div>
