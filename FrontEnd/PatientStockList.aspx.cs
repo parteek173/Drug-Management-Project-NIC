@@ -23,13 +23,33 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT PatientName, MobileNumber, PatientID, PrescribedBy, Category, HospitalName, DoctorName, DateOFSale, QuantitySold, DrugName FROM [Narcotics Drugs Management].[dbo].[PatientEntryForm]";
-            SqlDataAdapter da = new SqlDataAdapter(query, con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            string chemistID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                chemistID = Session["UserID"].ToString();
+            }
 
-            patientGridView.DataSource = dt;
-            patientGridView.DataBind();
+            //string query = "SELECT PatientName, MobileNumber, PatientID, PrescribedBy, Category, HospitalName, DoctorName, DateOFSale, QuantitySold, DrugName FROM [Narcotics Drugs Management].[dbo].[PatientEntryForm]";
+            //SqlDataAdapter da = new SqlDataAdapter(query, con);
+            //DataTable dt = new DataTable();
+            //da.Fill(dt);
+
+            //patientGridView.DataSource = dt;
+            //patientGridView.DataBind();
+
+            string query = "SELECT PatientName, MobileNumber, PatientID, PrescribedBy, Category, HospitalName, DoctorName, DateOFSale, QuantitySold, DrugName FROM [Narcotics Drugs Management].[dbo].[PatientEntryForm] WHERE ChemistID = @ChemistID";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                patientGridView.DataSource = dt;
+                patientGridView.DataBind();
+            }
         }
     }
 }
