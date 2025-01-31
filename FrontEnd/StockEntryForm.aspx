@@ -15,11 +15,6 @@
                 <div>
                     <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
                     <asp:DropDownList ID="txtDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <asp:ListItem Text="-- Select Drug --" Value="" />
-                        <asp:ListItem Text="Amperazole" Value="Amperazole" />
-                        <asp:ListItem Text="Torex" Value="Torex" />
-                        <asp:ListItem Text="Vitamin D" Value="Vitamin D" />
-                        <asp:ListItem Text="PCM" Value="PCM" />
                     </asp:DropDownList>
     
                     <asp:RequiredFieldValidator ID="rfvDrugName" runat="server" ControlToValidate="txtDrugName" 

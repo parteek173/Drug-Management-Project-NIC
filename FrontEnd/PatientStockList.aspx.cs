@@ -23,7 +23,7 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT PatientName, MobileNumber, PatientID, PrescribedBy, HospitalName, DoctorName, DateOFSale, QuantitySold, DrugName FROM [Narcotics Drugs Management].[dbo].[PatientEntryForm]";
+            string query = "SELECT PatientName, MobileNumber, PatientID, PrescribedBy, Category, HospitalName, DoctorName, DateOFSale, QuantitySold, DrugName FROM [Narcotics Drugs Management].[dbo].[PatientEntryForm]";
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataTable dt = new DataTable();
             da.Fill(dt);
