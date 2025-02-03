@@ -8,6 +8,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Newtonsoft.Json;
 using System.Web.Services;
+using System.IO;
+using System.Configuration;
 
 public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 {
@@ -17,8 +19,61 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            
+            if (Request.QueryString["export"] == "1")
+            {
+                ExportToExcel();
+            }
         }
+    }
+
+    private void ExportToExcel()
+    {
+        DataTable dt = GetExportData(); // Fetch data for export
+        if (dt == null || dt.Rows.Count == 0)
+        {
+            Response.Write("<script>alert('No data available to export!');</script>");
+            return;
+        }
+
+        Response.Clear();
+        Response.Buffer = true;
+        Response.AddHeader("content-disposition", "attachment;filename=ExportedData.xls");
+        Response.Charset = "";
+        Response.ContentType = "application/vnd.ms-excel";
+
+        using (StringWriter sw = new StringWriter())
+        {
+            using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+            {
+                GridView gv = new GridView();
+                gv.DataSource = dt;
+                gv.DataBind();
+                gv.RenderControl(hw);
+
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+            }
+        }
+    }
+
+    private DataTable GetExportData()
+    {
+        DataTable dt = new DataTable();
+        string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        string query = "SELECT * FROM PatientEntryForm"; // Modify for PatientStockList as needed
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                {
+                    con.Open();
+                    sda.Fill(dt);
+                }
+            }
+        }
+        return dt;
     }
 
     [WebMethod]

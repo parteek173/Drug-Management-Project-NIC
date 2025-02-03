@@ -8,8 +8,21 @@
         <div class="flex justify-center space-x-4 mb-4">
             <input type="date" id="fromDate" class="border p-2 rounded" />
             <input type="date" id="toDate" class="border p-2 rounded" />
-            <a href="javascript:void(0)" id="btnFilter" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</a>
-            <a href="javascript:void(0)" id="btnReset" class="bg-gray-500 text-white px-4 py-2 rounded">Reset</a>
+
+            <a href="javascript:void(0)" id="btnFilter" 
+               class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
+               🔍 Filter
+            </a>
+
+            <a href="javascript:void(0)" id="btnReset" 
+               class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
+               🔄 Reset
+            </a>
+
+            <a href="javascript:void(0);" onclick="exportData()" 
+               class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
+               📥 Export Data
+            </a>
         </div>
 
         <!-- Table for displaying stock data -->
@@ -95,6 +108,11 @@
                 table.ajax.url("DrugStockList.aspx/GetStockData").load(); // Load all data
             });
         });
+
+        function exportData() {
+            window.location.href = 'DrugStockList.aspx?export=1';
+        }
+
     </script>
 
 
