@@ -62,6 +62,7 @@
                 <div>
                     <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Total Quantity</label>
                     <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
+                    <span id="TotalQuantityError" class="text-red-500" style="display: none;">Drug is currently out of stock!</span>
                 </div>
 
                  <div>
@@ -114,6 +115,14 @@
             var totalQty = parseInt(document.getElementById('<%= txtQuantity.ClientID %>').value) || 0;
             var soldQty = parseInt(document.getElementById('<%= txtQuantitySold.ClientID %>').value) || 0;
             var errorMsg = document.getElementById('quantityError');
+            var TotalQuantityError = document.getElementById('TotalQuantityError');
+
+
+            
+            if (totalQty == 0) {
+                TotalQuantityError.style.display = 'block';  
+                return false;
+            }
 
             if (soldQty > totalQty) {
                 errorMsg.style.display = 'block';  // Show error message

@@ -61,6 +61,16 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         string category = ddlCategory.SelectedValue;
         string currentDate = DateTime.Today.ToString("yyyy-MM-dd");
         string chemistID = string.Empty;
+
+        if(quantity==0)
+        {
+            Response.Write("<script>alert('Stock quantity shuld be greater than zero!');</script>");
+            return;
+        }
+
+        
+
+
         if (Session["UserID"] != null)
         {
             chemistID = Session["UserID"].ToString();
