@@ -5,11 +5,24 @@
         <h1 class="text-3xl font-bold text-center mb-6">Patient Sale Drugs List</h1>
 
         <!-- Date Filters -->
-        <div class="flex justify-center space-x-4 mb-4">
+       <div class="flex justify-center space-x-4 mb-4">
             <input type="date" id="fromDate" class="border p-2 rounded" />
             <input type="date" id="toDate" class="border p-2 rounded" />
-            <a href="javascript:void(0)" id="btnFilter" class="bg-blue-500 text-white px-4 py-2 rounded">Filter</a>
-            <a href="javascript:void(0)" id="btnReset" class="bg-gray-500 text-white px-4 py-2 rounded">Reset</a>
+
+            <a href="javascript:void(0)" id="btnFilter" 
+               class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
+               🔍 Filter
+            </a>
+
+            <a href="javascript:void(0)" id="btnReset" 
+               class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
+               🔄 Reset
+            </a>
+
+            <a href="javascript:void(0);" onclick="exportData()" 
+               class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
+               📥 Export Data
+            </a>
         </div>
 
         <!-- Table for displaying patient stock data -->
@@ -95,6 +108,11 @@
                 table.ajax.url("PatientStockList.aspx/GetPatientStockData").load(); // Load all data again
             });
         });
+
+        function exportData() {
+            window.location.href = 'PatientStockList.aspx?export=1';
+        }
+
     </script>
 
      <style>

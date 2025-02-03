@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Web;
 using System.Web.Services;
+using System.Web.UI.WebControls;
+using System.Web.UI;
 using Newtonsoft.Json;
+using System.Configuration;
 
 public partial class DrugStockList : System.Web.UI.Page
 {
@@ -11,7 +15,65 @@ public partial class DrugStockList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!IsPostBack)
+        {
+            if (Request.QueryString["export"] == "1")
+            {
+                ExportToExcel();
+            }
+        }
     }
+
+    private void ExportToExcel()
+    {
+        DataTable dt = GetExportData(); // Fetch data for export
+        if (dt == null || dt.Rows.Count == 0)
+        {
+            Response.Write("<script>alert('No data available to export!');</script>");
+            return;
+        }
+
+        Response.Clear();
+        Response.Buffer = true;
+        Response.AddHeader("content-disposition", "attachment;filename=ExportedData.xls");
+        Response.Charset = "";
+        Response.ContentType = "application/vnd.ms-excel";
+
+        using (StringWriter sw = new StringWriter())
+        {
+            using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+            {
+                GridView gv = new GridView();
+                gv.DataSource = dt;
+                gv.DataBind();
+                gv.RenderControl(hw);
+
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+            }
+        }
+    }
+
+    private DataTable GetExportData()
+    {
+        DataTable dt = new DataTable();
+        string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        string query = "SELECT * FROM StockEntryForm"; 
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                {
+                    con.Open();
+                    sda.Fill(dt);
+                }
+            }
+        }
+        return dt;
+    }
+
 
     [WebMethod]
     public static string GetStockData()
