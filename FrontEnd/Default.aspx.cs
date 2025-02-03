@@ -15,6 +15,26 @@ public partial class FrontEnd_Default : System.Web.UI.Page
 
     }
 
+
+    private void CheckUserSession()
+    {
+        if (Session["AdminUserID"] != null)
+        {
+            Response.Redirect("dashboard.aspx");
+
+        }
+        else if (Session["UserID"] != null)
+        {
+            Response.Redirect("ChemistDashboard.aspx");
+
+        }
+        else
+        {
+            // If no session exists, redirect to login page
+            Response.Redirect("~/FrontEnd/Default.aspx");
+        }
+    }
+
     protected void btnLogin_Click(object sender, EventArgs e)
     {
 
@@ -23,7 +43,9 @@ public partial class FrontEnd_Default : System.Web.UI.Page
         if (enteredOTP == GeneratedOTP)
         {
             Session["IsLoggedIn"] = true;
-            Response.Redirect("dashboard.aspx");
+            CheckUserSession();
+
+
         }
         else
         {
@@ -32,6 +54,7 @@ public partial class FrontEnd_Default : System.Web.UI.Page
         }
 
     }
+
 
 
     protected void btnSendOTP_Click(object sender, EventArgs e)
@@ -47,76 +70,52 @@ public partial class FrontEnd_Default : System.Web.UI.Page
 
         using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString))
         {
-            string query = "SELECT UserID FROM Userlogin WHERE MobileNumber = @MobileNumber";
+            string query = "SELECT chemist_id, RoleType FROM chemist_tb WHERE Mobile = @Mobile AND Isactive = '1'";
+
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
+                cmd.Parameters.AddWithValue("@Mobile", mobileNumber);
                 con.Open();
-                object result = cmd.ExecuteScalar();
-                con.Close();
-
-                if (result != null)  // Mobile number exists
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    string userId = result.ToString();  // Get the UserID
-                    Session["UserID"] = userId;  // Store UserID in session
+                    if (reader.Read()) // If user exists
+                    {
+                        string userId = reader["chemist_id"].ToString();
+                        string roleType = reader["RoleType"].ToString();
 
-                    // Generate OTP
-                    GeneratedOTP = GenerateOTP();
-                    Session["OTP"] = GeneratedOTP; // Store OTP in session for validation
+                        if (roleType == "administrator")
+                        {
+                            Session["AdminUserID"] = userId; // Create a different session for admin
+                        }
+                        else
+                        {
+                            Session["UserID"] = userId; // Regular user session
+                        }
 
-                    lblMessage.Text = "Your OTP is: " + GeneratedOTP;
-                    lblMessage.CssClass = "text-green-500 font-semibold";
+                        // Generate OTP
+                        GeneratedOTP = GenerateOTP();
+                        Session["OTP"] = GeneratedOTP; // Store OTP in session for validation
 
-                    // Show OTP input field
-                    MobilePanel.Visible = false;
-                    OTPPanel.Visible = true;
-                }
-                else
-                {
-                    lblMessage.Text = "Mobile number not found.";
-                    lblMessage.CssClass = "text-red-500 font-semibold";
+                        lblMessage.Text = "Your OTP is: " + GeneratedOTP;
+                        lblMessage.CssClass = "text-green-500 font-semibold";
+
+                        // Show OTP input field
+                        MobilePanel.Visible = false;
+                        OTPPanel.Visible = true;
+                    }
+                    else
+                    {
+                        lblMessage.Text = "Mobile number not found.";
+                        lblMessage.CssClass = "text-red-500 font-semibold";
+                    }
                 }
             }
         }
     }
 
-    //protected void btnSendOTP_Click(object sender, EventArgs e)
-    //{
+    
 
-    //    string mobileNumber = txtMobileNumber.Text.Trim();
-    //    // Check if the mobile number exists in the database
-    //    using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString))
-    //    {
-    //        string query = "SELECT COUNT(*) FROM Userlogin WHERE MobileNumber = @MobileNumber";
-    //        using (SqlCommand cmd = new SqlCommand(query, con))
-    //        {
-    //            cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
-    //            con.Open();
-    //            int count = Convert.ToInt32(cmd.ExecuteScalar());
-    //            con.Close();
-
-    //            if (count > 0)
-    //            {
-    //                // Mobile number found - Generate OTP
-    //                GeneratedOTP = GenerateOTP();
-    //                lblMessage.Text = "Your OTP is: " + GeneratedOTP;
-    //                lblMessage.CssClass = "text-green-500 font-semibold";
-
-    //                // Show OTP input field
-    //                MobilePanel.Visible = false;
-    //                OTPPanel.Visible = true;
-    //            }
-    //            else
-    //            {
-    //                // Mobile number not found
-    //                lblMessage.Text = "Mobile number not found.";
-    //                lblMessage.CssClass = "text-red-500 font-semibold";
-    //            }
-    //        }
-    //    }
-
-    //}
-
+ 
 
     private string GenerateOTP()
     {

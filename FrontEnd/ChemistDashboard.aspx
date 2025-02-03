@@ -1,6 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Dashboard.aspx.cs" Inherits="Dashboard" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChemistDashboard.aspx.cs" Inherits="FrontEnd_ChemistDashboard" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+
+
 
      <!-- Main Content -->
   <main class="py-10">
@@ -20,38 +22,31 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Card 1 -->
           <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Drugs</h3>
-            <p class="text-4xl font-bold text-blue-600">
-                <a href="Drugslist.aspx">
-                <asp:Label ID="lblTotalDrugs" runat="server" ></asp:Label>
-                    </a>
-              </p>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Stock Entries</h3>
+            <p class="text-4xl font-bold text-blue-600"><asp:Label ID="lblTotalCount" runat="server" ></asp:Label></p>
             <p class="text-gray-600 mt-2">
-                The Drugs liable to be misused (Schedule H & H1)
+                <%--The Drugs liable to be misused (Schedule H & H1)--%>
 
             </p>
           </div>
 
           <!-- Card 2 -->
           <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Stock</h3>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Patient </h3>
             <p class="text-4xl font-bold text-red-500">
-                <a href="stockList.aspx">
-                <asp:Label ID="lblTotalStock" runat="server"></asp:Label></a>
+                <asp:Label ID="lblTotalPatients" runat="server"></asp:Label>
             </p>
-            <p class="text-gray-600 mt-2">Total stock of the listed chemists</p>
+            <p class="text-gray-600 mt-2">Total Patient listed</p>
           </div>
 
           <!-- Card 3 -->
-          <div class="bg-white p-6 rounded-lg shadow-md">
+        <%--  <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="text-lg font-bold text-gray-800 mb-4">Total Chemists</h3>
             <p class="text-4xl font-bold text-yellow-500">
-                <a href="ChemistList.aspx">
                 <asp:Label ID="lblTotalChemists" runat="server" ></asp:Label>
-                    </a>
             </p>
             <p class="text-gray-600 mt-2">Active Chemists </p>
-          </div>
+          </div>--%>
 
           <!-- Card 4 -->
           <%--<div class="bg-white p-6 rounded-lg shadow-md">
@@ -67,7 +62,6 @@
       
     </div>
   </main>
-
 
 </asp:Content>
 

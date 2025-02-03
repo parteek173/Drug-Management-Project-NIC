@@ -6,7 +6,7 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Narcotics Management - Login with OTP</title>
+  <title><%= System.Configuration.ConfigurationManager.AppSettings["ProjectName"] %> - Login with OTP</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
@@ -14,7 +14,7 @@
   <form id="form1" runat="server" class="w-full max-w-md">
     <div class="bg-white p-8 rounded-lg shadow-lg">
       <!-- Page Header -->
-      <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Narcotics Management</h1>
+      <h1 class="text-3xl font-bold text-center text-gray-800 mb-6"><%= System.Configuration.ConfigurationManager.AppSettings["ProjectName"] %></h1>
       <p class="text-center text-gray-600 mb-8">
         Enter your mobile number to receive an OTP and log in to your account.
       </p>

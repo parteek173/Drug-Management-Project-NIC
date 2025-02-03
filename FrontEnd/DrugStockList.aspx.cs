@@ -21,6 +21,9 @@ public partial class DrugStockList : System.Web.UI.Page
 
     }
 
+
+
+
     private void BindStockData()
     {
         using (SqlConnection con = new SqlConnection(connectionString))
