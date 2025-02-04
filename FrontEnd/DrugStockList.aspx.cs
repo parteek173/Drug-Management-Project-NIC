@@ -59,11 +59,20 @@ public partial class DrugStockList : System.Web.UI.Page
     {
         DataTable dt = new DataTable();
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
-        string query = "SELECT * FROM StockEntryForm"; 
+        string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
+
+        if (string.IsNullOrEmpty(chemistID))
+        {
+            return dt; // Return empty table if no user is logged in
+        }
+
+        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID";
+
         using (SqlConnection con = new SqlConnection(connectionString))
         {
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                 using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     con.Open();

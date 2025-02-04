@@ -61,11 +61,20 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
     {
         DataTable dt = new DataTable();
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
-        string query = "SELECT * FROM PatientEntryForm"; // Modify for PatientStockList as needed
+        string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
+
+        if (string.IsNullOrEmpty(chemistID))
+        {
+            return dt; // Return empty table if no user is logged in
+        }
+
+        string query = "SELECT * FROM PatientEntryForm  WHERE ChemistID = @ChemistID"; 
+
         using (SqlConnection con = new SqlConnection(connectionString))
         {
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                 using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
                 {
                     con.Open();
