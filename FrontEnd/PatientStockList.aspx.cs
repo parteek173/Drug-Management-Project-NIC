@@ -96,8 +96,8 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT PatientName, DrugName, Category, QuantitySold, MobileNumber, 
-                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientID, PrescribedBy, 
-                             HospitalName, DoctorName 
+                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientAddress, PrescribedBy, 
+                             HospitalName, HospitalAddress 
                              FROM [PatientEntryForm] 
                              WHERE ChemistID = @ChemistID";
 
@@ -123,8 +123,8 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT PatientName, DrugName, Category, QuantitySold, MobileNumber, 
-                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientID, PrescribedBy, 
-                             HospitalName, DoctorName 
+                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientAddress, PrescribedBy, 
+                             HospitalName, HospitalAddress 
                              FROM [PatientEntryForm] 
                              WHERE ChemistID = @ChemistID";
 

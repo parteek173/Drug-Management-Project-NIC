@@ -4,7 +4,7 @@
     <!-- Center the content vertically and horizontally using flex -->
     <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl">
-            <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Patient Entry Form</h1>
+            <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Sale Entry Form</h1>
 
             <!-- Validation Summary -->
             <%--<asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="text-red-500 mb-4" />--%>
@@ -37,11 +37,14 @@
                 </div>
 
                 <!-- Patient ID Field -->
-                <div>
-                    <label for="txtPatientID" class="block text-sm font-medium text-gray-600">Patient ID</label>
-                    <asp:TextBox ID="txtPatientID" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter patient ID" autocomplete="off" MaxLength="15"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvPatientID" runat="server" ControlToValidate="txtPatientID" ErrorMessage="Patient ID is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                </div>
+               <div>
+                <label for="txtPatientAddress" class="block text-sm font-medium text-gray-600">Patient Address</label>
+                <asp:TextBox ID="txtPatientAddress" runat="server" TextMode="MultiLine" Rows="3"
+                    CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Enter patient address" autocomplete="off"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="rfvPatientAddress" runat="server" ControlToValidate="txtPatientAddress"
+                    ErrorMessage="Patient address is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+            </div>
 
                 <div>
                     <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
@@ -89,28 +92,44 @@
 
                 <!-- Hospital Name Field -->
                 <div>
-                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital Name</label>
+                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital/Clinic Name</label>
                     <asp:TextBox ID="txtHospitalName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter hospital name" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName" ErrorMessage="Hospital name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
-                <!-- Doctor Name Field -->
+                <!-- Hospital/Clinic Address Field -->
                 <div>
-                    <label for="txtDoctorName" class="block text-sm font-medium text-gray-600">Doctor Name</label>
-                    <asp:TextBox ID="txtDoctorName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter doctor name" autocomplete="off"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvDoctorName" runat="server" ControlToValidate="txtDoctorName" ErrorMessage="Doctor name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                    <label for="txtHospitalAddress" class="block text-sm font-medium text-gray-600">Hospital/Clinic Address</label>
+                    <asp:TextBox ID="txtHospitalAddress" runat="server" TextMode="MultiLine" Rows="3"
+                                 CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                 placeholder="Enter hospital address" autocomplete="off"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvHospitalAddress" runat="server" ControlToValidate="txtHospitalAddress"
+                                                ErrorMessage="Hospital address is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
-            </div>
+    </div>
+
 
             <!-- Buttons -->
             <div class="flex items-center justify-between mt-6">
-                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600" OnClientClick="return validateQuantity();" OnClick="btnSubmit_Click" />
+                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600" OnClientClick="return validateForm();" OnClick="btnSubmit_Click" />
                 <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400" OnClientClick="resetForm(); return false;" />
             </div>
         </div>
     </div>
 
     <script>
+
+        function validateForm() {
+            // Perform ASP.NET validation before allowing submission
+            if (typeof (Page_ClientValidate) == 'function') {
+                if (!Page_ClientValidate()) {
+                    return false; // Stop submission if validation fails
+                }
+            }
+            return validateQuantity(); // Call your quantity check function
+        }
+
+
         function validateQuantity() {
             var totalQty = parseInt(document.getElementById('<%= txtQuantity.ClientID %>').value) || 0;
             var soldQty = parseInt(document.getElementById('<%= txtQuantitySold.ClientID %>').value) || 0;
