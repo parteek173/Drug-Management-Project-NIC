@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
      <div class="container mx-auto p-4 min-h-screen flex flex-col">
-        <h1 class="text-3xl font-bold text-center mb-6">Chemist List</h1>
+        <h1 class="text-3xl font-bold text-center mb-6">Chemist & Pharmacy Listings</h1>
 
         <!-- Table for displaying stock data -->
         <div class="overflow-x-auto flex-grow">
@@ -13,13 +13,22 @@
                 RowStyle-CssClass="text-center px-4 py-2 border-b">
                         <Columns>
 
+                            <asp:TemplateField HeaderText="Sr. No.">
+                                <ItemTemplate>
+                                    <%# Container.DataItemIndex + 1 %>
+                                </ItemTemplate>
+                                <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                            </asp:TemplateField>
+
                         <asp:TemplateField HeaderText="Firm Name">
-                        <ItemTemplate>
-                            <a href="StockList.aspx?ChemistID=<%# Eval("chemist_id") %>" class="text-left px-4 py-2 border-b font-semibold text-gray-700">
-                                <%# Eval("Name_Firm") %>
-                            </a>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+                            <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                            <ItemTemplate>
+                                <a href='StockList.aspx?ChemistID=<%# Eval("chemist_id") %>' class="font-semibold text-gray-700">
+                                    <%# Eval("Name_Firm") %>
+                                </a>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
 
                     <%--<asp:BoundField DataField="Name_Firm" HeaderText="Firm Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />--%>
                     <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
@@ -43,10 +52,11 @@
              lengthMenu: [5, 10, 25, 50,100, 200],
              pageLength: 50,
              columns: [
+                 { title: "Sr.No" },
                  { title: "Name_Firm" },
                  { title: "Address" },
                  { title: "Mobile" },
-                 { title: "CreatedAt" },
+                 { title: "Created Date" },
                  { title: "IsActive" }
              ]
          });

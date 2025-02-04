@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <div class="container mx-auto p-4 min-h-screen flex flex-col">
-        <h1 class="text-3xl font-bold text-center mb-6">Patient Sale Drugs List</h1>
+        <h1 class="text-3xl font-bold text-center mb-6">Sale List</h1>
 
         <!-- Date Filters -->
        <div class="flex justify-center space-x-4 mb-4">
@@ -36,10 +36,10 @@
                         <th>Quantity Sold</th>
                         <th>Mobile Number</th>
                         <th>Date of Sale</th>
-                        <th>Patient ID</th>
+                        <th>Patient Address</th>
                         <th>Prescribed By</th>
                         <th>Hospital Name</th>
-                        <th>Doctor Name</th>
+                        <th>Hospital Address</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -72,10 +72,10 @@
                     { "data": "QuantitySold" },
                     { "data": "MobileNumber" },
                     { "data": "DateOFSale" },
-                    { "data": "PatientID" },
+                    { "data": "PatientAddress" },
                     { "data": "PrescribedBy" },
                     { "data": "HospitalName" },
-                    { "data": "DoctorName" }
+                    { "data": "HospitalAddress" }
                 ]
             });
 

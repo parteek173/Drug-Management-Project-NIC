@@ -33,4 +33,23 @@ public partial class FrontEnd_Drugslist : System.Web.UI.Page
             DrugsGridView.DataBind();
         }
     }
+
+
+    protected void ToggleStatus_Click(object sender, CommandEventArgs e)
+    {
+        int drugID = Convert.ToInt32(e.CommandArgument);
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            con.Open();
+            string query = "UPDATE Drugs SET active = CASE WHEN active = 1 THEN 0 ELSE 1 END WHERE id = @drugID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@drugID", drugID);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        BindDrugs(); // Refresh GridView
+    }
+
+
 }

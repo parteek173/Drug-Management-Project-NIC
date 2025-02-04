@@ -14,9 +14,26 @@
                 <Columns>
 
                     
-
+                    <asp:TemplateField HeaderText="Sr. No.">
+                                <ItemTemplate>
+                                    <%# Container.DataItemIndex + 1 %>
+                                </ItemTemplate>
+                                <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10" />
+                    </asp:TemplateField>
                     <asp:BoundField DataField="drug_name" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                    <asp:BoundField DataField="active" HeaderText="Active" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
+                    <%--<asp:BoundField DataField="active" HeaderText="Active" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />--%>
+
+                    <asp:TemplateField HeaderText="Status">
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                    <ItemTemplate>
+                        <asp:Button ID="btnToggleStatus" runat="server" CssClass="px-3 py-1 rounded text-white font-semibold"
+                            CommandArgument='<%# Eval("id") %>' CommandName="ToggleStatus"
+                            OnCommand="ToggleStatus_Click"
+                            Text='<%# Convert.ToBoolean(Eval("active")) ? "Active" : "Inactive" %>'
+                            BackColor='<%# Convert.ToBoolean(Eval("active")) ? System.Drawing.Color.Green : System.Drawing.Color.Red %>' />
+                    </ItemTemplate>
+                </asp:TemplateField>
+
                     
                 </Columns>
             </asp:GridView>
@@ -34,7 +51,8 @@
              lengthMenu: [5, 10, 25, 50,100, 200],
              pageLength: 50,
              columns: [
-                 { title: "drug_name" },
+                 { title: "Sr.No" },   
+                 { title: "Drug Name" },
                  { title: "active" }
              ]
          });

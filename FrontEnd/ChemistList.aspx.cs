@@ -23,7 +23,7 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT [chemist_id],[Name_Firm],[Address],[Mobile],[CreatedAt],[IsActive] FROM [chemist_tb] where RoleType='Chemist'";
+            string query = "SELECT [chemist_id],LTRIM(RTRIM([Name_Firm])) AS Name_Firm,[Address],[Mobile],[CreatedAt],[IsActive] FROM [chemist_tb] where RoleType='Chemist' order by Name_Firm asc";
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataTable dt = new DataTable();
             da.Fill(dt);
