@@ -16,12 +16,10 @@
                     <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
                     <asp:DropDownList ID="txtDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </asp:DropDownList>
-    
                     <asp:RequiredFieldValidator ID="rfvDrugName" runat="server" ControlToValidate="txtDrugName" 
                         InitialValue="" ErrorMessage="Please select a drug" CssClass="text-red-500">
                     </asp:RequiredFieldValidator>
                 </div>
-
 
                 <!-- Date Field -->
                 <div>
@@ -29,30 +27,29 @@
                     <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter date"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                     <asp:RangeValidator ID="rvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Invalid date" CssClass="text-red-500" MinimumValue="1900-01-01" MaximumValue="2099-12-31" Type="Date"></asp:RangeValidator>
+                </div>                       
+
+                <!-- Brand Name -->
+                <div>
+                    <label for="brandName" class="block text-sm font-medium text-gray-600">Brand Name</label>
+                    <asp:TextBox ID="brandName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Brand Name"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvBrandName" runat="server" ControlToValidate="brandName" ErrorMessage="Brand Name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
-              <!-- Quantity Field -->
+                  <!-- Batch Number -->
+                  <div>
+                      <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number</label>
+                      <asp:TextBox ID="batchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Batch Number"></asp:TextBox>
+                      <asp:RequiredFieldValidator ID="rfvBatchNumber" runat="server" ControlToValidate="batchNumber" ErrorMessage="Batch Number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                  </div>
+
+                <!-- Quantity Field -->
                 <div>
                     <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity</label>
                     <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
-
-                    <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity can not be zero!</span>
-                </div>
-
-                <!-- Batch Number -->
-                <div>
-                    <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number</label>
-                    <asp:TextBox ID="batchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Batch Number"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="batchNumber" ErrorMessage="Batch Number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                </div>
-
-                <!-- Supplier Name -->
-                <div>
-                    <label for="supplierName" class="block text-sm font-medium text-gray-600">Supplier Name</label>
-                    <asp:TextBox ID="supplierName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Supplier Name"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="supplierName" ErrorMessage="Supplier Name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                    <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
                 </div>
 
                 <!-- Category Dropdown -->
@@ -71,26 +68,29 @@
 
             <!-- Buttons -->
             <div class="flex items-center justify-between mt-6">
-                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600" OnClientClick="return validateQuantity();" OnClick="btnSubmit_Click" />
+                <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600" OnClientClick="return validateForm();" OnClick="btnSubmit_Click" />
                 <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-400" OnClientClick="resetForm(); return false;" />
             </div>
         </div>
     </div>
 
     <script>
-    function validateQuantity() {
-        var totalQty = parseInt(document.getElementById('<%= txtQuantity.ClientID %>').value) || 0;
-        var TotalQuantityError = document.getElementById('TotalQuantityError');
+        function validateForm() {
+            // Ensure ASP.NET validators are checked first
+            if (Page_ClientValidate()) {
+                var totalQty = parseInt(document.getElementById('<%= txtQuantity.ClientID %>').value) || 0;
+                var TotalQuantityError = document.getElementById('TotalQuantityError');
 
-
-        
-        if (totalQty == 0) {
-            TotalQuantityError.style.display = 'block';  
-            return false;
+                if (totalQty === 0) {
+                    TotalQuantityError.style.display = 'block';
+                    return false;
+                } else {
+                    TotalQuantityError.style.display = 'none';
+                }
+                return true; // Allow form submission if all validations pass
+            }
+            return false; // Prevent form submission if any ASP.NET validation fails
         }
-    }
     </script>
 
 </asp:Content>
-
-
