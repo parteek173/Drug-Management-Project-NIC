@@ -63,7 +63,7 @@
                         <asp:ListItem Text="Injection" Value="Injection" />
                         <asp:ListItem Text="Capsules/Tablet" Value="Capsules/Tablet" />
                         <asp:ListItem Text="Ointment" Value="Ointment" />
-                        <asp:ListItem Text="Cyrup" Value="Cyrup" />
+                        <asp:ListItem Text="Syrup" Value="Syrup" />
                     </asp:DropDownList>
                     <asp:RequiredFieldValidator ID="rfvCategory" runat="server" ControlToValidate="ddlCategory" InitialValue="" ErrorMessage="Category is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
