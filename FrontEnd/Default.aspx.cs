@@ -98,7 +98,7 @@ public partial class FrontEnd_Default : System.Web.UI.Page
 
                         lblMessage.Text = "Your OTP is: " + GeneratedOTP;
                         lblMessage.CssClass = "text-green-500 font-semibold";
-
+                        txtOTP.Text = GeneratedOTP;
                         // Show OTP input field
                         MobilePanel.Visible = false;
                         OTPPanel.Visible = true;

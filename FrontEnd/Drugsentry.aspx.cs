@@ -11,9 +11,41 @@ public partial class FrontEnd_Drugsentry : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+
         if (!IsPostBack)
         {
             txtCreatedDate.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Set current date
+            string drugId = Request.QueryString["drugId"];
+            int drugIdValue;
+
+            if (!string.IsNullOrEmpty(drugId) && int.TryParse(drugId, out drugIdValue))
+            {
+                LoadDrugDetails(drugIdValue);
+            }
+        }
+    }
+
+    private void LoadDrugDetails(int drugId)
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            string query = "SELECT drug_name, created_date, active FROM Drugs WHERE id = @DrugId";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@DrugId", drugId);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    txtDrugName.Text = reader["drug_name"].ToString();
+                    txtCreatedDate.Text = Convert.ToDateTime(reader["created_date"]).ToString("yyyy-MM-dd HH:mm:ss");
+                    chkActive.Checked = Convert.ToBoolean(reader["active"]);
+                }
+                reader.Close();
+            }
         }
     }
 
@@ -22,6 +54,7 @@ public partial class FrontEnd_Drugsentry : System.Web.UI.Page
         string drugName = txtDrugName.Text.Trim();
         string createdDate = txtCreatedDate.Text;
         bool isActive = chkActive.Checked;
+        string drugId = Request.QueryString["drugId"];
 
         if (string.IsNullOrWhiteSpace(drugName))
         {
@@ -37,38 +70,58 @@ public partial class FrontEnd_Drugsentry : System.Web.UI.Page
             try
             {
                 conn.Open();
+                int drugIdValue;
 
-                // Check if Drug Name already exists
-                string checkQuery = "SELECT COUNT(*) FROM Drugs WHERE drug_name = @DrugName";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                if (!string.IsNullOrEmpty(drugId) && int.TryParse(drugId, out drugIdValue))
                 {
-                    checkCmd.Parameters.AddWithValue("@DrugName", drugName);
-                    int count = (int)checkCmd.ExecuteScalar();
-
-                    if (count > 0)
+                    // Update existing drug
+                    string updateQuery = "UPDATE Drugs SET drug_name = @DrugName, created_date = @CreatedDate, active = @Active WHERE id = @DrugId";
+                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                     {
-                        lblMessage.Text = "Error: Drug name already exists!";
-                        lblMessage.CssClass = "text-red-500";
-                        return;
+                        updateCmd.Parameters.AddWithValue("@DrugName", drugName);
+                        updateCmd.Parameters.AddWithValue("@CreatedDate", createdDate);
+                        updateCmd.Parameters.AddWithValue("@Active", isActive);
+                        updateCmd.Parameters.AddWithValue("@DrugId", drugIdValue);
+
+                        int rowsAffected = updateCmd.ExecuteNonQuery();
+                        lblMessage.Text = rowsAffected > 0 ? "Drug updated successfully!" : "Error: Drug not found!";
+                        lblMessage.CssClass = rowsAffected > 0 ? "text-green-500" : "text-red-500";
                     }
                 }
-
-                // Insert new drug if not exists
-                string insertQuery = "INSERT INTO Drugs (drug_name, created_date, active) VALUES (@DrugName, @CreatedDate, @Active)";
-                using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                else
                 {
-                    insertCmd.Parameters.AddWithValue("@DrugName", drugName);
-                    insertCmd.Parameters.AddWithValue("@CreatedDate", createdDate);
-                    insertCmd.Parameters.AddWithValue("@Active", isActive);
+                    // Check if Drug Name already exists
+                    string checkQuery = "SELECT COUNT(*) FROM Drugs WHERE drug_name = @DrugName";
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@DrugName", drugName);
+                        int count = (int)checkCmd.ExecuteScalar();
 
-                    insertCmd.ExecuteNonQuery();
-                    lblMessage.Text = "Drug added successfully!";
-                    lblMessage.CssClass = "text-green-500";
+                        if (count > 0)
+                        {
+                            lblMessage.Text = "Error: Drug name already exists!";
+                            lblMessage.CssClass = "text-red-500";
+                            return;
+                        }
+                    }
 
-                    // Reset fields
-                    txtDrugName.Text = "";
-                    txtCreatedDate.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    chkActive.Checked = true;
+                    // Insert new drug
+                    string insertQuery = "INSERT INTO Drugs (drug_name, created_date, active) VALUES (@DrugName, @CreatedDate, @Active)";
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                    {
+                        insertCmd.Parameters.AddWithValue("@DrugName", drugName);
+                        insertCmd.Parameters.AddWithValue("@CreatedDate", createdDate);
+                        insertCmd.Parameters.AddWithValue("@Active", isActive);
+
+                        insertCmd.ExecuteNonQuery();
+                        lblMessage.Text = "Drug added successfully!";
+                        lblMessage.CssClass = "text-green-500";
+
+                        // Reset fields
+                        txtDrugName.Text = "";
+                        txtCreatedDate.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        chkActive.Checked = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -78,4 +131,8 @@ public partial class FrontEnd_Drugsentry : System.Web.UI.Page
             }
         }
     }
+
+
+
+
 }

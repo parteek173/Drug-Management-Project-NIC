@@ -3,13 +3,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
      <div class="container mx-auto p-4 min-h-screen flex flex-col">
-         <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-3xl">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Chemist & Pharmacy </span>  Listings </h1>
-        <p class="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-           Below is a list of Chemists and Pharmacies available on this portal. To search for a specific Chemist, simply enter a keyword in the search bar.
-            <br />
+
+         <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Chemist & Pharmacy</span> Listings
+        </h1>
+        <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+            Below is a list of Chemists and Pharmacies available on this portal. To search for a specific Chemist, simply enter a keyword in the search bar.
+            
             If you'd like to check the stock for a particular Chemist or Pharmacy, click on the firm name, and it will display the available drug inventory for the selected Chemist.
         </p>
+
 
         <!-- Table for displaying stock data -->
         <div class="overflow-x-auto flex-grow mt-10" >
@@ -36,24 +39,26 @@
                                 <ItemTemplate>
                                     <%# Container.DataItemIndex + 1 %>
                                 </ItemTemplate>
-                                <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                                <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" />
                             </asp:TemplateField>
 
                         <asp:TemplateField HeaderText="Firm Name">
-                            <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                            <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="20%" />
                             <ItemTemplate>
                                 <a href='StockList.aspx?ChemistID=<%# Eval("chemist_id") %>' class="font-semibold text-gray-700">
                                     <%# Eval("Name_Firm") %>
                                 </a>
                             </ItemTemplate>
                         </asp:TemplateField>
+                  
+                            <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
+                            <asp:BoundField DataField="Mobile" HeaderText="Mobile" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
+                            <asp:BoundField DataField="CreatedAt" HeaderText="Created Date" 
+                            DataFormatString="{0:dd-MMMM-yyyy}" 
+                            ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
 
 
-                    <%--<asp:BoundField DataField="Name_Firm" HeaderText="Firm Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />--%>
-                    <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                    <asp:BoundField DataField="Mobile" HeaderText="Mobile" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                    <asp:BoundField DataField="CreatedAt" HeaderText="Created Date" DataFormatString="{0:MM/dd/yyyy}" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                   <%-- <asp:BoundField DataField="IsActive" HeaderText="Is Active" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />--%>
+                  
                              <asp:TemplateField HeaderText="Status">
                                 <ItemStyle CssClass="text-left px-4 py-2 border-b" />
                                 <ItemTemplate>
@@ -61,22 +66,20 @@
                                         CommandArgument='<%# Eval("chemist_id") %>' CommandName="ToggleStatus"
                                         OnCommand="ToggleStatus_Click"
                                         Text='<%# Convert.ToBoolean(Eval("IsActive")) ? "Active" : "Inactive" %>'
-                                        BackColor='<%# Convert.ToBoolean(Eval("IsActive")) ? System.Drawing.Color.Green : System.Drawing.Color.Red %>' />
+                                        
+                                        BackColor='<%# Convert.ToBoolean(Eval("IsActive")) ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'
+
+                                        />
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-
-                           
-
                             <asp:TemplateField HeaderText="Actions">
                                 <ItemTemplate>
-                                    <!-- Delete Button -->
                                     <asp:Button ID="btnDelete" runat="server" Text="Delete" CommandArgument='<%# Eval("chemist_id") %>' 
                                                 CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" 
                                                 CssClass="px-3 py-1 rounded text-white bg-red-600 font-semibold" />
                                 </ItemTemplate>
                             </asp:TemplateField>
-
 
                 </Columns>
             </asp:GridView>
