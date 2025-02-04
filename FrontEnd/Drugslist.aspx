@@ -12,7 +12,6 @@
                 GridLines="None" HeaderStyle-CssClass="bg-gray-200 font-semibold text-gray-700 text-center" 
                 RowStyle-CssClass="text-center px-4 py-2 border-b">
                 <Columns>
-
                     
                     <asp:TemplateField HeaderText="Sr. No.">
                                 <ItemTemplate>

@@ -51,16 +51,16 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             if (item != null)
             {
                 ddlChemists.SelectedValue = chemistID;
-                Response.Write("Selected ChemistID: " + chemistID); // Debugging
+                //Response.Write("Selected ChemistID: " + chemistID); // Debugging
             }
             else
             {
-                Response.Write("ChemistID not found in dropdown.");
+               // Response.Write("ChemistID not found in dropdown.");
             }
         }
         else
         {
-            Response.Write("Dropdown is empty.");
+            //Response.Write("Dropdown is empty.");
         }
     }
 

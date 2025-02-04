@@ -32,4 +32,66 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
             ChemistGridView.DataBind();
         }
     }
+
+
+    protected void ToggleStatus_Click(object sender, CommandEventArgs e)
+    {
+        int drugID = Convert.ToInt32(e.CommandArgument);
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            con.Open();
+            string query = "UPDATE chemist_tb SET IsActive = CASE WHEN IsActive = 1 THEN 0 ELSE 1 END WHERE [chemist_id] = @chemist_id";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@chemist_id", drugID);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        DeleteAlert.Visible = true;
+        lblMessage.Text = "Record updated successfully.";
+        lblMessage.Visible = true;
+
+        BindStockData();
+    }
+
+    protected void ChemistGridView_RowCommand(object sender, CommandEventArgs e)
+    {
+        if (e.CommandName == "Delete")
+        {
+            int chemistId = Convert.ToInt32(e.CommandArgument);
+            DeleteChemistRecord(chemistId);
+            BindStockData();  
+        }
+    }
+
+    private void DeleteChemistRecord(int chemistId)
+    {
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            con.Open();
+            string query = "DELETE FROM chemist_tb WHERE chemist_id = @chemist_id";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@chemist_id", chemistId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    protected void ChemistGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+    {
+        // Get the chemist_id from the selected row
+        int chemistId = Convert.ToInt32(ChemistGridView.DataKeys[e.RowIndex].Value);
+
+        // Delete the record
+        DeleteChemistRecord(chemistId);
+
+        DeleteAlert.Visible = true;
+        lblMessage.Text = "Record deleted successfully.";
+        lblMessage.Visible = true;
+
+        // Rebind the GridView
+        BindStockData();
+    }
+
 }

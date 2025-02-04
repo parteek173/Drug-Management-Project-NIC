@@ -35,7 +35,7 @@
                         <th>Expiry Date</th>
                         <th>Category</th>
                         <th>Batch Number</th>
-                        <th>Supplier Name</th>
+                        <th>Brand Name</th>
                         <th>Drug Purchase Date</th>
                     </tr>
                 </thead>
@@ -68,7 +68,7 @@
                     { "data": "ExpiryDate" },
                     { "data": "Category" },
                     { "data": "BatchNumber" },
-                    { "data": "SupplierName" },
+                    { "data": "BrandName" },
                     { "data": "CreatedDate" }
                 ]
             });

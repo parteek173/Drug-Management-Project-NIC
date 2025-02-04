@@ -4,7 +4,13 @@
 
 
    <div class="container mx-auto p-6 bg-white rounded-lg shadow-md max-w-2xl">
-    <h2 class="text-2xl font-semibold mb-6 text-center">Insert Chemist Details</h2>
+
+       <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-3xl">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Insert Chemist </span> Details </h1>
+        <p class="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+            Please enter the details related to the chemist as listed below.
+        </p>
+   
 
     <div class="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
         <!-- Firm Name -->

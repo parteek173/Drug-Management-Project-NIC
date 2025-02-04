@@ -56,7 +56,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         string drugName = txtDrugName.SelectedItem.Value;
         int quantity = int.Parse(txtQuantity.Text.Trim());
         string BatchNumber = batchNumber.Text.Trim();
-        string SupplierName = supplierName.Text.Trim();
+        string BrandName = brandName.Text.Trim();
         string date = txtDate.Text.Trim();
         string category = ddlCategory.SelectedValue;
         string currentDate = DateTime.Today.ToString("yyyy-MM-dd");
@@ -83,8 +83,8 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                 conn.Open();
 
                 // ✅ Always INSERT a new row in StockEntryForm (No Check for Existing Drug)
-                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName, ChemistID, CreatedDate) " +
-                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @SupplierName, @ChemistID,  @currentDate)";
+                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, CreatedDate) " +
+                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID,  @currentDate)";
 
                 using (SqlCommand insertStockCmd = new SqlCommand(insertStockQuery, conn))
                 {
@@ -93,7 +93,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                     insertStockCmd.Parameters.AddWithValue("@Date", date);
                     insertStockCmd.Parameters.AddWithValue("@Category", category);
                     insertStockCmd.Parameters.AddWithValue("@BatchNumber", batchNumber.Text.Trim());
-                    insertStockCmd.Parameters.AddWithValue("@SupplierName", supplierName.Text.Trim());
+                    insertStockCmd.Parameters.AddWithValue("@BrandName", brandName.Text.Trim());
                     insertStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
                     insertStockCmd.Parameters.AddWithValue("@currentDate", currentDate);
                     insertStockCmd.ExecuteNonQuery();
@@ -154,7 +154,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         txtQuantity.Text = "";
         txtDate.Text = "";
         batchNumber.Text = "";
-        supplierName.Text = "";
+        brandName.Text = "";
         ddlCategory.SelectedIndex = 0; // Reset dropdown to the default option
     }
 }
