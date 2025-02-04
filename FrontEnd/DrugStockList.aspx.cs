@@ -66,7 +66,7 @@ public partial class DrugStockList : System.Web.UI.Page
             return dt; // Return empty table if no user is logged in
         }
 
-        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, SupplierName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID";
+        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID";
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
@@ -95,7 +95,7 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT DrugName, Quantity, FORMAT(ExpiryDate, 'yyyy-MM-dd') AS ExpiryDate, 
-                         Category, BatchNumber, SupplierName, FORMAT(CreatedDate, 'yyyy-MM-dd') AS CreatedDate 
+                         Category, BatchNumber, BrandName, FORMAT(CreatedDate, 'yyyy-MM-dd') AS CreatedDate 
                          FROM [StockEntryForm] 
                          WHERE ChemistID = @ChemistID";
 
@@ -121,7 +121,7 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT DrugName, Quantity, FORMAT(ExpiryDate, 'yyyy-MM-dd') AS ExpiryDate, 
-                         Category, BatchNumber, SupplierName, FORMAT(CreatedDate, 'yyyy-MM-dd') AS CreatedDate 
+                         Category, BatchNumber, BrandName, FORMAT(CreatedDate, 'yyyy-MM-dd') AS CreatedDate 
                          FROM [StockEntryForm] 
                          WHERE ChemistID = @ChemistID";
 
