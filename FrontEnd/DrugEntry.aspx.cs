@@ -239,7 +239,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                     if (result > 0)
                     {
                         UpdateStock(drugName, quantitySold, categoryName, conn);
-                        Response.Write("<script>alert('Record inserted successfully!');</script>");
+                        Response.Write("<script>alert('Sale entry success!');</script>");
                         resetForm();
                     }
                     else
@@ -312,7 +312,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
 
                 if (rowsAffected > 0)
                 {
-                    Response.Write("<script>alert('Stock updated successfully!');</script>");
+                    //Response.Write("<script>alert('Stock updated successfully!');</script>");
                 }
                 else
                 {
