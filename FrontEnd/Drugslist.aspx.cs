@@ -14,6 +14,12 @@ public partial class FrontEnd_Drugslist : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["AdminUserID"] == null)
+        {
+            Response.Redirect("default.aspx");
+
+        }
+
         if (!IsPostBack)
         {
             BindDrugs();

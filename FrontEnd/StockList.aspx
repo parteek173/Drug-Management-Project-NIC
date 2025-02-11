@@ -2,12 +2,19 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-    
+
+
 
 
     <div class="container mx-auto p-4 min-h-screen flex flex-col">
-    <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Available Drug </span> Inventory</h1>
+    
+            <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+                Available Drug
+              </span> 
+              Inventory
+            </h1>
+
 
         <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
             Select a chemist from the list to view the available drug inventory for that specific chemist.

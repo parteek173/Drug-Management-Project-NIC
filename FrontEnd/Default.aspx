@@ -16,7 +16,7 @@
       <!-- Page Header -->
       <h1 class="text-3xl font-bold text-center text-gray-800 mb-6"><%= System.Configuration.ConfigurationManager.AppSettings["ProjectName"] %></h1>
       <p class="text-center text-gray-600 mb-8">
-        Enter your mobile number to receive an OTP and log in to your account.
+         Enter your mobile number to receive an OTP and log in to your account.
       </p>
 
       <!-- Error Message -->

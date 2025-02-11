@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Configuration;
 
 public partial class FrontEnd_ChemistList : System.Web.UI.Page
 {
@@ -13,11 +14,37 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["AdminUserID"] == null)
+        {
+            Response.Redirect("default.aspx");
+
+        }
+
         if (!IsPostBack)
         {
             BindStockData();
+            
         }
     }
+
+
+   
+
+    protected void ChemistGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        if (e.CommandName == "Edit")
+        {
+            int chemistId = Convert.ToInt32(e.CommandArgument);
+            
+            Response.Redirect("InsertChemist.aspx?chemistId=" + chemistId); 
+        }
+        //else if (e.CommandName == "Delete")
+        //{
+        //    int chemistId = Convert.ToInt32(e.CommandArgument);
+        //    // Delete logic here
+        //}
+    }
+
 
     private void BindStockData()
     {

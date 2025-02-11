@@ -96,6 +96,12 @@ public partial class FrontEnd_Default : System.Web.UI.Page
                         GeneratedOTP = GenerateOTP();
                         Session["OTP"] = GeneratedOTP; // Store OTP in session for validation
 
+
+                        Session["OTPExpiryTime"] = DateTime.Now.AddMinutes(10); // Set OTP expiry (10 minutes)
+                        LogOTPRequest(mobileNumber, GeneratedOTP, DateTime.Now.AddMinutes(10), Request.UserHostAddress, Request.UserAgent);
+
+
+
                         lblMessage.Text = "Your OTP is: " + GeneratedOTP;
                         lblMessage.CssClass = "text-green-500 font-semibold";
                         txtOTP.Text = GeneratedOTP;
@@ -113,9 +119,31 @@ public partial class FrontEnd_Default : System.Web.UI.Page
         }
     }
 
-    
 
- 
+    // Function to log OTP request into the database
+    private void LogOTPRequest(string mobileNumber, string otp, DateTime expiryTime, string ipAddress, string userAgent)
+    {
+        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString))
+        {
+            string query = @"
+            INSERT INTO UserLoginLogs (MobileNumber, OTP, OTPStatus, LoginStatus, ExpiryTime, IPAddress, DeviceDetails, UserAgent)
+            VALUES (@MobileNumber, @OTP, 'Sent', 'Success', @ExpiryTime, @IPAddress, @DeviceDetails, @UserAgent)";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
+                cmd.Parameters.AddWithValue("@OTP", otp);
+                cmd.Parameters.AddWithValue("@ExpiryTime", expiryTime);
+                cmd.Parameters.AddWithValue("@IPAddress", ipAddress);
+                cmd.Parameters.AddWithValue("@DeviceDetails", ""); // Optionally, you can capture device details
+                cmd.Parameters.AddWithValue("@UserAgent", userAgent);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
 
     private string GenerateOTP()
     {

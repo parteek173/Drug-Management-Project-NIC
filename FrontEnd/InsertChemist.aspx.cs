@@ -16,15 +16,69 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["AdminUserID"] == null)
+        {
+            Response.Redirect("default.aspx");
+
+        }
 
         if (!IsPostBack)
         {
             txtCreatedAt.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             LoadLocations();
+
+            // FOR EDIT the chemist
+            string chemistId = Request.QueryString["chemistId"];
+            int chemistIdValue;
+
+            if (!string.IsNullOrEmpty(chemistId) && int.TryParse(chemistId, out chemistIdValue))
+            {
+                LoadChemistDetails(chemistIdValue);
+            }
         }
 
     }
 
+    private void LoadChemistDetails(int chemistId)
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            string query = "SELECT Name_Firm, Address, Mobile,IsActive,Sectors FROM chemist_tb WHERE chemist_id = @chemist_id";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@chemist_id", chemistId);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    txtFirmName.Text = reader["Name_Firm"].ToString();
+                    txtAddress.Text = reader["Address"].ToString();
+                    txtPhoneNumber.Text = reader["Mobile"].ToString();
+                    chkIsActive.Checked = Convert.ToBoolean(reader["IsActive"]);
+                    SelectChemist(reader["Sectors"].ToString());
+                }
+                reader.Close();
+            }
+        }
+    }
+
+
+    private void SelectChemist(string chemistlocation)
+    {
+        if (ddlLocation.Items.Count > 0) // Ensure dropdown is populated
+        {
+            ListItem item = ddlLocation.Items.FindByText(chemistlocation);
+            if (item != null)
+            {
+                ddlLocation.SelectedValue = chemistlocation;
+                //Response.Write("Selected ChemistID: " + chemistID); // Debugging
+            }
+        }
+        
+    }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -34,6 +88,7 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
         string phoneNumber = txtPhoneNumber.Text.Trim();
         bool isActive = chkIsActive.Checked;
         string createdAt = txtCreatedAt.Text;
+        string chemistId = Request.QueryString["chemistId"];
 
         // Retrieve the connection string
         string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
@@ -50,44 +105,66 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
             {
                 conn.Open();
 
-                // Check if the Firm Name or Mobile already exists
-                string checkQuery = "SELECT COUNT(*) FROM chemist_tb WHERE Name_Firm = @FirmName OR Mobile = @Mobile";
-                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                if (!string.IsNullOrEmpty(chemistId)) // **Update Record**
                 {
-                    checkCmd.Parameters.AddWithValue("@FirmName", firmName);
-                    checkCmd.Parameters.AddWithValue("@Mobile", phoneNumber);
+                    string updateQuery = "UPDATE chemist_tb SET Name_Firm=@FirmName, Address=@Address, Mobile=@Mobile, " +
+                                         "IsActive=@IsActive, CreatedAt=@CreatedAt, RoleType=@RoleType, Sectors=@Sectors " +
+                                         "WHERE chemist_id=@ChemistId";
 
-                    int count = (int)checkCmd.ExecuteScalar();
-                    if (count > 0)
+                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                     {
-                        Response.Write("<script>alert('Error: Firm Name or Mobile Number already exists!');</script>");
-                        return; // Exit the function without inserting
+                        updateCmd.Parameters.AddWithValue("@FirmName", firmName);
+                        updateCmd.Parameters.AddWithValue("@Address", address);
+                        updateCmd.Parameters.AddWithValue("@Mobile", phoneNumber);
+                        updateCmd.Parameters.AddWithValue("@IsActive", isActive);
+                        updateCmd.Parameters.AddWithValue("@CreatedAt", createdAt);
+                        updateCmd.Parameters.AddWithValue("@RoleType", "Chemist");
+                        updateCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Text);
+                        updateCmd.Parameters.AddWithValue("@ChemistId", chemistId);
+                        updateCmd.ExecuteNonQuery();
                     }
+
+                    Response.Write("<script>alert('Chemist details updated successfully!'); window.location='ChemistList.aspx';</script>");
                 }
-
-                // Insert the data if no duplicate is found
-                string insertQuery = "INSERT INTO chemist_tb (Name_Firm, [Address], [Mobile], IsActive, CreatedAt, RoleType,Sectors) " +
-                                     "VALUES (@FirmName, @Address, @Mobile, @IsActive, @CreatedAt, @RoleType,@Sectors)";
-
-                using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                else // **Insert New Record**
                 {
-                    insertCmd.Parameters.AddWithValue("@FirmName", firmName);
-                    insertCmd.Parameters.AddWithValue("@Address", address);
-                    insertCmd.Parameters.AddWithValue("@Mobile", phoneNumber);
-                    insertCmd.Parameters.AddWithValue("@IsActive", isActive);
-                    insertCmd.Parameters.AddWithValue("@CreatedAt", createdAt);
-                    insertCmd.Parameters.AddWithValue("@RoleType", "Chemist");
-                    insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Text);
-                    insertCmd.ExecuteNonQuery();
+                    string checkQuery = "SELECT COUNT(*) FROM chemist_tb WHERE Name_Firm = @FirmName OR Mobile = @Mobile";
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@FirmName", firmName);
+                        checkCmd.Parameters.AddWithValue("@Mobile", phoneNumber);
+                        int count = (int)checkCmd.ExecuteScalar();
+
+                        if (count > 0)
+                        {
+                            Response.Write("<script>alert('Error: Firm Name or Mobile Number already exists!');</script>");
+                            return;
+                        }
+                    }
+
+                    string insertQuery = "INSERT INTO chemist_tb (Name_Firm, Address, Mobile, IsActive, CreatedAt, RoleType, Sectors) " +
+                                         "VALUES (@FirmName, @Address, @Mobile, @IsActive, @CreatedAt, @RoleType, @Sectors)";
+
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                    {
+                        insertCmd.Parameters.AddWithValue("@FirmName", firmName);
+                        insertCmd.Parameters.AddWithValue("@Address", address);
+                        insertCmd.Parameters.AddWithValue("@Mobile", phoneNumber);
+                        insertCmd.Parameters.AddWithValue("@IsActive", isActive);
+                        insertCmd.Parameters.AddWithValue("@CreatedAt", createdAt);
+                        insertCmd.Parameters.AddWithValue("@RoleType", "Chemist");
+                        insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Text);
+                        insertCmd.ExecuteNonQuery();
+                    }
+
+                    // Clear fields after successful insertion
+                    txtFirmName.Text = "";
+                    txtAddress.Text = "";
+                    txtPhoneNumber.Text = "";
+                    chkIsActive.Checked = false;
+
+                    Response.Write("<script>alert('Chemist details inserted successfully!'); window.location='ChemistList.aspx';</script>");
                 }
-
-                // Clear fields after successful insertion
-                txtFirmName.Text = "";
-                txtAddress.Text = "";
-                txtPhoneNumber.Text = "";
-                chkIsActive.Checked = false;
-
-                Response.Write("<script>alert('Chemist details inserted successfully!');</script>");
             }
             catch (Exception ex)
             {
@@ -95,6 +172,7 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
             }
         }
     }
+
 
 
 

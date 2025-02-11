@@ -13,15 +13,11 @@ public partial class Dashboard : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            if (Session["UserID"] != null)
+            if (Session["AdminUserID"] != null)
             {
-                string userId = Session["UserID"].ToString();
+                string userId = Session["AdminUserID"].ToString();
                 FetchUserDetails(userId);  // Call method to fetch Firm Name
             }
-            //else
-            //{
-            //    Response.Redirect("~/FrontEnd/Login.aspx");  // Redirect if not logged in
-            //}
 
 
             GetTotalDrugs();
@@ -135,7 +131,7 @@ public partial class Dashboard : System.Web.UI.Page
                 }
                 else
                 {
-                    lblWelcomeUser.Text = "Welcome, User";
+                    lblWelcomeUser.Text = "Welcome, Administrator!";
                 }
                 con.Close();
             }

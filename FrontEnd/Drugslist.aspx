@@ -3,18 +3,16 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
       <div class="container mx-auto p-4 min-h-screen flex flex-col">
-    <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">List of the drugs</span> liable to be misused
+    <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">List of the drugs</span> liable to be misused
     </h1>
-    <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+    <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400 text-center">
         (Schedule H & H1)
     </p>
 
 
     <!-- Table for displaying stock data -->
     <div class="overflow-x-auto flex-grow mt-6">
-
-
         <div id="DeleteAlert" runat="server" visible="false" class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
                   <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -23,7 +21,7 @@
                   <div>
                     <span class="font-medium">Alert!</span>  <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Visible="false"></asp:Label>
                   </div>
-            </div>
+        </div>
 
         <asp:GridView ID="DrugsGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
             CssClass="display w-full table-auto text-sm"  
@@ -56,8 +54,8 @@
                 <asp:TemplateField HeaderText="Actions">
                     <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" HorizontalAlign="Right" />
                     <ItemTemplate>
-                        <asp:Button ID="btnEdit" runat="server" Text="Edit" CommandName="Edit" CommandArgument='<%# Eval("id") %>' CssClass="px-3 py-1 rounded text-blue-600 font-semibold" />
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete" CommandName="Delete" CommandArgument='<%# Eval("id") %>' CssClass="px-3 py-1 rounded text-red-600 font-semibold" OnClientClick="return confirm('Are you sure you want to delete this record?');" />
+                        <asp:Button ID="btnEdit" runat="server" Text="Edit" CommandName="Edit" CommandArgument='<%# Eval("id") %>' CssClass="px-4 py-2 rounded-md text-white bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105" />
+                        <asp:Button ID="btnDelete" runat="server" Visible="false" Text="Delete" CommandName="Delete" CommandArgument='<%# Eval("id") %>' CssClass="px-3 py-1 rounded text-red-600 font-semibold" OnClientClick="return confirm('Are you sure you want to delete this record?');" />
                     </ItemTemplate>
                 </asp:TemplateField>
 

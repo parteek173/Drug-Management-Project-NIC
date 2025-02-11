@@ -14,16 +14,41 @@ public partial class MasterPage : System.Web.UI.MasterPage
         if (Session["IsLoggedIn"] == null || !(bool)Session["IsLoggedIn"])
         {
             Response.Redirect("~/FrontEnd/Default.aspx");
-
         }
-
+        
         if (!IsPostBack)
         {
             CheckUserSession();
             ShowUserRole();
         }
+    }
 
 
+    private void FetchUserDetails(string userId)
+    {
+        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString))
+        {
+            string query = "SELECT Name_Firm, Address, Mobile FROM chemist_tb WHERE chemist_id = @chemist_id";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@chemist_id", userId);
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    string firstName = reader["Name_Firm"].ToString();
+                    //string lastName = reader["LastName"].ToString();
+                    //string firmName = reader["FirmName"].ToString();
+                    lblWelcomeUser.Text = "Welcome, " + firstName + " ";
+                }
+                else
+                {
+                    lblWelcomeUser.Text = "Welcome, Administrator!";
+                }
+                con.Close();
+            }
+        }
     }
 
 
@@ -34,12 +59,24 @@ public partial class MasterPage : System.Web.UI.MasterPage
             //lblUserRole.Text = "Administrator";
             UlAdmin.Visible = true;
             UlChemist.Visible = false;
+
+            if (Session["AdminUserID"] != null)
+            {
+                string userId = Session["AdminUserID"].ToString();
+                FetchUserDetails(userId);  // Call method to fetch Firm Name
+            }
         }
         else if (Session["UserID"] != null)
         {
             //lblUserRole.Text = "Chemist";
             UlAdmin.Visible = false;
             UlChemist.Visible = true;
+
+            if (Session["UserID"] != null)
+            {
+                string userId = Session["UserID"].ToString();
+                FetchUserDetails(userId);  // Call method to fetch Firm Name
+            }
         }
         else
         {

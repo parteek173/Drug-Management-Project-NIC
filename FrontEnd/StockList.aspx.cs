@@ -14,26 +14,30 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
+
+        if (Session["AdminUserID"] == null)
         {
-            LoadChemists();
+            Response.Redirect("default.aspx");
 
-            if (Request.QueryString["ChemistID"] != null)
-            {
-                BindStocklistbyID();
-                chemistbox.Visible = true;
-                LoadChemistDetailsbyQueryString();
-                string chemistID = Request.QueryString["ChemistID"];
-                SelectChemist(chemistID);
+        }
 
-            }
+        if (!IsPostBack)
+             {
+                LoadChemists();
 
-            else
-            {
-                
-                BindStocklist();
+                if (Request.QueryString["ChemistID"] != null)
+                {
+                    BindStocklistbyID();
+                    chemistbox.Visible = true;
+                    LoadChemistDetailsbyQueryString();
+                    string chemistID = Request.QueryString["ChemistID"];
+                    SelectChemist(chemistID);
+                }
 
-            }
+                else
+                {
+                    BindStocklist();
+                }
 
             
 

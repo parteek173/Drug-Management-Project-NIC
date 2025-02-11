@@ -20,14 +20,19 @@
                         InitialValue="" ErrorMessage="Please select a drug" CssClass="text-red-500">
                     </asp:RequiredFieldValidator>
                 </div>
-
-                <!-- Date Field -->
-                <div>
-                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date</label>
-                    <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter date"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                    <asp:RangeValidator ID="rvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Invalid date" CssClass="text-red-500" MinimumValue="1900-01-01" MaximumValue="2099-12-31" Type="Date"></asp:RangeValidator>
-                </div>                       
+                      
+                    <!-- Category Dropdown -->
+                    <div>
+                        <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                        <asp:DropDownList ID="ddlCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <asp:ListItem Text="Select Category" Value="" />
+                            <asp:ListItem Text="Injection" Value="Injection" />
+                            <asp:ListItem Text="Capsules/Tablet" Value="Capsules/Tablet" />
+                            <asp:ListItem Text="Ointment" Value="Ointment" />
+                            <asp:ListItem Text="Syrup" Value="Syrup" />
+                        </asp:DropDownList>
+                        <asp:RequiredFieldValidator ID="rfvCategory" runat="server" ControlToValidate="ddlCategory" InitialValue="" ErrorMessage="Category is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                    </div>
 
                 <!-- Brand Name -->
                 <div>
@@ -41,30 +46,25 @@
                       <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number</label>
                       <asp:TextBox ID="batchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Batch Number"></asp:TextBox>
                       <asp:RequiredFieldValidator ID="rfvBatchNumber" runat="server" ControlToValidate="batchNumber" ErrorMessage="Batch Number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                  </div>
+                  </div>              
 
-                <!-- Quantity Field -->
-                <div>
-                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity</label>
-                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                    <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
-                    <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
+                  <!-- Expiry Date Field -->
+                      <div>
+                          <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date</label>
+                          <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter date"></asp:TextBox>
+                          <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                          <asp:RangeValidator ID="rvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Invalid date" CssClass="text-red-500" MinimumValue="1900-01-01" MaximumValue="2099-12-31" Type="Date"></asp:RangeValidator>
+                      </div>    
+            
+                 <!-- Quantity Field -->
+                      <div>
+                          <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity</label>
+                          <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off"></asp:TextBox>
+                          <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                          <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
+                          <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
+                      </div>
                 </div>
-
-                <!-- Category Dropdown -->
-                <div>
-                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
-                    <asp:DropDownList ID="ddlCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <asp:ListItem Text="Select Category" Value="" />
-                        <asp:ListItem Text="Injection" Value="Injection" />
-                        <asp:ListItem Text="Capsules/Tablet" Value="Capsules/Tablet" />
-                        <asp:ListItem Text="Ointment" Value="Ointment" />
-                        <asp:ListItem Text="Syrup" Value="Syrup" />
-                    </asp:DropDownList>
-                    <asp:RequiredFieldValidator ID="rfvCategory" runat="server" ControlToValidate="ddlCategory" InitialValue="" ErrorMessage="Category is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
-                </div>
-            </div>
 
             <!-- Buttons -->
             <div class="flex items-center justify-between mt-6">

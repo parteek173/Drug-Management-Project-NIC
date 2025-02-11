@@ -4,8 +4,8 @@
 
      <div class="container mx-auto p-4 min-h-screen flex flex-col">
 
-         <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Chemist & Pharmacy</span> Listings
+          <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Chemist & Pharmacy</span> Listings
         </h1>
         <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
             Below is a list of Chemists and Pharmacies available on this portal. To search for a specific Chemist, simply enter a keyword in the search bar.
@@ -35,15 +35,15 @@
                 RowStyle-CssClass="text-center px-4 py-2 border-b">
                         <Columns>
 
-                            <asp:TemplateField HeaderText="Sr. No.">
+                            <asp:TemplateField HeaderText="Sr. No." >
                                 <ItemTemplate>
                                     <%# Container.DataItemIndex + 1 %>
                                 </ItemTemplate>
-                                <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" />
+                                <ItemStyle CssClass="text-center px-4 py-2 border-b" Width="5%" />
                             </asp:TemplateField>
 
                         <asp:TemplateField HeaderText="Firm Name">
-                            <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="20%" />
+                            <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="15%" />
                             <ItemTemplate>
                                 <a href='StockList.aspx?ChemistID=<%# Eval("chemist_id") %>' class="font-semibold text-gray-700">
                                     <%# Eval("Name_Firm") %>
@@ -51,16 +51,14 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                   
-                            <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                            <asp:BoundField DataField="Mobile" HeaderText="Mobile" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-                            <asp:BoundField DataField="CreatedAt" HeaderText="Created Date" 
+                            <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="30%" />
+                            <asp:BoundField DataField="Mobile" HeaderText="Mobile" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="15%" />
+                            <asp:BoundField DataField="CreatedAt" HeaderText="Created Date"  
                             DataFormatString="{0:dd-MMMM-yyyy}" 
-                            ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
-
-
+                            ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="15%" />
                   
                              <asp:TemplateField HeaderText="Status">
-                                <ItemStyle CssClass="text-left px-4 py-2 border-b" />
+                                <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" />
                                 <ItemTemplate>
                                     <asp:Button ID="btnToggleStatus" runat="server" CssClass="px-3 py-1 rounded text-white font-semibold"
                                         CommandArgument='<%# Eval("chemist_id") %>' CommandName="ToggleStatus"
@@ -73,13 +71,24 @@
                                 </ItemTemplate>
                             </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="Actions">
+      
+
+                           <asp:TemplateField HeaderText="Actions">
                                 <ItemTemplate>
-                                    <asp:Button ID="btnDelete" runat="server" Text="Delete" CommandArgument='<%# Eval("chemist_id") %>' 
-                                                CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" 
-                                                CssClass="px-3 py-1 rounded text-white bg-red-600 font-semibold" />
+                                    <header CssClass="text-center"></header>
+                                    <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" />
+
+                                    <!-- Edit Button with Hover Effect -->
+                                    <asp:Button ID="btnEdit" runat="server" Text="Edit" CommandArgument='<%# Eval("chemist_id") %>' 
+                                        CommandName="Edit" CssClass="px-4 py-2 rounded-md text-white bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105" />
+
+                                    <!-- Delete Button with Hover Effect -->
+                                    <asp:Button ID="btnDelete" runat="server" Visible="false" Text="Delete" CommandArgument='<%# Eval("chemist_id") %>' 
+                                        CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" 
+                                        CssClass="px-4 py-2 rounded-md text-white bg-red-600 font-semibold hover:bg-red-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105 ml-2" />
                                 </ItemTemplate>
                             </asp:TemplateField>
+
 
                 </Columns>
             </asp:GridView>
