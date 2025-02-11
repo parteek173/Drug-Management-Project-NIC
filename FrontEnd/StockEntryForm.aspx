@@ -13,7 +13,7 @@
             <div class="grid grid-cols-2 gap-6">
                 <!-- Drug Name Field -->
                 <div>
-                    <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
+                    <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name <span class="text-red-500">*</span> </label>
                     <asp:DropDownList ID="txtDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </asp:DropDownList>
                     <asp:RequiredFieldValidator ID="rfvDrugName" runat="server" ControlToValidate="txtDrugName" 
@@ -23,7 +23,7 @@
                       
                     <!-- Category Dropdown -->
                     <div>
-                        <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                        <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category <span class="text-red-500">*</span> </label>
                         <asp:DropDownList ID="ddlCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                             <asp:ListItem Text="Select Category" Value="" />
                             <asp:ListItem Text="Injection" Value="Injection" />
@@ -36,21 +36,21 @@
 
                 <!-- Brand Name -->
                 <div>
-                    <label for="brandName" class="block text-sm font-medium text-gray-600">Brand Name</label>
+                    <label for="brandName" class="block text-sm font-medium text-gray-600">Brand Name <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="brandName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Brand Name"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvBrandName" runat="server" ControlToValidate="brandName" ErrorMessage="Brand Name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
                   <!-- Batch Number -->
                   <div>
-                      <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number</label>
+                      <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number <span class="text-red-500">*</span> </label>
                       <asp:TextBox ID="batchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter Batch Number"></asp:TextBox>
                       <asp:RequiredFieldValidator ID="rfvBatchNumber" runat="server" ControlToValidate="batchNumber" ErrorMessage="Batch Number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                   </div>              
 
                   <!-- Expiry Date Field -->
                       <div>
-                          <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date</label>
+                          <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date <span class="text-red-500">*</span> </label>
                           <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter date"></asp:TextBox>
                           <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                           <asp:RangeValidator ID="rvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Invalid date" CssClass="text-red-500" MinimumValue="1900-01-01" MaximumValue="2099-12-31" Type="Date"></asp:RangeValidator>
@@ -58,7 +58,7 @@
             
                  <!-- Quantity Field -->
                       <div>
-                          <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity</label>
+                          <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity <span class="text-red-500">*</span> </label>
                           <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off"></asp:TextBox>
                           <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                           <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>

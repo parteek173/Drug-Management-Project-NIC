@@ -37,6 +37,7 @@
                         <th>Batch Number</th>
                         <th>Brand Name</th>
                         <th>Drug Purchase Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -69,9 +70,65 @@
                     { "data": "Category" },
                     { "data": "BatchNumber" },
                     { "data": "BrandName" },
-                    { "data": "CreatedDate" }
+                    { "data": "CreatedDate" },
+                    {
+                        "data": null,
+                        "orderable": false, // Disable sorting for Action column
+                        "render": function (data, type, row) {
+                            var currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+                            var createdDate = new Date(row.CreatedDate).toISOString().split('T')[0]; // Format CreatedDate
+
+                            if (createdDate === currentDate) {
+                                return `
+                            <a href="javascript:void(0);" onclick="editEntry('${row.id}')" 
+                                class="text-blue-500 mr-3">
+                                ✏️
+                            </a>
+                            <a href="javascript:void(0);" onclick="deleteEntry('${row.id}')" 
+                                class="text-red-500">
+                                ❌
+                            </a>
+                        `;
+                            } else {
+                                return ''; // No icons if CreatedDate is not today
+                            }
+                        }
+                    }
+                ],
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 } // Make the last column non-sortable
                 ]
             });
+
+            window.editEntry = function (id) {
+                window.location.href = "StockListEdit.aspx?StockID=" + id;
+            };
+
+            // Function to Delete Entry
+            window.deleteEntry = function (id) {
+                if (confirm("Are you sure you want to delete this record?")) {
+                    $.ajax({
+                        url: "DrugStockList.aspx/DeleteStockEntry",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({ id: id }),
+                        success: function (response) {
+                            var result = JSON.parse(response.d);
+                            if (result.success) {
+                                alert(result.message);
+                                $('#stockTable').DataTable().ajax.reload(); // Refresh table after deletion
+                            } else {
+                                alert("Error: " + result.message);
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while deleting the record.");
+                        }
+                    });
+                }
+            };
+
 
             // Filter Button Click Event
             $("#btnFilter").click(function () {
