@@ -13,7 +13,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <!-- Date Field -->
                <div>
-                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Date</label>
+                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Date <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                     <asp:RangeValidator ID="rvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Invalid date" CssClass="text-red-500" MinimumValue="1900-01-01" MaximumValue="2099-12-31" Type="Date"></asp:RangeValidator>
@@ -22,7 +22,7 @@
 
                 <!-- Patient Name Field -->
                 <div>
-                    <label for="txtPatientName" class="block text-sm font-medium text-gray-600">Patient Name</label>
+                    <label for="txtPatientName" class="block text-sm font-medium text-gray-600">Patient Name <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtPatientName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter patient name" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvPatientName" runat="server" ControlToValidate="txtPatientName" ErrorMessage="Patient name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revPatientName" runat="server" ControlToValidate="txtPatientName" ErrorMessage="Invalid name (letters and spaces only)" ValidationExpression="^[a-zA-Z\s]+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
@@ -30,7 +30,7 @@
 
                 <!-- Mobile Number Field -->
                 <div>
-                    <label for="txtMobileNumber" class="block text-sm font-medium text-gray-600">Mobile Number</label>
+                    <label for="txtMobileNumber" class="block text-sm font-medium text-gray-600">Mobile Number <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter mobile number" autocomplete="off" MaxLength="10"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvMobileNumber" runat="server" ControlToValidate="txtMobileNumber" ErrorMessage="Mobile number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revMobileNumber" runat="server" ControlToValidate="txtMobileNumber" ErrorMessage="Invalid mobile number" ValidationExpression="^\d{10}$" CssClass="text-red-500"></asp:RegularExpressionValidator>
@@ -38,7 +38,7 @@
 
                 <!-- Patient ID Field -->
                <div>
-                <label for="txtPatientAddress" class="block text-sm font-medium text-gray-600">Patient Address</label>
+                <label for="txtPatientAddress" class="block text-sm font-medium text-gray-600">Patient Address <span class="text-red-500">*</span> </label>
                 <asp:TextBox ID="txtPatientAddress" runat="server" TextMode="MultiLine" Rows="3"
                     CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     placeholder="Enter patient address" autocomplete="off"></asp:TextBox>
@@ -47,7 +47,7 @@
             </div>
 
                 <div>
-                    <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
+                    <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name <span class="text-red-500">*</span> </label>
                     <asp:DropDownList ID="ddlDrugName" runat="server" AutoPostBack="true" 
                         CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         OnSelectedIndexChanged="ddlDrugName_SelectedIndexChanged">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div>
-                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category <span class="text-red-500">*</span> </label>
                     <asp:DropDownList ID="ddlCategory" runat="server" AutoPostBack="true" 
                         OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
                         CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -63,13 +63,13 @@
                 </div>
 
                 <div>
-                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Total Quantity</label>
+                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Total Quantity <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
                     <span id="TotalQuantityError" class="text-red-500" style="display: none;">Drug is currently out of stock!</span>
                 </div>
 
                  <div>
-                    <label for="txtQuantitySold" class="block text-sm font-medium text-gray-600">Quantity Sold</label>
+                    <label for="txtQuantitySold" class="block text-sm font-medium text-gray-600">Quantity Sold <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtQuantitySold" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
                                  Placeholder="Enter quantity sold" MaxLength="3"/>
                     <asp:RequiredFieldValidator ID="rfvQuantitySold" runat="server" ControlToValidate="txtQuantitySold" 
@@ -85,21 +85,21 @@
 
                 <!-- Prescribed By Field -->
                 <div>
-                    <label for="txtPrescribedBy" class="block text-sm font-medium text-gray-600">Prescribed By</label>
+                    <label for="txtPrescribedBy" class="block text-sm font-medium text-gray-600">Prescribed By <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtPrescribedBy" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter prescriber name" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvPrescribedBy" runat="server" ControlToValidate="txtPrescribedBy" ErrorMessage="Prescriber name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
                 <!-- Hospital Name Field -->
                 <div>
-                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital/Clinic Name</label>
+                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital/Clinic Name <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtHospitalName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter hospital name" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName" ErrorMessage="Hospital name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
                 <!-- Hospital/Clinic Address Field -->
                 <div>
-                    <label for="txtHospitalAddress" class="block text-sm font-medium text-gray-600">Hospital/Clinic Address</label>
+                    <label for="txtHospitalAddress" class="block text-sm font-medium text-gray-600">Hospital/Clinic Address <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtHospitalAddress" runat="server" TextMode="MultiLine" Rows="3"
                                  CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                  placeholder="Enter hospital address" autocomplete="off"></asp:TextBox>
