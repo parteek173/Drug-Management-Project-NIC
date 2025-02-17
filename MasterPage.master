@@ -132,7 +132,7 @@
                                 <!-- Dropdown menu -->
                                 <div id="dropdownNavbar" class="absolute hidden group-hover:block font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
                                     <ul class="py-2 text-sm">
-                                        <li><a href="PatientStockList.aspx" class="block px-4 py-2 hover:text-gray-300">Patient Stock List</a></li>
+                                        <li><a href="PatientStockList.aspx" class="block px-4 py-2 hover:text-gray-300">Sale List</a></li>
                                         <li><a href="DrugStockList.aspx" class="block px-4 py-2 hover:text-gray-300">Drug Stock List</a></li>
                                         <li><a href="CurrentStock.aspx" class="block px-4 py-2 hover:text-gray-300">Current Stock</a></li>
                                     </ul>
