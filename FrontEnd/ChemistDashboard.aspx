@@ -22,8 +22,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Card 1 -->
           <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Stock Entries</h3>
-            <p class="text-4xl font-bold text-blue-600"><asp:Label ID="lblTotalCount" runat="server" ></asp:Label></p>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Drug Catageories</h3>
+            <p class="text-4xl font-bold text-blue-600"> <a href="DrugStockList.aspx"> <asp:Label ID="lblTotalCount" runat="server" ></asp:Label> </a> </p>
             <p class="text-gray-600 mt-2">
                 <%--The Drugs liable to be misused (Schedule H & H1)--%>
 
@@ -32,9 +32,9 @@
 
           <!-- Card 2 -->
           <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Patient </h3>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Sale </h3>
             <p class="text-4xl font-bold text-red-500">
-                <asp:Label ID="lblTotalPatients" runat="server"></asp:Label>
+               <a href="PatientStockList.aspx"> <asp:Label ID="lblTotalPatients" runat="server"> </asp:Label> </a>
             </p>
             <p class="text-gray-600 mt-2">Total Patient listed</p>
           </div>
