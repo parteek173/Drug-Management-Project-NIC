@@ -75,10 +75,23 @@
                         "data": null,
                         "orderable": false, // Disable sorting for Action column
                         "render": function (data, type, row) {
-                            var currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-                            var createdDate = new Date(row.CreatedDate).toISOString().split('T')[0]; // Format CreatedDate
+                            if (!row.CreatedDate) return ''; // Handle null or empty dates
 
-                            if (createdDate === currentDate) {
+                            // Convert CreatedDate from "dd-MM-yyyy" to a JavaScript Date object
+                            var parts = row.CreatedDate.split('-'); // Split by "-"
+                            if (parts.length !== 3) return ''; // Invalid date format, return empty
+
+                            var createdDate = new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-based), Day
+
+                            // Get today's date in dd-MM-yyyy format
+                            var today = new Date();
+                            var todayFormatted =
+                                String(today.getDate()).padStart(2, '0') + '-' +
+                                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                today.getFullYear();
+
+                            // Compare formatted date with today's date
+                            if (row.CreatedDate === todayFormatted) {
                                 return `
                             <a href="javascript:void(0);" onclick="editEntry('${row.id}')" 
                                 class="text-blue-500 mr-3">
@@ -89,11 +102,11 @@
                                 ❌
                             </a>
                         `;
-                            } else {
-                                return ''; // No icons if CreatedDate is not today
                             }
+                            return ''; // No icons if CreatedDate is not today
                         }
                     }
+
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": -1 } // Make the last column non-sortable
