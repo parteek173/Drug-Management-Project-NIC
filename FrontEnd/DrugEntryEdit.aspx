@@ -69,10 +69,19 @@
                 </div>
 
                 <!-- Hospital Name -->
-                <div>
-                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital Name</label>
-                    <asp:TextBox ID="txtHospitalName" runat="server" CssClass="form-input"></asp:TextBox>
-                </div>
+               <div>
+                <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital Name</label>
+                <asp:DropDownList ID="txtHospitalName" runat="server" CssClass="form-input">
+                    <asp:ListItem Text="Select Hospital" Value="" />
+                    <asp:ListItem Text="Government Medical College and Hospital, Chandigarh Sector 32 CHD" Value="Government Medical College and Hospital, Chandigarh Sector 32 CHD" />
+                    <asp:ListItem Text="Government Multi Specialty Hospital Sector 16 , CHD" Value="Government Multi Specialty Hospital Sector 16 , CHD" />
+                    <asp:ListItem Text="Postgraduate Institute of Medical Education and Research Sector 12" Value="Postgraduate Institute of Medical Education and Research Sector 12" />
+                    <asp:ListItem Text="Other/Private" Value="Other/Private" />
+                </asp:DropDownList>
+                <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName"
+                    InitialValue="" ErrorMessage="Hospital name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+            </div>
+
 
                 <!-- Hospital Address -->
                 <div>
