@@ -81,11 +81,21 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                     txtPatientAddress.Text = reader["PatientAddress"].ToString();
                     txtQuantitySold.Text = reader["QuantitySold"].ToString();
                     txtPrescribedBy.Text = reader["PrescribedBy"].ToString();
-                    txtHospitalName.Text = reader["HospitalName"].ToString();
+                    //txtHospitalName.Text = reader["HospitalName"].ToString();
                     txtHospitalAddress.Text = reader["HospitalAddress"].ToString();
 
+                    string hospitalName = reader["HospitalName"].ToString();
                     string drugName = reader["DrugName"].ToString();
                     string category = reader["Category"].ToString();
+
+                    if (txtHospitalName.Items.FindByValue(hospitalName) != null)
+                    {
+                        txtHospitalName.SelectedValue = hospitalName;
+                    }
+                    else
+                    {
+                        txtHospitalName.SelectedIndex = 0; // Select first item if hospital not found
+                    }
 
                     // Ensure the DrugName exists before setting it
                     if (ddlDrugName.Items.FindByValue(drugName) != null)
@@ -327,7 +337,12 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
 
                 // Step 4: Commit Transaction
                 transaction.Commit();
-                Response.Redirect("PatientStockList.aspx");
+
+                string script = "<script type='text/javascript'>alert('Updated Success!'); window.location='PatientStockList.aspx';</script>";
+                ClientScript.RegisterStartupScript(this.GetType(), "UpdateSuccess", script);
+
+                //Response.Write("<script>alert('Updated Success!');</script>");
+                //Response.Redirect("PatientStockList.aspx");
             }
         }
         catch (Exception ex)

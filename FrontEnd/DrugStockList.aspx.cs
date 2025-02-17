@@ -66,7 +66,7 @@ public partial class DrugStockList : System.Web.UI.Page
             return dt; // Return empty table if no user is logged in
         }
 
-        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID";
+        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY CreatedDate DESC";
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
@@ -97,7 +97,8 @@ public partial class DrugStockList : System.Web.UI.Page
             string query = @"SELECT id, DrugName, Quantity, FORMAT(ExpiryDate, 'yyyy-MM-dd') AS ExpiryDate, 
                          Category, BatchNumber, BrandName, FORMAT(CreatedDate, 'yyyy-MM-dd') AS CreatedDate 
                          FROM [StockEntryForm] 
-                         WHERE ChemistID = @ChemistID";
+                         WHERE ChemistID = @ChemistID
+                         ORDER BY CreatedDate DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {

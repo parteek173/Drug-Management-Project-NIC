@@ -204,7 +204,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         string mobileNumber = txtMobileNumber.Text.Trim();
         string patientAddress = txtPatientAddress.Text.Trim();
         string prescribedBy = txtPrescribedBy.Text.Trim();
-        string hospitalName = txtHospitalName.Text.Trim();
+        string hospitalName = txtHospitalName.SelectedValue;
         string hospitalAddress = txtHospitalAddress.Text.Trim(); // Fix variable name
         string dateOfSale = txtDate.Text.Trim();
         string drugName = ddlDrugName.SelectedValue;
@@ -337,7 +337,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         txtMobileNumber.Text = "";
         txtPatientAddress.Text = "";
         txtPrescribedBy.Text = "";
-        txtHospitalName.Text = "";
+        txtHospitalName.SelectedIndex = 0;
         txtHospitalAddress.Text = "";
         txtDate.Text = "";
         ddlDrugName.SelectedIndex = 0;
