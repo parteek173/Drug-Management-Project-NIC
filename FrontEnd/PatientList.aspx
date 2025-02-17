@@ -2,62 +2,68 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-     <div class="container mx-auto p-4 min-h-screen flex flex-col">
-    
-            <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
-              <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
-                Available Drug
-              </span> 
-              Inventory
-            </h1>
+     <div class="container mx-auto p-6 min-h-screen flex flex-col">
+    <!-- Page Title Section -->
+    <h1 class="text-center text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+            Patient Prescription 
+        </span> 
+        & Drug Records
+    </h1>
 
+    <!-- Page Description Section -->
+    <p class="text-center text-sm lg:text-base text-gray-500 dark:text-gray-400 mb-6">
+        This page provides a detailed record of patient prescriptions, including patient information, contact details, prescribed drugs, and hospital details. 
+        <br />
+        Select the Chemist AND/OR Drug name from the list to view the patient details.
+    </p>
 
-        <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
-            Select a chemist from the list to view the available drug inventory for that specific chemist.
-        </p>
+    <!-- Chemist and Drug Selection Section -->
+    <div class="flex justify-center gap-6 mb-8 mt-8">
+        <!-- Chemist Dropdown -->
+        <div class="w-1/3">
+            <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
+                CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
+            </asp:DropDownList>
+        </div>
 
-    
-
-    <!-- Chemist Selection and Details in One Row -->
-    <div class="flex items-center space-x-4 mb-4">
-        <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
-            CssClass="border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
-            OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
-        </asp:DropDownList>
-
-        <div id="chemistbox" runat="server" visible="false" class="border border-gray-300 p-4 rounded">
-            <p class="text-gray-800"><strong>🏢 Firm Name:</strong> <asp:Label ID="lblFirmName" runat="server"></asp:Label></p>
-            <p class="text-gray-800"><strong>📍 Address:</strong> <asp:Label ID="lblAddress" runat="server"></asp:Label></p>
-            <p class="text-gray-800"><strong>📞 Phone:</strong> <asp:Label ID="lblPhone" runat="server"></asp:Label></p>
+        <!-- Drug Dropdown -->
+        <div class="w-1/3">
+            <asp:DropDownList ID="ddlDrugs" runat="server" AutoPostBack="true"
+                OnSelectedIndexChanged="ddlDrugs_SelectedIndexChanged"
+                CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500">
+            </asp:DropDownList>
         </div>
     </div>
 
-    <!-- No Stock Alert -->
-    <div id="MsgAlert" runat="server" visible="false" class="border-l-4 border-orange-500 text-orange-700 p-4">
-        <p class="font-bold">⚠ No Stock Found</p>
+    <!-- No Stock Alert Message -->
+    <div id="MsgAlert" runat="server" visible="false" class="border-l-4 border-orange-500 text-orange-700 p-4 mb-6">
+        <p class="font-semibold">⚠ No data Found</p>
         <p><asp:Label ID="lblMessage" runat="server"></asp:Label></p>
     </div>
 
-    <!-- Drug Inventory Table -->
+    <!-- Patient Data Table -->
     <div class="overflow-x-auto">
-        <asp:GridView ID="ChemistGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
-            CssClass="w-full table-auto text-sm border border-gray-300 shadow-md"
+        <asp:GridView ID="PatientGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
+            CssClass="w-full table-auto text-sm border border-gray-300 shadow-md rounded-lg"
             GridLines="None" HeaderStyle-CssClass="bg-gray-100 font-semibold text-gray-700 text-center"
             RowStyle-CssClass="text-center px-4 py-2 border-b">
+
+
             <Columns>
+               
                 <asp:TemplateField HeaderText="Sr. No.">
                     <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
                     <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10"/>
                 </asp:TemplateField>
                 <asp:BoundField DataField="PatientName" HeaderText="Patient Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                <asp:BoundField DataField="MobileNumber" HeaderText="MobileNumber" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                <asp:BoundField DataField="PatientAddress" HeaderText="PatientAddress" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="MobileNumber" HeaderText="Mobile Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="PatientAddress" HeaderText="Patient Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="ChemistName" HeaderText="Chemist Name" SortExpression="ChemistName" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="QuantitySold" HeaderText="Quantity Sold" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="HospitalName" HeaderText="Hospital Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-
-
-
             </Columns>
         </asp:GridView>
     </div>
@@ -67,7 +73,7 @@
      <!-- DataTables Initialization Script -->
  <script>
      $(document).ready(function () {
-         $('#<%= ChemistGridView.ClientID %>').DataTable({
+         $('#<%= PatientGridView.ClientID %>').DataTable({
              paging: true,
              searching: true,
              ordering: true,
@@ -76,12 +82,13 @@
              pageLength: 50,
              columns: [
                  { title: "Sr.No" },
-                 { title: "PatientName" },
-                 { title: "MobileNumber" },
-                 { title: "PatientAddress" },
-                 { title: "DrugName" },
-                 { title: "QuantitySold" },
-                 { title: "HospitalName" },
+                 { title: "Patient Name" },
+                 { title: "Mobile Number" },
+                 { title: "Patient Address" },
+                 { title: "Chemist Name" },
+                 { title: "Drug Name" },
+                 { title: "Quantity Sold" },
+                 { title: "Hospital Name" },
              ]
          });
      });
