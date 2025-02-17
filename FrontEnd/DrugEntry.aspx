@@ -90,12 +90,22 @@
                     <asp:RequiredFieldValidator ID="rfvPrescribedBy" runat="server" ControlToValidate="txtPrescribedBy" ErrorMessage="Prescriber name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
 
-                <!-- Hospital Name Field -->
+              <!-- Hospital Name Field -->
                 <div>
-                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">Hospital/Clinic Name <span class="text-red-500">*</span> </label>
-                    <asp:TextBox ID="txtHospitalName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter hospital name" autocomplete="off"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName" ErrorMessage="Hospital name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                    <label for="txtHospitalName" class="block text-sm font-medium text-gray-600">
+                        Hospital/Clinic Name <span class="text-red-500">*</span>
+                    </label>
+                    <asp:DropDownList ID="txtHospitalName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <asp:ListItem Text="Select Hospital" Value="" />
+                        <asp:ListItem Text="Government Medical College and Hospital, Chandigarh Sector 32 CHD" Value="Government Medical College and Hospital, Chandigarh Sector 32 CHD" />
+                        <asp:ListItem Text="Government Multi Specialty Hospital Sector 16 , CHD" Value="Government Multi Specialty Hospital Sector 16 , CHD" />
+                        <asp:ListItem Text="Postgraduate Institute of Medical Education and Research Sector 12" Value="Postgraduate Institute of Medical Education and Research Sector 12" />
+                        <asp:ListItem Text="Other/Private" Value="Other/Private" />
+                    </asp:DropDownList>
+                    <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName"
+                        InitialValue="" ErrorMessage="Hospital name is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                 </div>
+
 
                 <!-- Hospital/Clinic Address Field -->
                 <div>

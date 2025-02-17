@@ -63,6 +63,7 @@
                           <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                           <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
                           <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
+                          <span id="MaxQuantityError" class="text-red-500" style="display: none;">Quantity cannot be more than 1000!</span>
                       </div>
                 </div>
 
@@ -80,12 +81,19 @@
             if (Page_ClientValidate()) {
                 var totalQty = parseInt(document.getElementById('<%= txtQuantity.ClientID %>').value) || 0;
                 var TotalQuantityError = document.getElementById('TotalQuantityError');
+                var MaxQuantityError = document.getElementById('MaxQuantityError');
 
                 if (totalQty === 0) {
                     TotalQuantityError.style.display = 'block';
                     return false;
-                } else {
+                }
+                else if (totalQty > 1000) {
+                    MaxQuantityError.style.display = 'block';
+                    return false;
+                }
+                else {
                     TotalQuantityError.style.display = 'none';
+                    MaxQuantityError.style.display = 'none';
                 }
                 return true; // Allow form submission if all validations pass
             }
