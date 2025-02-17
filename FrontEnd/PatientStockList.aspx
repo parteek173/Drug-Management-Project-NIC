@@ -79,17 +79,33 @@
                     {
                         "data": "DateOFSale",
                         "render": function (data, type, row) {
-                            var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-                            if (data === today) {
+                            if (!data) return ''; // Handle cases where DateOFSale is null or empty
+
+                            // Convert DateOFSale from "dd-MM-yyyy" to "YYYY-MM-DD" for accurate comparison
+                            var parts = data.split('-'); // Split by "-"
+                            if (parts.length !== 3) return ''; // Invalid date format, return empty
+
+                            var formattedDate = new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-based), Day
+
+                            // Get today's date in dd-MM-yyyy format
+                            var today = new Date();
+                            var todayFormatted =
+                                String(today.getDate()).padStart(2, '0') + '-' +
+                                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                today.getFullYear();
+
+                            // Compare formatted date with today's date
+                            if (data === todayFormatted) {
                                 return `
-                            <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">
-                                ✏️ 
-                            </a>
-                        `;
+                                <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">
+                                    ✏️
+                                </a>
+                            `;
                             }
                             return ''; // Hide the icon if DateOFSale is not today
                         }
                     }
+
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": -1 } // Disable sorting for the last column (Action)
