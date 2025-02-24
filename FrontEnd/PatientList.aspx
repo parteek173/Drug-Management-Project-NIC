@@ -2,24 +2,24 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-     <div class="container mx-auto p-6 min-h-screen flex flex-col">
+     <div class="container mx-auto p-6  flex flex-col">
     <!-- Page Title Section -->
     <h1 class="text-center text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+        <span class="">
             Patient Prescription 
         </span> 
         & Drug Records
     </h1>
 
     <!-- Page Description Section -->
-    <p class="text-center text-sm lg:text-base text-gray-500 dark:text-gray-400 mb-6">
+    <p class="text-center text-sm lg:text-base text-gray-900 dark:text-gray-400 mb-6">
         This page provides a detailed record of patient prescriptions, including patient information, contact details, prescribed drugs, and hospital details. 
         <br />
         Select the Chemist AND/OR Drug name from the list to view the patient details.
     </p>
 
     <!-- Chemist and Drug Selection Section -->
-    <div class="flex justify-center gap-6 mb-8 mt-8">
+    <div class="flex justify-center gap-6 mb-8">
         <!-- Chemist Dropdown -->
         <div class="w-1/3">
             <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"

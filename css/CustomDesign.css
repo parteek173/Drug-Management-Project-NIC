@@ -27,10 +27,42 @@
 .dashboard-sec h3 {
     color: #fff;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 26px;
 }
 .ul-li a {
     color: #fff;font-size:17px;
 }
 
 .dashb a span, .dashb p {color:#fff;}
+
+.dataTables_length, .dataTables_filter {
+    margin-bottom: 20px;
+}
+
+table thead {
+    background: #c2d2ff
+}
+table {margin-bottom:15px!important;}
+
+    table thead tr th, table tbody tr td {
+        border: #9d9d9d solid 1px;
+    }
+        table thead tr th:last-child,, table tbody tr td:last-child {
+            border-right: none;
+        }
+
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+body{position:relative;padding-bottom:40px;min-height:100%;}
+html {height:100%;position:relative;}
+
+.shadow-lg {
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 3px 15px var(--tw-shadow-color), 0 4px 2px var(--tw-shadow-color)!important;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}

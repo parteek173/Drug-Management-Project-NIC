@@ -15,7 +15,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
             PopulateDrugNames();
             ddlCategory.Items.Clear();
             txtQuantity.Text = string.Empty;
-            txtDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            //txtDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
         }
     }
 
@@ -239,7 +239,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                     if (result > 0)
                     {
                         UpdateStock(drugName, quantitySold, categoryName, conn);
-                        Response.Write("<script>alert('Sale entry success!');</script>");
+                        //Response.Write("<script>alert('Sale entry success!');</script>");
                         resetForm();
                     }
                     else
@@ -344,5 +344,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         ddlCategory.SelectedIndex = 0;        
         txtQuantity.Text = "";       
         txtQuantitySold.Text = "";
+        string script = "alert('Sale entry success!'); window.location='PatientStockList.aspx';";
+        ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
     }
 }

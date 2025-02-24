@@ -2,11 +2,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-    <div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-20 shadow-blue-900/50">
       <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-       <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Add New  </span> Drug</h1>
+       <span class="">Add New  </span> Drug</h1>
 
-        <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+        <p class=" text-sm font-normal text-gray-900 lg:text-base dark:text-gray-400">
            Drugs liable to be misused (Schedule H & H1)
         </p>
 
@@ -37,7 +37,7 @@
 
     <!-- Submit Button -->
     <div class="text-center">
-        <asp:Button ID="btnSubmit" runat="server" Text="Add Drug" OnClick="btnSubmit_Click" CssClass="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition" />
+        <asp:Button ID="btnSubmit" runat="server" Text="Add Drug" OnClick="btnSubmit_Click" CssClass="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-green-700 transition" />
     </div>
 
     
