@@ -2,12 +2,12 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-     <div class="container mx-auto p-4 min-h-screen flex flex-col">
+     <div class="container mx-auto p-4  flex flex-col">
 
           <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
-              <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Chemist & Pharmacy</span> Listings
+              <span class="">Chemist & Pharmacy</span> Listings
         </h1>
-        <p class="text-sm font-normal text-gray-500 lg:text-base dark:text-gray-400">
+        <p class="text-sm text-center font-normal text-gray-900 lg:text-base dark:text-gray-400">
             Below is a list of Chemists and Pharmacies available on this portal. To search for a specific Chemist, simply enter a keyword in the search bar.
             
             If you'd like to check the stock for a particular Chemist or Pharmacy, click on the firm name, and it will display the available drug inventory for the selected Chemist.
@@ -15,7 +15,7 @@
 
 
         <!-- Table for displaying stock data -->
-        <div class="overflow-x-auto flex-grow mt-10" >
+        <div class="overflow-x-auto flex-grow mt-6" >
            
             <div id="DeleteAlert" runat="server" visible="false" class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
                   <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">

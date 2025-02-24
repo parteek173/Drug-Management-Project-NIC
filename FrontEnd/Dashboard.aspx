@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-<main class="py-12 bg-gray-100 min-h-screen">
+<main class="py-12  ">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Welcome Section -->
@@ -16,7 +16,7 @@
         </section>
 
         <!-- Dashboard Section -->
-        <section class="bg-white p-4 rounded-lg shadow-lg dashboard-sec">
+        <section class="bg-white p-4 rounded-lg shadow-lg dashboard-sec shadow-blue-900/50">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Dashboard</h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
