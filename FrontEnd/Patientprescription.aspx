@@ -1,18 +1,18 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="PatientList.aspx.cs" Inherits="FrontEnd_PatientList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Patientprescription.aspx.cs" Inherits="FrontEnd_Patientprescription" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-     <div class="container mx-auto p-6  flex flex-col">
+    <div class="container mx-auto p-6 min-h-screen flex flex-col">
     <!-- Page Title Section -->
     <h1 class="text-center text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-        <span class="">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
             Patient Prescription 
         </span> 
         & Drug Records
     </h1>
 
     <!-- Page Description Section -->
-    <p class="text-center text-sm lg:text-base text-gray-900 dark:text-gray-400 mb-6">
+    <p class="text-center text-sm lg:text-base text-gray-500 dark:text-gray-400 mb-6">
         This page provides a detailed record of patient prescriptions, including patient information, contact details, prescribed drugs, and hospital details. 
         <br />
         <b>
@@ -20,15 +20,30 @@
         </b>
     </p>
 
-    <!-- Chemist and Drug Selection Section -->
-    <div class="flex justify-center gap-6 mb-8">
-        <!-- Chemist Dropdown -->
-        <div class="w-1/3">
-            <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
-                CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
-            </asp:DropDownList>
-        </div>
+
+         <!-- Date & Filter Condition Selection -->
+        <!-- Filter Section -->
+        <div class="flex flex-wrap gap-4 mb-4">
+            <!-- From Date -->
+            <div class="flex-1">
+                <label for="txtFromDate" class="block text-gray-700 font-semibold mb-2">📅 From Date:</label>
+                <asp:TextBox ID="txtFromDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
+            </div>
+
+            <!-- To Date -->
+            <div class="flex-1">
+                <label for="txtToDate" class="block text-gray-700 font-semibold mb-2">📅 To Date:</label>
+                <asp:TextBox ID="txtToDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
+            </div>
+
+            <!-- Chemist Selection -->
+            <div class="flex-1">
+                <label for="ddlChemists" class="block text-gray-700 font-semibold mb-2">🔽 Select Chemist:</label>
+                <asp:DropDownList ID="ddlChemists" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                    <asp:ListItem Text="Select Chemist" Value=""></asp:ListItem>
+           
+                </asp:DropDownList>
+            </div>
 
     <!-- Drug Selection -->
     <div class="flex-1">
@@ -44,6 +59,12 @@
         <asp:Button ID="btnFilter" runat="server" Text="🔍 Filter" CssClass="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
             OnClick="btnFilter_Click" />
     </div>
+
+            <!-- Filter Button -->
+    <div class="flex items-end">
+        <asp:Button ID="btnReset" runat="server" Text="🔄 Reset" OnClick="btnReset_Click" CssClass="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all" />
+
+    </div>
 </div>
 
     <!-- No Stock Alert Message -->
@@ -52,18 +73,13 @@
         <p><asp:Label ID="lblMessage" runat="server"></asp:Label></p>
     </div>
 
-    <!-- Patient Data Table -->
+        <!-- Patient Data Table -->
     <div class="overflow-x-auto">
-        
-
         <asp:GridView ID="PatientGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
             CssClass="w-full table-auto text-sm border border-gray-300 shadow-md rounded-lg"
             GridLines="None" HeaderStyle-CssClass="bg-gray-100 font-semibold text-gray-700 text-center"
             RowStyle-CssClass="text-center px-4 py-2 border-b">
-
-
             <Columns>
-               
                 <asp:TemplateField HeaderText="Sr. No.">
                     <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
                     <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10"/>
@@ -89,7 +105,7 @@
              searching: true,
              ordering: true,
              info: true,
-             lengthMenu: [5, 10, 25, 50,100, 200],
+             lengthMenu: [5, 10, 25, 50, 100, 200],
              pageLength: 50,
              columns: [
                  { title: "Sr.No" },
@@ -149,6 +165,7 @@
         outline-offset: 2px;
     }
 </style>
+
 
 </asp:Content>
 

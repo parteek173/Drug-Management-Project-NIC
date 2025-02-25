@@ -7,9 +7,9 @@
             <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
               <span class="">
                 Available Drug
-              </span> 
-              Inventory
-            </h1>
+            </span>
+            Inventory
+        </h1>
 
 
         <p class="text-center text-sm font-normal text-gray-800 lg:text-base dark:text-gray-800">
@@ -25,18 +25,37 @@
             OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
         </asp:DropDownList>
 
-        <div id="chemistbox" runat="server" visible="false" class="border border-gray-300 p-4 rounded">
-            <p class="text-gray-800"><strong>🏢 Firm Name:</strong> <asp:Label ID="lblFirmName" runat="server"></asp:Label></p>
-            <p class="text-gray-800"><strong>📍 Address:</strong> <asp:Label ID="lblAddress" runat="server"></asp:Label></p>
-            <p class="text-gray-800"><strong>📞 Phone:</strong> <asp:Label ID="lblPhone" runat="server"></asp:Label></p>
-        </div>
-    </div>
+            <!-- Chemist Details Box -->
+            <div id="chemistbox" runat="server" visible="false" class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between" >
+                <div >
+                    <h3 class="text-xl font-bold text-blue-600 mb-4 flex items-center">
+                        🏥 Chemist Details
+                    </h3>
+                    <div class="space-y-3 text-gray-800">
+                        <p><strong>🏢 Firm:</strong> <asp:Label ID="lblFirmName" runat="server"></asp:Label></p>
+                        <p><strong>📍 Address:</strong> <asp:Label ID="lblAddress" runat="server"></asp:Label></p>
+                        <p><strong>📞 Phone:</strong> <asp:Label ID="lblPhone" runat="server"></asp:Label></p>
+                    </div>
+                </div>
+            </div>
 
-    <!-- No Stock Alert -->
-    <div id="MsgAlert" runat="server" visible="false" class="border-l-4 border-orange-500 text-orange-700 p-4">
-        <p class="font-bold">⚠ No Stock Found</p>
-        <p><asp:Label ID="lblMessage" runat="server"></asp:Label></p>
-    </div>
+            <!-- Drug-wise Stock Chart -->
+            <div id="DrugChart" runat="server" visible="false" class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    💊 Drug-wise Stock
+                </h2>
+                <p class="text-gray-600 mb-3">Top 5 Drugs Stock Quantity</p>
+                <canvas id="drugStockChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <!-- No Stock Alert -->
+        <div id="MsgAlert" runat="server" visible="false" class="border-l-4 border-orange-500 text-orange-700 p-4 mb-4">
+            <p class="font-bold">⚠ No Stock Available </p>
+            <p><asp:Label ID="lblMessage" runat="server"></asp:Label></p>
+        </div>
 
     <!-- Drug Inventory Table -->
     <div class="overflow-x-auto">
@@ -58,8 +77,38 @@
 </div>
 
 
-     <!-- DataTables Initialization Script -->
- <script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof drugStockData !== "undefined" && drugStockData.length > 0) {
+            let drugLabels = drugStockData.map(item => item.DrugName);
+            let drugStock = drugStockData.map(item => item.Quantity);
+
+            var ctx2 = document.getElementById("drugStockChart").getContext("2d");
+            new Chart(ctx2, {
+                type: "bar",
+                data: {
+                    labels: drugLabels,
+                    datasets: [{
+                        label: "Stock Quantity",
+                        data: drugStock,
+                        backgroundColor: ["#EF4444", "#3B82F6", "#10B981", "#FBBF24", "#A855F7"]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    });
+</script>
+
+        <!-- DataTables Initialization Script -->
+        <script>
      $(document).ready(function () {
          $('#<%= ChemistGridView.ClientID %>').DataTable({
              paging: true,
@@ -72,13 +121,21 @@
                  { title: "Sr.No" },
                  { title: "Drug Name" },
                  { title: "Category" },
-                 { title: "Quantity" }
+                 { title: "Stock in hand" }
              ]
          });
      });
  </script>
-
-     <style>
+        <script>
+        $(document).ready(function () {
+            $('#<%= ddlChemists.ClientID %>').select2({
+                width: '100%',  // Adjust width as per your layout
+                placeholder: "Search Chemist...",
+                allowClear: true
+            });
+        });
+</script>
+        <style>
     /* Adjust the overall width of the DataTables length menu select box */
     .dataTables_length select {
         width: auto; /* Allow the width to adjust based on content */
@@ -103,5 +160,6 @@
         outline-offset: 2px;
     }
 </style>
+
 </asp:Content>
 

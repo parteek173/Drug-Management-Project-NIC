@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -19,15 +21,62 @@ public partial class Dashboard : System.Web.UI.Page
                 FetchUserDetails(userId);  // Call method to fetch Firm Name
             }
 
-
             GetTotalDrugs();
             GetTotalStock();
             GetTotalChemists();
-
+            LoadDrugStockChart();
 
         }
 
     }
+
+
+
+    private void LoadDrugStockChart()
+    {
+        try
+        {
+            string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open(); // Ensure connection is opened before executing query
+
+                string query = @"
+                SELECT TOP 5 
+                    T.DrugName, 
+                    T.Quantity, 
+                    T.Category,
+                    C.Name_Firm AS ChemistName 
+                FROM TotalStockData T
+                LEFT JOIN chemist_tb C ON T.ChemistID = C.chemist_id
+                ORDER BY T.Quantity DESC";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            // Convert DataTable to JSON using Newtonsoft.Json
+            string jsonData = JsonConvert.SerializeObject(dt, Formatting.None);
+
+            // Pass JSON data to JavaScript
+            string script = "var drugStockData = " + jsonData + ";";
+            ClientScript.RegisterStartupScript(this.GetType(), "drugStockData", script, true);
+        }
+        catch (Exception ex)
+        {
+            // Show error using JavaScript alert
+            string errorMessage = "alert('Error loading drug stock: " + ex.Message + "');";
+            ClientScript.RegisterStartupScript(this.GetType(), "errorAlert", errorMessage, true);
+        }
+    }
+
 
 
     private void GetTotalChemists()

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChemistList.aspx.cs" Inherits="FrontEnd_ChemistList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChemistList.aspx.cs" MaintainScrollPositionOnPostback="true" Inherits="FrontEnd_ChemistList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
@@ -12,6 +12,24 @@
             
             If you'd like to check the stock for a particular Chemist or Pharmacy, click on the firm name, and it will display the available drug inventory for the selected Chemist.
         </p>
+
+         <!-- Chemist Selection and Drug Stock Section -->
+            <div class="flex flex-col md:flex-row justify-center gap-6 mt-8 mb-8">
+
+                <!-- Chemist Selection Dropdown -->
+                <div class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
+                    <label for="ddlChemists" class="block text-gray-700 font-semibold mb-3 text-lg">
+                        🔽 Select Location:
+                    </label>
+                    <p>
+                        Select a location to filter the chemist list based on their respective locations.
+                    </p>
+                    <asp:DropDownList ID="ddlLocation" runat="server" AutoPostBack="true"
+                        CssClass="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        OnSelectedIndexChanged="ddlLocation_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </div>
+             </div>
 
 
         <!-- Table for displaying stock data -->
@@ -52,6 +70,9 @@
                         </asp:TemplateField>
                   
                             <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="30%" />
+                            
+                            <asp:BoundField DataField="Sectors" HeaderText="Sectors" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="10%" />
+                            
                             <asp:BoundField DataField="Mobile" HeaderText="Mobile" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="15%" />
                             <asp:BoundField DataField="CreatedAt" HeaderText="Created Date"  
                             DataFormatString="{0:dd-MMMM-yyyy}" 
@@ -109,6 +130,7 @@
                  { title: "Sr.No" },
                  { title: "Name Firm" },
                  { title: "Address" },
+                 { title: "Sectors" },
                  { title: "Mobile" },
                  { title: "Created Date" },
                  { title: "Is Active" },
@@ -117,6 +139,16 @@
          });
      });
  </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#<%= ddlLocation.ClientID %>').select2({
+                width: '100%',  // Adjust width as per your layout
+                placeholder: "Search Location...",
+                allowClear: true
+            });
+        });
+</script>
 
      <style>
     /* Adjust the overall width of the DataTables length menu select box */
