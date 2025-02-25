@@ -61,6 +61,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         string date = txtDate.Text.Trim();
         string billDate = txtBillDate.Text.Trim();
         string billNumber = txtBillNumber.Text.Trim();
+        string purchasedFrom = txtpurchasedFrom.Text.Trim();
         string category = ddlCategory.SelectedValue;
         //string currentDate = DateTime.Today.ToString("yyyy-MM-dd");
         string chemistID = string.Empty;
@@ -86,8 +87,8 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                 conn.Open();
 
                 // ✅ Always INSERT a new row in StockEntryForm (No Check for Existing Drug)
-                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber) " +
-                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate , @BillNumber)";
+                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom) " +
+                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate , @BillNumber, @purchasedFrom)";
 
                 using (SqlCommand insertStockCmd = new SqlCommand(insertStockQuery, conn))
                 {
@@ -101,6 +102,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                    // insertStockCmd.Parameters.AddWithValue("@currentDate", currentDate);
                     insertStockCmd.Parameters.AddWithValue("@BillDate", billDate);
                     insertStockCmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                    insertStockCmd.Parameters.AddWithValue("@purchasedFrom", purchasedFrom);
                     insertStockCmd.ExecuteNonQuery();
                 }
 
