@@ -16,28 +16,11 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            LoadNotifications();
+            
         }
 
     }
-
-    private void LoadNotifications()
-    {
-        string connStr = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
-        using (SqlConnection conn = new SqlConnection(connStr))
-        {
-            string query = "SELECT * FROM Notifications ORDER BY CreatedAt DESC";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                conn.Open();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                gvNotifications.DataSource = dt;
-                gvNotifications.DataBind();
-            }
-        }
-    }
+  
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -81,30 +64,13 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
                 conn.Close();
             }
         }
+
         lblMessage.Text = "Notification added successfully!";
-        LoadNotifications();
+        Response.Redirect("NotificationsList.aspx");
+        
     }
 
 
 
-    protected void gvNotifications_RowCommand(object sender, GridViewCommandEventArgs e)
-    {
-        if (e.CommandName == "DeleteNotification")
-        {
-            int notificationId = Convert.ToInt32(e.CommandArgument);
-            string connStr = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                string query = "DELETE FROM Notifications WHERE NotificationID = @NotificationID";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@NotificationID", notificationId);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                }
-            }
-            LoadNotifications();
-        }
-    }
+    
 }
