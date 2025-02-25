@@ -16,6 +16,7 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
 
         if (!IsPostBack)
         {
+<<<<<<< HEAD
             LoadNotifications();
         }
 
@@ -38,6 +39,13 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
             }
         }
     }
+=======
+            
+        }
+
+    }
+  
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -81,12 +89,20 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
                 conn.Close();
             }
         }
+<<<<<<< HEAD
         lblMessage.Text = "Notification added successfully!";
         LoadNotifications();
+=======
+
+        lblMessage.Text = "Notification added successfully!";
+        Response.Redirect("NotificationsList.aspx");
+        
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
     }
 
 
 
+<<<<<<< HEAD
     protected void gvNotifications_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         if (e.CommandName == "DeleteNotification")
@@ -107,4 +123,7 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
             LoadNotifications();
         }
     }
+=======
+    
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
 }

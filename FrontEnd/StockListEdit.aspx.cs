@@ -20,6 +20,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                 LoadStockDetails(stockID);
             }
             PopulateDrugNames();
+            txtDate.Attributes["min"] = DateTime.Now.ToString("yyyy-MM-dd");
         }
     }
 
@@ -32,7 +33,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
             try
             {
                 conn.Open();
-                string query = "SELECT DrugName, Category, BrandName, BatchNumber, ExpiryDate, Quantity FROM StockEntryForm WHERE id = @StockID";
+                string query = "SELECT DrugName, Category, BrandName, BatchNumber, ExpiryDate, Quantity, BillDate, BillNumber, PurchasedFrom FROM StockEntryForm WHERE id = @StockID";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -48,6 +49,10 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                             batchNumber.Text = reader["BatchNumber"].ToString();
                             txtDate.Text = Convert.ToDateTime(reader["ExpiryDate"]).ToString("yyyy-MM-dd");
                             txtQuantity.Text = reader["Quantity"].ToString();
+                            txtPurchasedFrom.Text = reader["PurchasedFrom"].ToString();                            
+                            txtbillDate.Text = Convert.ToDateTime(reader["BillDate"]).ToString("yyyy-MM-dd");
+                            txtbillNumber.Text = reader["BillNumber"].ToString();
+                            txtDrugName.Enabled = false;
                         }
                     }
                 }
@@ -105,7 +110,11 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
         int newQuantity = int.Parse(txtQuantity.Text);
         string newBatchNumber = batchNumber.Text;
         string newBrandName = brandName.Text;
+        string purchasedFrom = txtPurchasedFrom.Text;
         DateTime newExpiryDate = DateTime.Parse(txtDate.Text);
+
+        string newBillNumber = txtbillNumber.Text;
+        DateTime newBillDate = DateTime.Parse(txtbillDate.Text);
 
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
@@ -139,7 +148,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                 // Update StockEntryForm table
                 string updateStockQuery = @"UPDATE StockEntryForm 
                                         SET DrugName = @DrugName, Category = @Category, Quantity = @Quantity, 
-                                            BatchNumber = @BatchNumber, BrandName = @BrandName, ExpiryDate = @ExpiryDate 
+                                            BatchNumber = @BatchNumber, BrandName = @BrandName, ExpiryDate = @ExpiryDate, BillDate = @BillDate, BillNumber = @BillNumber, PurchasedFrom = @purchasedFrom 
                                         WHERE id = @StockID";
                 using (SqlCommand cmd = new SqlCommand(updateStockQuery, conn, transaction))
                 {
@@ -150,6 +159,9 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@BrandName", newBrandName);
                     cmd.Parameters.AddWithValue("@ExpiryDate", newExpiryDate);
                     cmd.Parameters.AddWithValue("@StockID", stockID);
+                    cmd.Parameters.AddWithValue("@BillNumber", newBillNumber);
+                    cmd.Parameters.AddWithValue("@BillDate", newBillDate);
+                    cmd.Parameters.AddWithValue("@purchasedFrom", purchasedFrom);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -229,7 +241,10 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                 }
 
                 transaction.Commit();
-                Response.Write("<script>alert('Stock updated successfully!');</script>");
+                //Response.Write("<script>alert('Stock updated successfully!');</script>");
+
+                string script = "alert('Stock updated successfully!'); window.location='DrugStockList.aspx';";
+                ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
             }
             catch (Exception ex)
             {

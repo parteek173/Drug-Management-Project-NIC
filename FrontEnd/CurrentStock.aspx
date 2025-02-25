@@ -1,14 +1,14 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.Master" CodeFile="CurrentStock.aspx.cs" Inherits="FrontEnd_CurrentStock" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+    <div class="container mx-auto p-4  flex flex-col">
         <h1 class="text-3xl font-bold text-center mb-6">Total Stock List</h1>
 
         <!-- Table for displaying stock data -->
         <div class="overflow-x-auto flex-grow">
             <table id="stockTable" class="display w-full text-sm">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700">
+                    <tr class="text-gray-700">
                         <th>Drug Name</th>
                         <th>Category</th>
                         <th>Quantity</th>
