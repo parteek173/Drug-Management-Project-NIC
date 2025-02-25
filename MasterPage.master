@@ -140,7 +140,7 @@
                              <li><a href="ChemistDashboard.aspx">Dashboard</a></li>    
                             <li><a href="StockEntryForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock Entry Form</a></li>
                             <li><a href="DrugEntry.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Entry Form</a></li>
-                            
+                            <li><a href="SaleReturnForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Return Form</a></li>
                             
                             
                             
