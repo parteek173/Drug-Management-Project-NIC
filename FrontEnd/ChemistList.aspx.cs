@@ -22,13 +22,46 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            BindStockData();
-            
+            BindChemistData();
+            LoadChemistsbyLocation();
         }
     }
 
 
-   
+    private void LoadChemistsbyLocation()
+    {
+        string query = "SELECT [SrNo], [Locations] FROM ChdSectors";
+        DataTable dt = GetData(query);
+
+        ddlLocation.DataSource = dt;
+        ddlLocation.DataTextField = "Locations";
+        ddlLocation.DataValueField = "SrNo";
+        ddlLocation.DataBind();
+        ddlLocation.Items.Insert(0, new ListItem("-- Select Location --", ""));
+    }
+
+    private DataTable GetData(string query, params SqlParameter[] parameters)
+    {
+        string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        using (SqlConnection conn = new SqlConnection(connString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                if (parameters != null)
+                    cmd.Parameters.AddRange(parameters);
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+    }
+
+
+
 
     protected void ChemistGridView_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -46,15 +79,14 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
     }
 
 
-    private void BindStockData()
+    private void BindChemistData()
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT [chemist_id],LTRIM(RTRIM([Name_Firm])) AS Name_Firm,[Address],[Mobile],[CreatedAt],[IsActive] FROM [chemist_tb] where RoleType='Chemist' order by Name_Firm asc";
+            string query = "SELECT [chemist_id],LTRIM(RTRIM([Name_Firm])) AS Name_Firm,[Address],[Mobile],[CreatedAt],[IsActive],Sectors FROM [chemist_tb] where RoleType='Chemist' order by Name_Firm asc";
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataTable dt = new DataTable();
             da.Fill(dt);
-
             ChemistGridView.DataSource = dt;
             ChemistGridView.DataBind();
         }
@@ -78,7 +110,7 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
         lblMessage.Text = "Record updated successfully.";
         lblMessage.Visible = true;
 
-        BindStockData();
+        BindChemistData();
     }
 
     protected void ChemistGridView_RowCommand(object sender, CommandEventArgs e)
@@ -87,7 +119,7 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
         {
             int chemistId = Convert.ToInt32(e.CommandArgument);
             DeleteChemistRecord(chemistId);
-            BindStockData();  
+            BindChemistData();  
         }
     }
 
@@ -118,7 +150,48 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
         lblMessage.Visible = true;
 
         // Rebind the GridView
-        BindStockData();
+        BindChemistData();
     }
 
+
+    private void BindChemistDataByLocation(string selectedLocation)
+    {
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            string query = "SELECT [chemist_id], LTRIM(RTRIM([Name_Firm])) AS Name_Firm, [Address],Sectors, [Mobile], [CreatedAt], [IsActive] " +
+                           "FROM [chemist_tb] " +
+                           "WHERE RoleType = 'Chemist' AND (@Location = '' OR Sectors = @Location) " +
+                           "ORDER BY Name_Firm ASC";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Location", selectedLocation);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                ChemistGridView.DataSource = dt;
+                ChemistGridView.DataBind();
+            }
+        }
+    }
+
+
+
+
+    protected void ddlLocation_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        
+
+        if(ddlLocation.SelectedItem.Text == "-- Select Location --")
+        {
+            BindChemistData();
+        }
+
+        else
+        {
+            BindChemistDataByLocation(ddlLocation.SelectedItem.Text);
+        }
+    }
 }

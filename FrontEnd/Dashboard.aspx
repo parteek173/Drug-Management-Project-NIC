@@ -73,71 +73,76 @@
                         Active Chemists
                     </p>
                 </div>
-                
-               
-               
-
 
             </div>
         </section>
-    </div>
+
+
+        
+        <section class="bg-white p-8 rounded-lg shadow-lg mt-6">
+                <h2 class="text-3xl font-semibold text-gray-800 mb-4">
+                    <asp:Label ID="Label1" runat="server"></asp:Label>
+                </h2>
+                <!-- Drug-wise Stock Chart -->
+                <div id="DrugChart" runat="server"  class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        💊 Drug-wise Stock
+                    </h2>
+                    <p class="text-gray-600 mb-3">Top 5 Drugs Stockist Quantity</p>
+                    <canvas id="drugStockChart"></canvas>
+                </div>
+         </section>
+
+
+
+        </div>
 </main>
 
    
-<!-- Main Content -->
-  <%--<main class="py-10">
-    <div class="container mx-auto px-4">
-
-        <!-- Content Section -->
-      <section>
-        <h2 class="text-2xl font-bold text-gray-800 mb-6"><asp:Label ID="lblWelcomeUser" runat="server"></asp:Label>
-            </h2>
-        <p class="text-gray-600">Manage your drug inventory efficiently with Narcotic Drugs Monitoring System.</p>
-      </section>
 
 
-      <!-- Dashboard Section -->
-      <section class="mb-10 mt-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Card 1 -->
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Drugs</h3>
-            <p class="text-4xl font-bold text-blue-600">
-                <a href="Drugslist.aspx">
-                <asp:Label ID="lblTotalDrugs" runat="server" ></asp:Label>
-                    </a>
-              </p>
-            <p class="text-gray-600 mt-2">
-                The Drugs liable to be misused (Schedule H & H1)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof drugStockData !== "undefined" && drugStockData.length > 0) {
+            // Combine Drug Name and Chemist Name for better clarity
+            let drugLabels = drugStockData.map(item => `${item.DrugName} - ${item.Category} `);
+            let drugStock = drugStockData.map(item => item.Quantity);
 
-            </p>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="bg-white p-6 rounded-lg shadow-md" id="HideTotalStock" runat="server" visible="false">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Stock</h3>
-            <p class="text-4xl font-bold text-red-500">
-                <a href="stockList.aspx">
-                <asp:Label ID="lblTotalStock" runat="server"></asp:Label></a>
-            </p>
-            <p class="text-gray-600 mt-2">Total stock of the listed chemists</p>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Total Chemists</h3>
-            <p class="text-4xl font-bold text-yellow-500">
-                <a href="ChemistList.aspx">
-                <asp:Label ID="lblTotalChemists" runat="server" ></asp:Label>
-                    </a>
-            </p>
-            <p class="text-gray-600 mt-2">Active Chemists </p>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>--%>
+            var ctx2 = document.getElementById("drugStockChart").getContext("2d");
+            new Chart(ctx2, {
+                type: "bar",  // bar , line , radar , doughnut, polarArea , bubble , scatter
+                data: {
+                    labels: drugLabels,
+                    datasets: [{
+                        label: "Stock Quantity",
+                        data: drugStock,
+                        backgroundColor: ["#EF4444", "#3B82F6", "#10B981", "#FBBF24", "#A855F7"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    let dataIndex = tooltipItem.dataIndex;
+                                    let chemistName = drugStockData[dataIndex].ChemistName;
+                                    let Category = drugStockData[dataIndex].Category;
+                                    return `Stock: ${tooltipItem.raw} (Chemist: ${chemistName})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+    });
+</script>
 
 
 </asp:Content>

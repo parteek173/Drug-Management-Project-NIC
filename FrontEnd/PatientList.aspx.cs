@@ -58,62 +58,75 @@ public partial class FrontEnd_PatientList : System.Web.UI.Page
     }
 
 
-
-
-
-    private void BindPatientslist(string chemistId = "", string drugName = "")
-{
-    using (SqlConnection con = new SqlConnection(connectionString))
+    private void BindPatientslist(string chemistId = "", string firmName = "", string drugName = "", string fromDate = "", string toDate = "")
     {
-        string query = @"SELECT p.[id], p.[PatientName], p.[MobileNumber], p.[PatientAddress], p.[PrescribedBy], 
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            string query = @"SELECT p.[id], p.[PatientName], p.[MobileNumber], p.[PatientAddress], p.[PrescribedBy], 
                         p.[HospitalName], p.[HospitalAddress], p.[DateOFSale], p.[QuantitySold], p.[DrugName], 
                         p.[ChemistID], p.[Category], c.[Name_Firm] AS ChemistName 
                         FROM [PatientEntryForm] p
                         LEFT JOIN [chemist_tb] c ON p.ChemistID = c.Chemist_id
                         WHERE 1=1";
 
-        List<SqlParameter> parameters = new List<SqlParameter>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
 
-        if (!string.IsNullOrEmpty(chemistId) && string.IsNullOrEmpty(drugName))
-        {
-            query += " AND p.ChemistID = @ChemistID";
-            parameters.Add(new SqlParameter("@ChemistID", chemistId));
-        }
-        else if (!string.IsNullOrEmpty(drugName) && string.IsNullOrEmpty(chemistId))
-        {
-            query += " AND p.DrugName = @DrugName";
-            parameters.Add(new SqlParameter("@DrugName", drugName));
-        }
-        else if (!string.IsNullOrEmpty(chemistId) && !string.IsNullOrEmpty(drugName))
-        {
-            query += " AND p.ChemistID = @ChemistID AND p.DrugName = @DrugName";
-            parameters.Add(new SqlParameter("@ChemistID", chemistId));
-            parameters.Add(new SqlParameter("@DrugName", drugName));
-        }
+            // Date filtering
+            if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+            {
+                query += " AND CAST(p.DateOFSale AS DATE) BETWEEN @FromDate AND @ToDate";
+                parameters.Add(new SqlParameter("@FromDate", DateTime.Parse(fromDate).ToString("yyyy-MM-dd")));
+                parameters.Add(new SqlParameter("@ToDate", DateTime.Parse(toDate).ToString("yyyy-MM-dd")));
+            }
+            else if (!string.IsNullOrEmpty(fromDate))
+            {
+                query += " AND CAST(p.DateOFSale AS DATE) >= @FromDate";
+                parameters.Add(new SqlParameter("@FromDate", DateTime.Parse(fromDate).ToString("yyyy-MM-dd")));
+            }
+            else if (!string.IsNullOrEmpty(toDate))
+            {
+                query += " AND CAST(p.DateOFSale AS DATE) <= @ToDate";
+                parameters.Add(new SqlParameter("@ToDate", DateTime.Parse(toDate).ToString("yyyy-MM-dd")));
+            }
 
-        SqlDataAdapter da = new SqlDataAdapter(query, con);
-        foreach (var param in parameters)
-        {
-            da.SelectCommand.Parameters.Add(param);
-        }
+            // Chemist filtering
+            if (!string.IsNullOrEmpty(chemistId))
+            {
+                query += " AND p.ChemistID = @ChemistID";
+                parameters.Add(new SqlParameter("@ChemistID", chemistId));
+            }
+            else if (!string.IsNullOrEmpty(firmName))
+            {
+                query += " AND c.Name_Firm = @FirmName";
+                parameters.Add(new SqlParameter("@FirmName", firmName));
+            }
 
-        DataTable dt = new DataTable();
-        da.Fill(dt);
+            // Drug name filtering (case-insensitive and partial match)
+            if (!string.IsNullOrEmpty(drugName))
+            {
+                query += " AND LOWER(p.DrugName) LIKE LOWER(@DrugName)";
+                parameters.Add(new SqlParameter("@DrugName", "%" + drugName.ToLower() + "%"));
+            }
 
-        PatientGridView.DataSource = dt;
-        PatientGridView.DataBind();
+            SqlDataAdapter da = new SqlDataAdapter(query, con);
+            foreach (var param in parameters)
+            {
+                da.SelectCommand.Parameters.Add(param);
+            }
 
-        // Check if there is no data in the GridView
-        if (PatientGridView.Rows.Count == 0)
-        {
-            MsgAlert.Visible = true;  // Show message if no data is found
-        }
-        else
-        {
-            MsgAlert.Visible = false; // Hide message if data exists
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            PatientGridView.DataSource = dt;
+            PatientGridView.DataBind();
+
+            // Check if there is no data in the GridView
+            MsgAlert.Visible = dt.Rows.Count == 0;
         }
     }
-}
+
+
+
 
 
 
@@ -164,21 +177,20 @@ public partial class FrontEnd_PatientList : System.Web.UI.Page
         }
     }
 
- 
-    //private void BindPatientslist()
-    //{
-    //    using (SqlConnection con = new SqlConnection(connectionString))
-    //    {
-    //        string query = "SELECT [id],[PatientName],[MobileNumber],[PatientAddress],[PrescribedBy],[HospitalName],[HospitalAddress],[DateOFSale],[QuantitySold],[DrugName],[ChemistID],[Category] FROM [PatientEntryForm]";
-    //        SqlDataAdapter da = new SqlDataAdapter(query, con);
-    //        DataTable dt = new DataTable();
-    //        da.Fill(dt);
 
-    //        PatientGridView.DataSource = dt;
-    //        PatientGridView.DataBind();
-    //    }
-    //}
+  
 
 
-    
+
+    protected void btnFilter_Click(object sender, EventArgs e)
+    {
+        string fromDate = txtFromDate.Text.Trim();
+        string toDate = txtToDate.Text.Trim();
+        string chemistId = ddlChemists.SelectedValue;
+        string drugName = ddlDrugs.SelectedValue;
+
+        // Call the method with selected values
+        BindPatientslist(chemistId, drugName, fromDate, toDate);
+    }
+
 }

@@ -7,11 +7,15 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
+
 
 public partial class FrontEnd_StockList : System.Web.UI.Page
 {
 
     string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -27,25 +31,69 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
                 if (Request.QueryString["ChemistID"] != null)
                 {
+                   
                     BindStocklistbyID();
                     chemistbox.Visible = true;
+                    DrugChart.Visible = true;
                     LoadChemistDetailsbyQueryString();
                     string chemistID = Request.QueryString["ChemistID"];
                     SelectChemist(chemistID);
-                }
+                    LoadDrugStockChart();
+
+            }
 
                 else
                 {
-                    BindStocklist();
+                    //BindStocklist();
+
                 }
-
-            
-
         }
     }
 
 
-    
+    private void LoadDrugStockChart()
+    {
+        try
+        {
+            string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+            string chemistID = ddlChemists.SelectedValue;
+
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open(); // Ensure connection is opened before executing query
+                string query = "SELECT TOP 5 DrugName, Quantity FROM TotalStockData WHERE ChemistID = @ChemistID ORDER BY Quantity DESC";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            // Convert DataTable to JSON using Newtonsoft.Json
+            string jsonData = JsonConvert.SerializeObject(dt, Formatting.None);
+
+            // Pass JSON data to JavaScript (without string interpolation)
+            string script = "var drugStockData = " + jsonData + ";";
+            ClientScript.RegisterStartupScript(this.GetType(), "drugStockData", script, true);
+        }
+        catch (Exception ex)
+        {
+            // Show error using JavaScript alert (without string interpolation)
+            string errorMessage = "alert('Error loading drug stock: " + ex.Message + "');";
+            ClientScript.RegisterStartupScript(this.GetType(), "errorAlert", errorMessage, true);
+        }
+    }
+
+
+
+
 
     private void SelectChemist(string chemistID)
     {
@@ -56,6 +104,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             {
                 ddlChemists.SelectedValue = chemistID;
                 //Response.Write("Selected ChemistID: " + chemistID); // Debugging
+                
             }
             else
             {
@@ -83,10 +132,12 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     protected void ddlChemists_SelectedIndexChanged(object sender, EventArgs e)
     {
+
         if (!string.IsNullOrEmpty(ddlChemists.SelectedValue))
         {
               LoadChemistDetails(ddlChemists.SelectedValue);
               LoadInventory(ddlChemists.SelectedValue);
+              LoadDrugStockChart();
 
         }
     }
@@ -104,6 +155,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             lblAddress.Text = dt.Rows[0]["Address"].ToString();
             lblPhone.Text = dt.Rows[0]["Mobile"].ToString();
             chemistbox.Visible = true;
+            DrugChart.Visible = true;
         }
     }
 
@@ -130,7 +182,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity] FROM [TotalStockData] WHERE [ChemistID] = @ChemistID";
+        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity] FROM [TotalStockData] WHERE [ChemistID] = @ChemistID order by DrugName asc";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 
@@ -139,12 +191,14 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             ChemistGridView.DataSource = dt;
             ChemistGridView.DataBind();
             MsgAlert.Visible = false;
+            DrugChart.Visible = true;
         }
         else
         {
             ChemistGridView.DataSource = null;
             ChemistGridView.DataBind();
             MsgAlert.Visible = true;
+            DrugChart.Visible = false;
             
             lblMessage.Text = "No stock available for the selected chemist.";
         }
@@ -230,38 +284,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
     }
 
 
-    //private void BindStocklistbyID()
-    //{
-    //    using (SqlConnection con = new SqlConnection(connectionString))
-    //    {
-    //        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity] FROM [TotalStockData]";
-
-    //        // Check if ChemistID is provided in the query string
-    //        if (Request.QueryString["ChemistID"] != null)
-    //        {
-    //            string chemistID = Request.QueryString["ChemistID"];
-
-    //            // Add a WHERE clause to filter by ChemistID
-    //            query += " WHERE ChemistID = @ChemistID";
-    //        }
-
-    //        using (SqlCommand cmd = new SqlCommand(query, con))
-    //        {
-    //            // If ChemistID is provided, add it as a parameter to prevent SQL injection
-    //            if (Request.QueryString["ChemistID"] != null)
-    //            {
-    //                cmd.Parameters.AddWithValue("@ChemistID", Request.QueryString["ChemistID"]);
-    //            }
-
-    //            SqlDataAdapter da = new SqlDataAdapter(cmd);
-    //            DataTable dt = new DataTable();
-    //            da.Fill(dt);
-
-    //            ChemistGridView.DataSource = dt;
-    //            ChemistGridView.DataBind();
-    //        }
-    //    }
-    //}
+   
 
 
 
