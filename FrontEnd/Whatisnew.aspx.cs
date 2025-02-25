@@ -25,7 +25,7 @@ public partial class FrontEnd_Whatisnew : System.Web.UI.Page
         string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
         using (SqlConnection conn = new SqlConnection(connString))
         {
-            string query = "SELECT NotificationID, Title, Message FROM Notifications ORDER BY CreatedAt DESC";
+            string query = "SELECT Title, CreatedAt, PdfFilePath,Message FROM Notifications ORDER BY CreatedAt DESC";
             SqlDataAdapter da = new SqlDataAdapter(query, conn);
             DataTable dt = new DataTable();
             da.Fill(dt);

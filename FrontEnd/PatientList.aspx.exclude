@@ -20,6 +20,42 @@
         </b>
     </p>
 
+<<<<<<< HEAD:FrontEnd/PatientList.aspx
+
+         <!-- Date & Filter Condition Selection -->
+<!-- Filter Section -->
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- From Date -->
+    <div class="flex-1">
+        <label for="txtFromDate" class="block text-gray-700 font-semibold mb-2">📅 From Date:</label>
+        <asp:TextBox ID="txtFromDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
+    </div>
+
+    <!-- To Date -->
+    <div class="flex-1">
+        <label for="txtToDate" class="block text-gray-700 font-semibold mb-2">📅 To Date:</label>
+        <asp:TextBox ID="txtToDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
+    </div>
+
+    <!-- Chemist Selection -->
+    <div class="flex-1">
+        <label for="ddlChemists" class="block text-gray-700 font-semibold mb-2">🔽 Select Chemist:</label>
+        <asp:DropDownList ID="ddlChemists" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500">
+            <asp:ListItem Text="Select Chemist" Value=""></asp:ListItem>
+           
+        </asp:DropDownList>
+    </div>
+
+    <!-- Drug Selection -->
+    <div class="flex-1">
+        <label for="ddlDrugs" class="block text-gray-700 font-semibold mb-2">💊 Select Drug:</label>
+        <asp:DropDownList ID="ddlDrugs" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500">
+            <asp:ListItem Text="Select Drug" Value=""></asp:ListItem>
+           
+        </asp:DropDownList>
+    </div>
+
+=======
     <!-- Chemist and Drug Selection Section -->
     <div class="flex justify-center gap-6 mb-8">
         <!-- Chemist Dropdown -->
@@ -39,6 +75,7 @@
         </asp:DropDownList>
     </div>
 
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f:FrontEnd/PatientList.aspx.exclude
     <!-- Filter Button -->
     <div class="flex items-end">
         <asp:Button ID="btnFilter" runat="server" Text="🔍 Filter" CssClass="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
