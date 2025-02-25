@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -9,7 +10,6 @@ using System.Web.UI.WebControls;
 
 public partial class FrontEnd_InsertChemist : System.Web.UI.Page
 {
-
    
     // Retrieve the connection string from the configuration file
     string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
@@ -26,7 +26,6 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
         {
             txtCreatedAt.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             LoadLocations();
-
             // FOR EDIT the chemist
             string chemistId = Request.QueryString["chemistId"];
             int chemistIdValue;
@@ -153,7 +152,7 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
                         insertCmd.Parameters.AddWithValue("@IsActive", isActive);
                         insertCmd.Parameters.AddWithValue("@CreatedAt", createdAt);
                         insertCmd.Parameters.AddWithValue("@RoleType", "Chemist");
-                        insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Text);
+                        insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Value);
                         insertCmd.ExecuteNonQuery();
                     }
 
@@ -175,36 +174,42 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
 
 
 
-
-
     private void LoadLocations()
     {
-        List<string> locations = new List<string>
-    {
-        "Select Location",
-        "-- Sectors --",
-        "Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5",
-        "Sector 6", "Sector 7", "Sector 8", "Sector 9", "Sector 10",
-        "Sector 11", "Sector 12", "Sector 13", "Sector 14", "Sector 15",
-        "Sector 16", "Sector 17", "Sector 18", "Sector 19", "Sector 20",
-        "Sector 21", "Sector 22", "Sector 23", "Sector 24", "Sector 25",
-        "Sector 26", "Sector 27", "Sector 28", "Sector 29", "Sector 30",
-        "Sector 31", "Sector 32", "Sector 33", "Sector 34", "Sector 35",
-        "Sector 36", "Sector 37", "Sector 38", "Sector 39", "Sector 40",
-        "Sector 41", "Sector 42", "Sector 43", "Sector 44", "Sector 45",
-        "Sector 46", "Sector 47", "Sector 48", "Sector 49", "Sector 50",
-        "Sector 51", "Sector 52", "Sector 53", "Sector 54", "Sector 55",
-        "Sector 56", "Sector 57", "Sector 58", "Sector 59", "Sector 60",
-        "Sector 61", "Sector 62", "Sector 63",
-        "-- Villages --",
-        "Khuda Lahora", "Khuda Jassu", "Khuda Alisher", "Dhanas", "Maloa",
-        "Raipur Kalan", "Raipur Khurd", "Behlana", "Burail", "Kajheri",
-        "Dadumajra", "Palsora", "Hallomajra", "Attawa", "Sarangpur"
-    };
+        string query = "SELECT [SrNo],[Locations] FROM [ChdSectors]";
+        DataTable dt = GetData(query);
 
-        ddlLocation.DataSource = locations;
+        ddlLocation.DataSource = dt;
+        ddlLocation.DataTextField = "Locations";
+        ddlLocation.DataValueField = "SrNo";
         ddlLocation.DataBind();
+        ddlLocation.Items.Insert(0, new ListItem("-- Select Location --", ""));
     }
+
+
+    private DataTable GetData(string query, params SqlParameter[] parameters)
+    {
+        string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        using (SqlConnection conn = new SqlConnection(connString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                if (parameters != null)
+                    cmd.Parameters.AddRange(parameters);
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+    }
+
+
+
+  
 
 
 
