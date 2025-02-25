@@ -10,8 +10,13 @@
             <div class="grid grid-cols-2 gap-4">
                 <!-- Date Field -->
                 <div>
-                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Date</label>
+                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Bill Date</label>
                     <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="form-input" ReadOnly="true"></asp:TextBox>
+                </div>
+
+                <div>
+                    <label for="txtBillNumber" class="block text-sm font-medium text-gray-600">Bill Number</label>
+                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="form-input"></asp:TextBox>
                 </div>
 
                 <!-- Patient Name -->
@@ -35,25 +40,27 @@
                 <!-- Drug Name -->
                 <div>
                   <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
-                  <asp:DropDownList ID="ddlDrugName" runat="server" AutoPostBack="true" 
-                      CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      OnSelectedIndexChanged="ddlDrugName_SelectedIndexChanged">
-                  </asp:DropDownList>
+                  <asp:DropDownList ID="DropDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" Enabled="false"></asp:DropDownList>
+
               </div>
 
               <div>
                   <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
-                  <asp:DropDownList ID="ddlCategory" runat="server" AutoPostBack="true" 
-                      OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"
-                      CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                  </asp:DropDownList>
+                  <asp:DropDownList ID="DropCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"></asp:DropDownList>
+
               </div>
+
+                <div>
+                    <label for="ddlBatchNumber" class="block text-sm font-medium text-gray-900">Batch Number <span class="text-red-500">*</span> </label>
+                   <asp:DropDownList ID="DropBatchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlBatchNumber_SelectedIndexChanged"></asp:DropDownList>
+
+                </div>
 
                  <!-- Total Quantity-->
                   <div>
                       <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Total Quantity</label>
-                      <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
-                      <span id="TotalQuantityError" class="text-red-500" style="display: none;">Drug is currently out of stock!</span>
+                      <asp:TextBox ID="txtTotalQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
+                      <asp:Label id="TotalQuantityError" class="text-red-500" style="display: none;" runat="server">Drug is currently out of stock!</asp:Label>
                   </div>
 
                 <!-- Quantity Sold -->
