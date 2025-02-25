@@ -33,9 +33,11 @@
                 <th>Patient Name</th>
                 <th>Drug Name</th>
                 <th>Category</th>
+                <th>Batch Number</th>
                 <th>Quantity Sold</th>
                 <th>Mobile Number</th>
-                <th>Date of Sale</th>
+                <th>Bill Date</th>
+                <th>Bill Number</th>
                 <th>Patient Address</th>
                 <th>Prescribed By</th>
                 <th>Hospital Name</th>
@@ -70,9 +72,11 @@
                     { "data": "PatientName" },
                     { "data": "DrugName" },
                     { "data": "Category" },
+                    { "data": "BatchNumber" },                   
                     { "data": "QuantitySold" },
                     { "data": "MobileNumber" },
                     { "data": "DateOFSale" },
+                    { "data": "BillNumber" }, 
                     { "data": "PatientAddress" },
                     { "data": "PrescribedBy" },
                     { "data": "HospitalName" },

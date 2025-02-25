@@ -13,13 +13,19 @@
             <div class="grid grid-cols-2 gap-x-6 gap-y-0">
                 <!-- Date Field -->
               <div>
-                <label for="txtDate" class="block text-sm font-medium text-gray-900">Date <span class="text-red-500">*</span></label>
+                <label for="txtDate" class="block text-sm font-medium text-gray-900">Bill Date <span class="text-red-500">*</span></label>
                 <asp:TextBox ID="txtDate" runat="server" TextMode="Date"
                     CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </asp:TextBox>
                 <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtDate" ErrorMessage="Date is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
             </div>
 
+                   <div>
+                    <label for="Bill Number" class="block text-sm font-medium text-gray-900">Bill Number <span class="text-red-500">*</span></label>
+                    <asp:TextBox ID="txtbillNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </asp:TextBox>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtbillNumber" ErrorMessage="Bill Number is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
+                </div>
 
                 <!-- Patient Name Field -->
                 <div>
