@@ -10,6 +10,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         if (!IsPostBack)
         {
             PopulateDrugNames();
+            txtDate.Attributes["min"] = DateTime.Now.ToString("yyyy-MM-dd");
         }
     }
 
@@ -58,8 +59,11 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         string BatchNumber = batchNumber.Text.Trim();
         string BrandName = brandName.Text.Trim();
         string date = txtDate.Text.Trim();
+        string billDate = txtBillDate.Text.Trim();
+        string billNumber = txtBillNumber.Text.Trim();
+        string purchasedFrom = txtpurchasedFrom.Text.Trim();
         string category = ddlCategory.SelectedValue;
-        string currentDate = DateTime.Today.ToString("yyyy-MM-dd");
+        //string currentDate = DateTime.Today.ToString("yyyy-MM-dd");
         string chemistID = string.Empty;
 
         if(quantity==0)
@@ -83,8 +87,8 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                 conn.Open();
 
                 // ✅ Always INSERT a new row in StockEntryForm (No Check for Existing Drug)
-                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, CreatedDate) " +
-                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID,  @currentDate)";
+                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom) " +
+                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate , @BillNumber, @purchasedFrom)";
 
                 using (SqlCommand insertStockCmd = new SqlCommand(insertStockQuery, conn))
                 {
@@ -95,7 +99,10 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                     insertStockCmd.Parameters.AddWithValue("@BatchNumber", batchNumber.Text.Trim());
                     insertStockCmd.Parameters.AddWithValue("@BrandName", brandName.Text.Trim());
                     insertStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
-                    insertStockCmd.Parameters.AddWithValue("@currentDate", currentDate);
+                   // insertStockCmd.Parameters.AddWithValue("@currentDate", currentDate);
+                    insertStockCmd.Parameters.AddWithValue("@BillDate", billDate);
+                    insertStockCmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                    insertStockCmd.Parameters.AddWithValue("@purchasedFrom", purchasedFrom);
                     insertStockCmd.ExecuteNonQuery();
                 }
 
@@ -136,7 +143,7 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                     }
                 }
 
-                Response.Write("<script>alert('Stock added successfully!');</script>");
+                //Response.Write("<script>alert('Stock added successfully!');</script>");
                 resetForm();
             }
             catch (Exception ex)
@@ -153,8 +160,13 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         txtDrugName.SelectedIndex = 0;
         txtQuantity.Text = "";
         txtDate.Text = "";
+        txtBillDate.Text = "";
+        txtBillNumber.Text = "";
         batchNumber.Text = "";
         brandName.Text = "";
-        ddlCategory.SelectedIndex = 0; // Reset dropdown to the default option
+        ddlCategory.SelectedIndex = 0; 
+
+        string script = "alert('Stock added successfully!'); window.location='DrugStockList.aspx';";
+        ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
     }
 }

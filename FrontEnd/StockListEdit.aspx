@@ -9,12 +9,12 @@
             
             <div class="grid grid-cols-2 gap-6">
                 <div>
-                    <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
+                    <label for="txtDrugName" class="block text-sm font-medium text-gray-600">Drug Name <span class="text-red-500">*</span> </label>
                     <asp:DropDownList ID="txtDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:DropDownList>
                 </div>
                 
                 <div>
-                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
+                    <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category <span class="text-red-500">*</span> </label>
                     <asp:DropDownList ID="ddlCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm">
                         <asp:ListItem Text="Injection" Value="Injection" />
                         <asp:ListItem Text="Capsules/Tablet" Value="Capsules/Tablet" />
@@ -24,23 +24,38 @@
                 </div>
                 
                 <div>
-                    <label for="brandName" class="block text-sm font-medium text-gray-600">Brand Name</label>
+                    <label for="brandName" class="block text-sm font-medium text-gray-600">Brand Name <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="brandName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
                 </div>
                 
                 <div>
-                    <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number</label>
+                    <label for="batchNumber" class="block text-sm font-medium text-gray-600">Batch Number <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="batchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
                 </div>
+
+                  <div>
+                      <label for="billDate" class="block text-sm font-medium text-gray-600">Bill Date <span class="text-red-500">*</span> </label>
+                      <asp:TextBox ID="txtbillDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
+                  </div>
+  
+                  <div>
+                      <label for="billNumber" class="block text-sm font-medium text-gray-600">Bill Number <span class="text-red-500">*</span> </label>
+                      <asp:TextBox ID="txtbillNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
+                  </div>
                 
                 <div>
-                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date</label>
+                    <label for="txtDate" class="block text-sm font-medium text-gray-600">Expiry Date <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
                 </div>
                 
                 <div>
-                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity</label>
-                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
+                    <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity <span class="text-red-500">*</span> </label>
+                    <asp:TextBox ID="txtQuantity" type="number" min="1" max="100000" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
+                </div>
+
+                <div>
+                    <label for="txtPurchasedFrom" class="block text-sm font-medium text-gray-600">Purchased From <span class="text-red-500">*</span> </label>
+                    <asp:TextBox ID="txtPurchasedFrom" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
                 </div>
             </div>
             

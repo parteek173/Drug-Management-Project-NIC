@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.Master" CodeFile="PatientStockList.aspx.cs" Inherits="FrontEnd_PatientStockList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+    <div class="container mx-auto p-4  flex flex-col">
         <h1 class="text-3xl font-bold text-center mb-6">Sale List</h1>
 
         <!-- Date Filters -->
@@ -10,18 +10,18 @@
             <input type="date" id="toDate" class="border p-2 rounded" />
 
             <a href="javascript:void(0)" id="btnFilter" 
-               class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
-               🔍 Filter
+               class="bg-blue-900 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
+               <i class="fa fa-filter" aria-hidden="true"></i>  Filter
             </a>
 
             <a href="javascript:void(0)" id="btnReset" 
-               class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
-               🔄 Reset
+               class="bg-gray-900 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
+                <i class="fa fa-refresh" aria-hidden="true"></i> Reset
             </a>
 
             <a href="javascript:void(0);" onclick="exportData()" 
-               class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
-               📥 Export Data
+               class="bg-green-900 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
+                <i class="fa fa-download" aria-hidden="true"></i> Export Data
             </a>
         </div>
 
@@ -29,19 +29,20 @@
         <div class="overflow-x-auto flex-grow">
             <table id="patientStockTable" class="display w-full text-sm">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th>Patient Name</th>
-                        <th>Drug Name</th>
-                        <th>Category</th>
-                        <th>Quantity Sold</th>
-                        <th>Mobile Number</th>
-                        <th>Date of Sale</th>
-                        <th>Patient Address</th>
-                        <th>Prescribed By</th>
-                        <th>Hospital Name</th>
-                        <th>Hospital Address</th>
-                        <th>Action</th> <!-- New Action Column -->
-                    </tr>
+                     <tr class="text-gray-700">
+                <th>Patient Name</th>
+                <th>Drug Name</th>
+                <th>Category</th>
+                <th>Quantity Sold</th>
+                <th>Mobile Number</th>
+                <th>Date of Sale</th>
+                <th>Patient Address</th>
+                <th>Prescribed By</th>
+                <th>Hospital Name</th>
+                <th>Hospital Address</th>
+                <th style="display: none;">Created Date</th> 
+                <th>Action</th> 
+            </tr>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -76,25 +77,45 @@
                     { "data": "PrescribedBy" },
                     { "data": "HospitalName" },
                     { "data": "HospitalAddress" },
+                    { "data": "CreatedDate", "visible": false }, // Keep CreatedDate hidden
                     {
-                        "data": "DateOFSale",
+                        "data": "CreatedDate",
                         "render": function (data, type, row) {
-                            var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-                            if (data === today) {
+                            if (!data) return ''; // Handle null values
+
+                            // Convert "dd-MM-yyyy HH:mm:ss" to "YYYY-MM-DD" format
+                            var dateParts = data.split(" ")[0].split("-"); // Extract "dd-MM-yyyy"
+                            if (dateParts.length !== 3) return ''; // Invalid format check
+
+                            var formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]); // Year, Month (0-based), Day
+
+                            // Get today's date in "dd-MM-yyyy" format
+                            var today = new Date();
+                            var todayFormatted =
+                                String(today.getDate()).padStart(2, '0') + '-' +
+                                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                today.getFullYear();
+
+                            // Compare CreatedDate with today's date
+                            if (data.startsWith(todayFormatted)) {
                                 return `
-                            <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">
-                                ✏️ 
-                            </a>
-                        `;
+                        <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">
+                            ✏️
+                        </a>
+                    `;
                             }
-                            return ''; // Hide the icon if DateOFSale is not today
+                            return ''; // Hide icon if CreatedDate is not today
                         }
                     }
                 ],
+                "order": [[10, "desc"]], // Sort by CreatedDate (column index 10) in descending order
                 "columnDefs": [
-                    { "orderable": false, "targets": -1 } // Disable sorting for the last column (Action)
+                    { "targets": 10, "visible": false }, // Ensure CreatedDate column stays hidden
+                    { "orderable": false, "targets": -1 } // Disable sorting for last column (Action)
                 ]
             });
+
+
 
             // Filter Button Click Event
             $("#btnFilter").click(function () {

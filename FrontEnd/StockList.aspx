@@ -2,33 +2,28 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
- <div class="container mx-auto p-4 min-h-screen flex flex-col">
-     
-     <!-- Title Section -->
-        <h1 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center mb-6">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+    <div class="container mx-auto p-4 flex flex-col">
+    
+            <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
+              <span class="">
                 Available Drug
             </span>
             Inventory
         </h1>
 
-            
-        <!-- Chemist Selection and Drug Stock Section -->
-        <div class="flex flex-col md:flex-row justify-center gap-6 mt-8 mb-8">
 
-            <!-- Chemist Selection Dropdown -->
-            <div class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
-                <label for="ddlChemists" class="block text-gray-700 font-semibold mb-3 text-lg">
-                    🔽 Select Chemist:
-                </label>
-                <p>
-                    Select a chemist from the list to view the available drug inventory for that specific chemist.
-                </p>
-                <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
-                    CssClass="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
-                </asp:DropDownList>
-            </div>
+        <p class="text-center text-sm font-normal text-gray-800 lg:text-base dark:text-gray-800">
+            Select a chemist from the list to view the available drug inventory for that specific chemist.
+        </p>
+
+    
+
+    <!-- Chemist Selection and Details in One Row -->
+    <div class="text-center mb-4">
+        <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
+            CssClass="border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
+            OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
+        </asp:DropDownList>
 
             <!-- Chemist Details Box -->
             <div id="chemistbox" runat="server" visible="false" class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between" >
@@ -62,24 +57,23 @@
             <p><asp:Label ID="lblMessage" runat="server"></asp:Label></p>
         </div>
 
-        <!-- Drug Inventory Table -->
-        <div class="overflow-x-auto mb-8">
-            <asp:GridView ID="ChemistGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
-                CssClass="w-full table-auto text-sm border border-gray-300 shadow-md"
-                GridLines="None" HeaderStyle-CssClass="bg-gray-100 font-semibold text-gray-700 text-center"
-                RowStyle-CssClass="text-center px-4 py-2 border-b">
-                <Columns>
-                    <asp:TemplateField HeaderText="Sr. No.">
-                        <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
-                        <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10"/>
-                    </asp:TemplateField>
-                    <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                    <asp:BoundField DataField="Category" HeaderText="Category" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                    <asp:BoundField DataField="Quantity" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                </Columns>
-            </asp:GridView>
-        </div>
-
+    <!-- Drug Inventory Table -->
+    <div class="overflow-x-auto">
+        <asp:GridView ID="ChemistGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
+            CssClass="w-full table-auto text-sm border border-gray-300 shadow-md"
+            GridLines="None" HeaderStyle-CssClass="bg-gray-100 font-semibold text-gray-900 text-center"
+            RowStyle-CssClass="text-center px-4 py-2 border-b">
+            <Columns>
+                <asp:TemplateField HeaderText="Sr. No.">
+                    <ItemTemplate><%# Container.DataItemIndex + 1 %></ItemTemplate>
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10"/>
+                </asp:TemplateField>
+                <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-900"/>
+                <asp:BoundField DataField="Category" HeaderText="Category" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-900"/>
+                <asp:BoundField DataField="Quantity" HeaderText="Quantity" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-900"/>
+            </Columns>
+        </asp:GridView>
+    </div>
 </div>
 
 

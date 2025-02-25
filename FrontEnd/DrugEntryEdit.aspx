@@ -76,6 +76,11 @@
                     <asp:ListItem Text="Government Medical College and Hospital, Chandigarh Sector 32 CHD" Value="Government Medical College and Hospital, Chandigarh Sector 32 CHD" />
                     <asp:ListItem Text="Government Multi Specialty Hospital Sector 16 , CHD" Value="Government Multi Specialty Hospital Sector 16 , CHD" />
                     <asp:ListItem Text="Postgraduate Institute of Medical Education and Research Sector 12" Value="Postgraduate Institute of Medical Education and Research Sector 12" />
+                     <asp:ListItem Text="Civil Hospital, Sector-22" Value="Civil Hospital, Sector-22" />
+                     <asp:ListItem Text="Civil Hospital, Sector-45" Value="Civil Hospital, Sector-45" />
+                     <asp:ListItem Text="Civil Hospital, Manimajra" Value="Civil Hospital, Manimajra" />
+                     <asp:ListItem Text="GMCH, South Campus, Sector 48" Value="GMCH, South Campus, Sector 48" />
+                     <asp:ListItem Text="Mental Health Institute (MHI) Sector-32" Value="Mental Health Institute (MHI) Sector-32" />
                     <asp:ListItem Text="Other/Private" Value="Other/Private" />
                 </asp:DropDownList>
                 <asp:RequiredFieldValidator ID="rfvHospitalName" runat="server" ControlToValidate="txtHospitalName"

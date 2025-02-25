@@ -2,17 +2,17 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-     <div class="container mx-auto p-6 min-h-screen flex flex-col">
+     <div class="container mx-auto p-6  flex flex-col">
     <!-- Page Title Section -->
     <h1 class="text-center text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
+        <span class="">
             Patient Prescription 
         </span> 
         & Drug Records
     </h1>
 
     <!-- Page Description Section -->
-    <p class="text-center text-sm lg:text-base text-gray-500 dark:text-gray-400 mb-6">
+    <p class="text-center text-sm lg:text-base text-gray-900 dark:text-gray-400 mb-6">
         This page provides a detailed record of patient prescriptions, including patient information, contact details, prescribed drugs, and hospital details. 
         <br />
         <b>
@@ -20,30 +20,15 @@
         </b>
     </p>
 
-
-         <!-- Date & Filter Condition Selection -->
-<!-- Filter Section -->
-<div class="flex flex-wrap gap-4 mb-4">
-    <!-- From Date -->
-    <div class="flex-1">
-        <label for="txtFromDate" class="block text-gray-700 font-semibold mb-2">📅 From Date:</label>
-        <asp:TextBox ID="txtFromDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
-    </div>
-
-    <!-- To Date -->
-    <div class="flex-1">
-        <label for="txtToDate" class="block text-gray-700 font-semibold mb-2">📅 To Date:</label>
-        <asp:TextBox ID="txtToDate" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500" TextMode="Date"></asp:TextBox>
-    </div>
-
-    <!-- Chemist Selection -->
-    <div class="flex-1">
-        <label for="ddlChemists" class="block text-gray-700 font-semibold mb-2">🔽 Select Chemist:</label>
-        <asp:DropDownList ID="ddlChemists" runat="server" CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500">
-            <asp:ListItem Text="Select Chemist" Value=""></asp:ListItem>
-           
-        </asp:DropDownList>
-    </div>
+    <!-- Chemist and Drug Selection Section -->
+    <div class="flex justify-center gap-6 mb-8">
+        <!-- Chemist Dropdown -->
+        <div class="w-1/3">
+            <asp:DropDownList ID="ddlChemists" runat="server" AutoPostBack="true"
+                CssClass="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                OnSelectedIndexChanged="ddlChemists_SelectedIndexChanged">
+            </asp:DropDownList>
+        </div>
 
     <!-- Drug Selection -->
     <div class="flex-1">

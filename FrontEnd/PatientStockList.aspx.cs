@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using System.Web.Services;
 using System.IO;
 using System.Configuration;
+using System.Reflection.Emit;
+using System.Security.Policy;
 
 public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 {
@@ -96,12 +98,14 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT id, PatientName, DrugName, Category, QuantitySold, MobileNumber, 
-                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientAddress, PrescribedBy, 
-                             HospitalName, HospitalAddress 
-                             FROM [PatientEntryForm] 
-                             WHERE ChemistID = @ChemistID";
-
-            using (SqlCommand cmd = new SqlCommand(query, con))
+                         FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, 
+                         HospitalName, HospitalAddress, 
+                         FORMAT(CreatedDate, 'dd-MM-yyyy HH:mm:ss') AS CreatedDate
+                         FROM [PatientEntryForm] 
+                         WHERE ChemistID = @ChemistID
+                         ORDER BY CreatedDate DESC"; 
+    
+        using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -111,6 +115,7 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
 
     [WebMethod]
     public static string GetFilteredPatientStockData(string fromDate, string toDate)
@@ -123,7 +128,7 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT id, PatientName, DrugName, Category, QuantitySold, MobileNumber, 
-                             FORMAT(DateOFSale, 'yyyy-MM-dd') AS DateOFSale, PatientAddress, PrescribedBy, 
+                             FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, 
                              HospitalName, HospitalAddress 
                              FROM [PatientEntryForm] 
                              WHERE ChemistID = @ChemistID";

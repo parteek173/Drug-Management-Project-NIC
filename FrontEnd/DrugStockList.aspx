@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPage.Master" CodeFile="DrugStockList.aspx.cs" Inherits="DrugStockList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <div class="container mx-auto p-4 min-h-screen flex flex-col">
+    <div class="container mx-auto p-4  flex flex-col">
         <h1 class="text-3xl font-bold text-center mb-6">Drug Stock List</h1>
 
         <!-- Date Filters -->
@@ -10,18 +10,18 @@
             <input type="date" id="toDate" class="border p-2 rounded" />
 
             <a href="javascript:void(0)" id="btnFilter" 
-               class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
-               🔍 Filter
+               class="bg-blue-900 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-all">
+                <i class="fa fa-filter" aria-hidden="true"></i> Filter
             </a>
 
             <a href="javascript:void(0)" id="btnReset" 
-               class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
-               🔄 Reset
+               class="bg-gray-900 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition-all">
+               <i class="fa fa-refresh" aria-hidden="true"></i> Reset
             </a>
 
             <a href="javascript:void(0);" onclick="exportData()" 
-               class="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
-               📥 Export Data
+               class="bg-green-900 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-all">
+                <i class="fa fa-download" aria-hidden="true"></i> Export Data
             </a>
         </div>
 
@@ -29,14 +29,17 @@
         <div class="overflow-x-auto flex-grow">
             <table id="stockTable" class="display w-full text-sm">
                 <thead>
-                    <tr class="bg-gray-200 text-gray-700">
+                    <tr class=" text-gray-700">
                         <th>Drug Name</th>
+                        <th>Category</th>
                         <th>Quantity</th>
                         <th>Expiry Date</th>
-                        <th>Category</th>
                         <th>Batch Number</th>
                         <th>Brand Name</th>
-                        <th>Drug Purchase Date</th>
+                        <th>Bill Date</th>
+                        <th>Bill Number</th>
+                        <th>Drug Entry Date</th>
+                        <th>Drug Purchased From</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -55,7 +58,7 @@
             // Default Data (All Stock Data)
             var table = $('#stockTable').DataTable({
                 "ajax": {
-                    "url": "DrugStockList.aspx/GetStockData",  // Call to fetch all data
+                    "url": "DrugStockList.aspx/GetStockData",
                     "type": "POST",
                     "contentType": "application/json; charset=utf-8",
                     "dataType": "json",
@@ -65,40 +68,55 @@
                 },
                 "columns": [
                     { "data": "DrugName" },
+                    { "data": "Category" },
                     { "data": "Quantity" },
                     { "data": "ExpiryDate" },
-                    { "data": "Category" },
                     { "data": "BatchNumber" },
                     { "data": "BrandName" },
-                    { "data": "CreatedDate" },
+                    { "data": "BillDate" },
+                    { "data": "BillNumber" },
+                    {
+                        "data": "CreatedDate",
+                        "render": function (data, type, row) {
+                            if (!data) return ''; // Handle empty/null cases
+
+                            var createdDate = new Date(data);
+                            var day = String(createdDate.getDate()).padStart(2, '0');
+                            var month = String(createdDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                            var year = createdDate.getFullYear();
+
+                            return `${day}-${month}-${year}`; // Format to dd-MM-yyyy
+                        }
+                    },
+                    { "data": "PurchasedFrom" },
                     {
                         "data": null,
-                        "orderable": false, // Disable sorting for Action column
+                        "orderable": false,
                         "render": function (data, type, row) {
-                            var currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-                            var createdDate = new Date(row.CreatedDate).toISOString().split('T')[0]; // Format CreatedDate
+                            if (!row.CreatedDate) return '';
 
-                            if (createdDate === currentDate) {
+                            var createdDate = new Date(row.CreatedDate);
+                            var createdDateFormatted = createdDate.toISOString().split('T')[0]; // yyyy-MM-dd
+                            var today = new Date().toISOString().split('T')[0];
+
+                            if (createdDateFormatted === today) {
                                 return `
-                            <a href="javascript:void(0);" onclick="editEntry('${row.id}')" 
-                                class="text-blue-500 mr-3">
-                                ✏️
-                            </a>
-                            <a href="javascript:void(0);" onclick="deleteEntry('${row.id}')" 
-                                class="text-red-500">
-                                ❌
-                            </a>
-                        `;
-                            } else {
-                                return ''; // No icons if CreatedDate is not today
+                        <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">✏️</a>
+                        <a href="javascript:void(0);" onclick="deleteEntry('${row.id}')" class="text-red-500">❌</a>
+                    `;
                             }
+                            return '';
                         }
                     }
                 ],
+                "order": [[8, "desc"]],  // Sort by CreatedDate (latest first)
                 "columnDefs": [
-                    { "orderable": false, "targets": -1 } // Make the last column non-sortable
+                    { "targets": 8, "type": "date" },  // Ensure sorting works correctly
+                    { "orderable": false, "targets": -1 }
                 ]
             });
+
+
 
             window.editEntry = function (id) {
                 window.location.href = "StockListEdit.aspx?StockID=" + id;
