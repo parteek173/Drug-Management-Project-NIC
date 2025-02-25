@@ -52,6 +52,11 @@
                     <label for="txtQuantity" class="block text-sm font-medium text-gray-600">Quantity <span class="text-red-500">*</span> </label>
                     <asp:TextBox ID="txtQuantity" type="number" min="1" max="100000" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
                 </div>
+
+                <div>
+                    <label for="txtPurchasedFrom" class="block text-sm font-medium text-gray-600">Purchased From <span class="text-red-500">*</span> </label>
+                    <asp:TextBox ID="txtPurchasedFrom" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"></asp:TextBox>
+                </div>
             </div>
             
             <div class="flex items-center justify-between mt-6">

@@ -66,7 +66,7 @@ public partial class DrugStockList : System.Web.UI.Page
             return dt; // Return empty table if no user is logged in
         }
 
-        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY CreatedDate DESC";
+        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate, BillDate, BillNumber, PurchasedFrom FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY CreatedDate DESC";
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
@@ -95,7 +95,7 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT id, DrugName, Quantity, FORMAT(ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
-                         Category, BatchNumber, BrandName, CreatedDate, FORMAT(BillDate, 'dd-MM-yyyy') AS BillDate, BillNumber
+                         Category, BatchNumber, BrandName, CreatedDate, FORMAT(BillDate, 'dd-MM-yyyy') AS BillDate, BillNumber, PurchasedFrom
                          FROM [StockEntryForm] 
                          WHERE ChemistID = @ChemistID
                          ORDER BY CreatedDate DESC";
@@ -122,7 +122,7 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT id, DrugName, Quantity, FORMAT(ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
-                         Category, BatchNumber, BrandName, FORMAT(CreatedDate, 'dd-MM-yyyy') AS CreatedDate 
+                         Category, BatchNumber, BrandName, CreatedDate, FORMAT(BillDate, 'dd-MM-yyyy') AS BillDate, BillNumber, PurchasedFrom 
                          FROM [StockEntryForm] 
                          WHERE ChemistID = @ChemistID";
 

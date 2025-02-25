@@ -33,7 +33,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
             try
             {
                 conn.Open();
-                string query = "SELECT DrugName, Category, BrandName, BatchNumber, ExpiryDate, Quantity, BillDate, BillNumber FROM StockEntryForm WHERE id = @StockID";
+                string query = "SELECT DrugName, Category, BrandName, BatchNumber, ExpiryDate, Quantity, BillDate, BillNumber, PurchasedFrom FROM StockEntryForm WHERE id = @StockID";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -49,6 +49,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                             batchNumber.Text = reader["BatchNumber"].ToString();
                             txtDate.Text = Convert.ToDateTime(reader["ExpiryDate"]).ToString("yyyy-MM-dd");
                             txtQuantity.Text = reader["Quantity"].ToString();
+                            txtPurchasedFrom.Text = reader["PurchasedFrom"].ToString();                            
                             txtbillDate.Text = Convert.ToDateTime(reader["BillDate"]).ToString("yyyy-MM-dd");
                             txtbillNumber.Text = reader["BillNumber"].ToString();
                             txtDrugName.Enabled = false;
@@ -109,6 +110,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
         int newQuantity = int.Parse(txtQuantity.Text);
         string newBatchNumber = batchNumber.Text;
         string newBrandName = brandName.Text;
+        string purchasedFrom = txtPurchasedFrom.Text;
         DateTime newExpiryDate = DateTime.Parse(txtDate.Text);
 
         string newBillNumber = txtbillNumber.Text;
@@ -146,7 +148,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                 // Update StockEntryForm table
                 string updateStockQuery = @"UPDATE StockEntryForm 
                                         SET DrugName = @DrugName, Category = @Category, Quantity = @Quantity, 
-                                            BatchNumber = @BatchNumber, BrandName = @BrandName, ExpiryDate = @ExpiryDate, BillDate = @BillDate, BillNumber = @BillNumber 
+                                            BatchNumber = @BatchNumber, BrandName = @BrandName, ExpiryDate = @ExpiryDate, BillDate = @BillDate, BillNumber = @BillNumber, PurchasedFrom = @purchasedFrom 
                                         WHERE id = @StockID";
                 using (SqlCommand cmd = new SqlCommand(updateStockQuery, conn, transaction))
                 {
@@ -159,6 +161,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@StockID", stockID);
                     cmd.Parameters.AddWithValue("@BillNumber", newBillNumber);
                     cmd.Parameters.AddWithValue("@BillDate", newBillDate);
+                    cmd.Parameters.AddWithValue("@purchasedFrom", purchasedFrom);
                     cmd.ExecuteNonQuery();
                 }
 

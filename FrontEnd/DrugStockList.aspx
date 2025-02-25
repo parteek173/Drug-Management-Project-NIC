@@ -31,14 +31,15 @@
                 <thead>
                     <tr class=" text-gray-700">
                         <th>Drug Name</th>
+                        <th>Category</th>
                         <th>Quantity</th>
                         <th>Expiry Date</th>
-                        <th>Category</th>
                         <th>Batch Number</th>
                         <th>Brand Name</th>
                         <th>Bill Date</th>
                         <th>Bill Number</th>
-                        <th>Drug Purchase Date</th>
+                        <th>Drug Entry Date</th>
+                        <th>Drug Purchased From</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -67,9 +68,9 @@
                 },
                 "columns": [
                     { "data": "DrugName" },
+                    { "data": "Category" },
                     { "data": "Quantity" },
                     { "data": "ExpiryDate" },
-                    { "data": "Category" },
                     { "data": "BatchNumber" },
                     { "data": "BrandName" },
                     { "data": "BillDate" },
@@ -87,6 +88,7 @@
                             return `${day}-${month}-${year}`; // Format to dd-MM-yyyy
                         }
                     },
+                    { "data": "PurchasedFrom" },
                     {
                         "data": null,
                         "orderable": false,

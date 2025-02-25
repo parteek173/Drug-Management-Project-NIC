@@ -81,6 +81,13 @@
                           <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
                           <span id="MaxQuantityError" class="text-red-500" style="display: none;">Quantity cannot be more than 1000!</span>
                       </div>
+
+                <!-- Purchased From -->
+                         <div>
+                             <label for="purchasedFrom" class="block text-sm font-medium text-gray-900"> Purchased From <span class="text-red-500">*</span> </label>
+                             <asp:TextBox ID="txtpurchasedFrom" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Purchased From"></asp:TextBox>
+                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtpurchasedFrom" ErrorMessage="Field is required" CssClass="text-red-500"></asp:RequiredFieldValidator>                             
+                         </div> 
                 </div>
 
             <!-- Buttons -->

@@ -63,10 +63,19 @@
                     </asp:DropDownList>
                 </div>
 
+                <div class="mb-5">
+                    <label for="ddlBatchNumber" class="block text-sm font-medium text-gray-900">Batch Number <span class="text-red-500">*</span> </label>
+                   <asp:DropDownList ID="ddlBatchNumber" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlBatchNumber_SelectedIndexChanged" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
+                </div>
+
+
                 <div>
                     <label for="txtQuantity" class="block text-sm font-medium text-gray-900">Total Quantity <span class="text-red-500">*</span> </label>
-                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true"></asp:TextBox>
-                    <span id="TotalQuantityError" class="text-red-500" style="display: none;">Drug is currently out of stock!</span>
+                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" ReadOnly="true" disabled="true"></asp:TextBox>
+
+                    <asp:Label ID="TotalQuantityError" runat="server" Text="No stock available" ForeColor="Red" Visible="false" />
+
+
                 </div>
 
                  <div>
