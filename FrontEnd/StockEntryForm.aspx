@@ -110,10 +110,10 @@
                     TotalQuantityError.style.display = 'block';
                     return false;
                 }
-                else if (totalQty > 1000) {
-                    MaxQuantityError.style.display = 'block';
-                    return false;
-                }
+                //else if (totalQty > 1000) {
+                //    MaxQuantityError.style.display = 'block';
+                //    return false;
+                //}
                 else {
                     TotalQuantityError.style.display = 'none';
                     MaxQuantityError.style.display = 'none';

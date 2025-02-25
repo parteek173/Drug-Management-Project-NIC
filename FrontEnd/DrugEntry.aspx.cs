@@ -413,12 +413,13 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         string drugName = ddlDrugName.SelectedValue;
         string categoryName = ddlCategory.SelectedValue;
         string batchNumber = ddlBatchNumber.SelectedValue;
+        string billNumber = txtbillNumber.Text.Trim();
         int quantitySold = int.Parse(txtQuantitySold.Text.Trim());
 
         string chemistID = Session["UserID"] != null ? Session["UserID"].ToString() : string.Empty;
 
-        string query = "INSERT INTO PatientEntryForm (PatientName, MobileNumber, PatientAddress, PrescribedBy, HospitalName, HospitalAddress, DateOFSale, DrugName, QuantitySold, ChemistID, Category, BatchNumber) " +
-                       "VALUES (@PatientName, @MobileNumber, @PatientAddress, @PrescribedBy, @HospitalName, @HospitalAddress, @DateOFSale, @DrugName, @QuantitySold, @ChemistID, @categoryName, @batchNumber)";
+        string query = "INSERT INTO PatientEntryForm (PatientName, MobileNumber, PatientAddress, PrescribedBy, HospitalName, HospitalAddress, DateOFSale, DrugName, QuantitySold, ChemistID, Category, BatchNumber, BillNumber) " +
+                       "VALUES (@PatientName, @MobileNumber, @PatientAddress, @PrescribedBy, @HospitalName, @HospitalAddress, @DateOFSale, @DrugName, @QuantitySold, @ChemistID, @categoryName, @batchNumber, @billNumber)";
 
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
@@ -439,6 +440,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                     cmd.Parameters.AddWithValue("@categoryName", categoryName);
                     cmd.Parameters.AddWithValue("@batchNumber", batchNumber);
+                    cmd.Parameters.AddWithValue("@billNumber", billNumber);
 
                     int result = cmd.ExecuteNonQuery();
                     if (result > 0)

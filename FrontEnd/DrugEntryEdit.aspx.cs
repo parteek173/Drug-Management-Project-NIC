@@ -13,53 +13,53 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            PopulateDrugDropdown(); // Populate Drug Dropdown on Initial Load
+
             if (!string.IsNullOrEmpty(Request.QueryString["PatientID"]))
             {
                 string patientID = Request.QueryString["PatientID"];
                 hfPatientID.Value = patientID;
-
-                PopulateDrugNames();  // Populate the Drug Name dropdown first
-                LoadPatientData(patientID); // Then load patient details and set default values
+                LoadPatientData(patientID); // Load patient details and set default values
             }
         }
     }
 
-    private void PopulateDrugNames()
-    {
-        if (Session["UserID"] != null)
-        {
-            string chemistID = Session["UserID"].ToString();
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
-            {
-                string query = "SELECT DISTINCT DrugName FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY DrugName";
+    //private void PopulateDrugNames()
+    //{
+    //    if (Session["UserID"] != null)
+    //    {
+    //        string chemistID = Session["UserID"].ToString();
+    //        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
+    //        {
+    //            string query = "SELECT DISTINCT DrugName FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY DrugName";
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
-                    try
-                    {
-                        con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
+    //            using (SqlCommand cmd = new SqlCommand(query, con))
+    //            {
+    //                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                try
+    //                {
+    //                    con.Open();
+    //                    SqlDataReader reader = cmd.ExecuteReader();
 
-                        ddlDrugName.DataSource = reader;
-                        ddlDrugName.DataTextField = "DrugName";
-                        ddlDrugName.DataValueField = "DrugName";
-                        ddlDrugName.DataBind();
+    //                    ddlDrugName.DataSource = reader;
+    //                    ddlDrugName.DataTextField = "DrugName";
+    //                    ddlDrugName.DataValueField = "DrugName";
+    //                    ddlDrugName.DataBind();
 
-                        ddlDrugName.Items.Insert(0, new ListItem("Select Drug Name", ""));
-                    }
-                    catch (Exception ex)
-                    {
-                        Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
-                    }
-                }
-            }
-        }
-        else
-        {
-            Response.Write("<script>alert('Error: Session expired. Please log in again.');</script>");
-        }
-    }
+    //                    ddlDrugName.Items.Insert(0, new ListItem("Select Drug Name", ""));
+    //                }
+    //                catch (Exception ex)
+    //                {
+    //                    Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Response.Write("<script>alert('Error: Session expired. Please log in again.');</script>");
+    //    }
+    //}
 
 
     private void LoadPatientData(string patientID)
@@ -81,39 +81,59 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                     txtPatientAddress.Text = reader["PatientAddress"].ToString();
                     txtQuantitySold.Text = reader["QuantitySold"].ToString();
                     txtPrescribedBy.Text = reader["PrescribedBy"].ToString();
-                    //txtHospitalName.Text = reader["HospitalName"].ToString();
+                    txtBillNumber.Text = reader["BillNumber"].ToString();
                     txtHospitalAddress.Text = reader["HospitalAddress"].ToString();
 
                     string hospitalName = reader["HospitalName"].ToString();
                     string drugName = reader["DrugName"].ToString();
                     string category = reader["Category"].ToString();
+                    string batchNumber = reader["BatchNumber"].ToString();
 
+                    // Populate Hospital Name Dropdown
                     if (txtHospitalName.Items.FindByValue(hospitalName) != null)
                     {
                         txtHospitalName.SelectedValue = hospitalName;
                     }
                     else
                     {
-                        txtHospitalName.SelectedIndex = 0; // Select first item if hospital not found
+                        txtHospitalName.SelectedIndex = 0;
                     }
 
-                    // Ensure the DrugName exists before setting it
-                    if (ddlDrugName.Items.FindByValue(drugName) != null)
+                    // Populate Drug Name Dropdown Before Setting Selected Value
+                    PopulateDrugDropdown();
+                    if (DropDrugName.Items.FindByValue(drugName) != null)
                     {
-                        ddlDrugName.SelectedValue = drugName;
-                    }
-                    else
-                    {
-                        ddlDrugName.SelectedIndex = 0; // Select the first item if not found
+                        DropDrugName.SelectedValue = drugName;
                     }
 
-                    FetchCategoryAndQuantity(drugName, category);
+                    DropDrugName.Enabled = false; // Make it Read-Only
+
+                    // Fetch Categories and Batch Numbers based on the drug name
+                    FetchCategoriesAndBatchNumbers(drugName, category, batchNumber);
                 }
             }
         }
     }
 
-    private void FetchCategoryAndQuantity(string drugName, string selectedCategory = "")
+    private void PopulateDrugDropdown()
+    {
+        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
+        {
+            string query = "SELECT DISTINCT drug_name FROM Drugs";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                con.Open();
+                DropDrugName.DataSource = cmd.ExecuteReader();
+                DropDrugName.DataTextField = "drug_name";
+                DropDrugName.DataValueField = "drug_name";
+                DropDrugName.DataBind();
+            }
+        }
+        DropDrugName.Items.Insert(0, new ListItem("-- Select Drug --", ""));
+    }
+
+
+    private void FetchCategoriesAndBatchNumbers(string drugName, string selectedCategory = "", string selectedBatch = "")
     {
         if (Session["UserID"] == null)
         {
@@ -124,7 +144,7 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
         string chemistID = Session["UserID"].ToString();
         using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
         {
-            string query = "SELECT Category, Quantity FROM TotalStockData WHERE DrugName = @DrugName AND ChemistID = @ChemistID";
+            string query = "SELECT DISTINCT Category, BatchNumber, Quantity FROM StockEntryForm WHERE DrugName = @DrugName AND ChemistID = @ChemistID";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -136,33 +156,41 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                     con.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    ddlCategory.Items.Clear();
-                    txtQuantity.Text = string.Empty;
+                    DropCategory.Items.Clear();
+                    DropBatchNumber.Items.Clear();
+                    txtTotalQuantity.Text = string.Empty;
 
-                    Dictionary<string, string> categoryQuantityMap = new Dictionary<string, string>();
+                    Dictionary<string, Dictionary<string, string>> categoryBatchQuantityMap = new Dictionary<string, Dictionary<string, string>>();
 
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
                             string category = reader["Category"].ToString();
+                            string batch = reader["BatchNumber"].ToString();
                             string quantity = reader["Quantity"].ToString();
-                            categoryQuantityMap[category] = quantity;
-                            ddlCategory.Items.Add(new ListItem(category, category));
+
+                            if (!categoryBatchQuantityMap.ContainsKey(category))
+                            {
+                                categoryBatchQuantityMap[category] = new Dictionary<string, string>();
+                            }
+                            categoryBatchQuantityMap[category][batch] = quantity;
                         }
 
-                        if (ddlCategory.Items.Count > 0)
+                        foreach (var cat in categoryBatchQuantityMap.Keys)
                         {
-                            if (ddlCategory.Items.FindByValue(selectedCategory) != null)
-                            {
-                                ddlCategory.SelectedValue = selectedCategory;
-                            }
-                            else
-                            {
-                                ddlCategory.SelectedIndex = 0;
-                            }
+                            DropCategory.Items.Add(new ListItem(cat, cat));
+                        }
 
-                            txtQuantity.Text = categoryQuantityMap[ddlCategory.SelectedValue];
+                        if (!string.IsNullOrEmpty(selectedCategory) && categoryBatchQuantityMap.ContainsKey(selectedCategory))
+                        {
+                            DropCategory.SelectedValue = selectedCategory;
+                            PopulateBatchNumbers(selectedCategory, categoryBatchQuantityMap, selectedBatch);
+                        }
+                        else
+                        {
+                            DropCategory.SelectedIndex = 0;
+                            PopulateBatchNumbers(DropCategory.SelectedValue, categoryBatchQuantityMap);
                         }
                     }
                 }
@@ -174,17 +202,27 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
         }
     }
 
-    protected void ddlDrugName_SelectedIndexChanged(object sender, EventArgs e)
+    private void PopulateBatchNumbers(string category, Dictionary<string, Dictionary<string, string>> categoryBatchQuantityMap, string selectedBatch = "")
     {
-        if (!string.IsNullOrEmpty(ddlDrugName.SelectedValue))
+        DropBatchNumber.Items.Clear();
+
+        if (categoryBatchQuantityMap.ContainsKey(category))
         {
-            txtQuantitySold.Text = "";
-            FetchCategoryAndQuantity(ddlDrugName.SelectedValue);
-        }
-        else
-        {
-            ddlCategory.Items.Clear();
-            txtQuantity.Text = string.Empty;
+            foreach (var batch in categoryBatchQuantityMap[category].Keys)
+            {
+                DropBatchNumber.Items.Add(new ListItem(batch, batch));
+            }
+
+            if (!string.IsNullOrEmpty(selectedBatch) && categoryBatchQuantityMap[category].ContainsKey(selectedBatch))
+            {
+                DropBatchNumber.SelectedValue = selectedBatch;
+                txtTotalQuantity.Text = categoryBatchQuantityMap[category][selectedBatch];
+            }
+            else
+            {
+                DropBatchNumber.SelectedIndex = 0;
+                txtTotalQuantity.Text = categoryBatchQuantityMap[category][DropBatchNumber.SelectedValue];
+            }
         }
     }
 
@@ -197,12 +235,12 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
         }
 
         string chemistID = Session["UserID"].ToString();
-        string drugName = ddlDrugName.SelectedValue;
-        string categoryName = ddlCategory.SelectedValue;
+        string drugName = DropDrugName.SelectedValue;
+        string categoryName = DropCategory.SelectedValue;
 
         using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
         {
-            string query = "SELECT Quantity FROM TotalStockData WHERE DrugName = @DrugName AND ChemistID = @ChemistID AND Category = @Category";
+            string query = "SELECT DISTINCT BatchNumber, Quantity FROM StockEntryForm WHERE DrugName = @DrugName AND ChemistID = @ChemistID AND Category = @Category";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -213,8 +251,26 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                 try
                 {
                     con.Open();
-                    object result = cmd.ExecuteScalar();
-                    txtQuantity.Text = result != null ? result.ToString() : "0";
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    DropBatchNumber.Items.Clear();
+                    txtTotalQuantity.Text = string.Empty;
+
+                    Dictionary<string, string> batchQuantityMap = new Dictionary<string, string>();
+
+                    while (reader.Read())
+                    {
+                        string batch = reader["BatchNumber"].ToString();
+                        string quantity = reader["Quantity"].ToString();
+                        batchQuantityMap[batch] = quantity;
+                        DropBatchNumber.Items.Add(new ListItem(batch, batch));
+                    }
+
+                    if (DropBatchNumber.Items.Count > 0)
+                    {
+                        DropBatchNumber.SelectedIndex = 0;
+                        txtTotalQuantity.Text = batchQuantityMap[DropBatchNumber.SelectedValue];
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -223,6 +279,76 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
             }
         }
     }
+
+    protected void ddlBatchNumber_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (Session["UserID"] == null)
+        {
+            Response.Write("<script>alert('Error: Session expired. Please log in again.');</script>");
+            return;
+        }
+
+        string selectedBatch = DropBatchNumber.SelectedValue;
+        string selectedCategory = DropCategory.SelectedValue;
+
+        if (!string.IsNullOrEmpty(selectedBatch) && !string.IsNullOrEmpty(selectedCategory))
+        {
+            txtTotalQuantity.Text = FetchQuantity(DropDrugName.SelectedValue, selectedCategory, selectedBatch);
+        }
+    }
+
+    private string FetchQuantity(string drugName, string category, string batchNumber)
+    {
+        // Check if session is expired
+        if (Session["UserID"] == null)
+        {
+            Response.Write("<script>alert('Error: Session expired. Please log in again.');</script>");
+            return "0"; // Return a default value
+        }
+
+        string chemistID = Session["UserID"].ToString();
+        string quantityStr = "0"; // Default value
+
+        try
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
+            {
+                string query = "SELECT Quantity FROM StockEntryForm WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber AND ChemistID = @ChemistID";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@DrugName", drugName);
+                    cmd.Parameters.AddWithValue("@Category", category);
+                    cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+                    con.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    int quantity; // Declare variable separately (C# 5.0 compatibility)
+                    if (result != null && int.TryParse(result.ToString(), out quantity))
+                    {
+                        quantityStr = quantity.ToString();
+                        if (TotalQuantityError != null)
+                            TotalQuantityError.Visible = (quantity == 0);
+                    }
+                    else
+                    {
+                        if (TotalQuantityError != null)
+                            TotalQuantityError.Visible = true;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+        }
+
+        return quantityStr; // Return the retrieved quantity or "0" if an error occurred
+    }
+
+
 
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
@@ -256,30 +382,32 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
 
                 // Step 2: Update PatientEntryForm
                 string updateQuery = @"UPDATE PatientEntryForm SET 
-                PatientName = @PatientName, MobileNumber = @MobileNumber, PatientAddress = @PatientAddress,
-                DrugName = @DrugName, Category = @Category, QuantitySold = @QuantitySold, 
-                PrescribedBy = @PrescribedBy, HospitalName = @HospitalName, HospitalAddress = @HospitalAddress
-                WHERE id = @PatientID";
+                    BillNumber = @BillNumber, PatientName = @PatientName, MobileNumber = @MobileNumber, 
+                    PatientAddress = @PatientAddress, Category = @Category, BatchNumber = @BatchNumber,
+                    QuantitySold = @QuantitySold, PrescribedBy = @PrescribedBy, HospitalName = @HospitalName, 
+                    HospitalAddress = @HospitalAddress 
+                    WHERE id = @PatientID";
 
                 using (SqlCommand updateCmd = new SqlCommand(updateQuery, con, transaction))
                 {
                     updateCmd.Parameters.AddWithValue("@PatientID", hfPatientID.Value);
+                    updateCmd.Parameters.AddWithValue("@BillNumber", txtBillNumber.Text);
                     updateCmd.Parameters.AddWithValue("@PatientName", txtPatientName.Text);
                     updateCmd.Parameters.AddWithValue("@MobileNumber", txtMobileNumber.Text);
                     updateCmd.Parameters.AddWithValue("@PatientAddress", txtPatientAddress.Text);
-                    updateCmd.Parameters.AddWithValue("@DrugName", ddlDrugName.SelectedValue);
-                    updateCmd.Parameters.AddWithValue("@Category", ddlCategory.SelectedValue);
+                    updateCmd.Parameters.AddWithValue("@Category", DropCategory.SelectedValue);
+                    updateCmd.Parameters.AddWithValue("@BatchNumber", DropBatchNumber.SelectedValue);
                     updateCmd.Parameters.AddWithValue("@QuantitySold", txtQuantitySold.Text);
                     updateCmd.Parameters.AddWithValue("@PrescribedBy", txtPrescribedBy.Text);
-                    updateCmd.Parameters.AddWithValue("@HospitalName", txtHospitalName.Text);
+                    updateCmd.Parameters.AddWithValue("@HospitalName", txtHospitalName.SelectedValue);
                     updateCmd.Parameters.AddWithValue("@HospitalAddress", txtHospitalAddress.Text);
 
                     updateCmd.ExecuteNonQuery();
                 }
 
                 // Step 3: Update TotalStockData
-                string newDrugName = ddlDrugName.SelectedValue;
-                string newCategory = ddlCategory.SelectedValue;
+                string newDrugName = DropDrugName.SelectedValue;
+                string newCategory = DropCategory.SelectedValue;
                 int newQuantitySold = Convert.ToInt32(txtQuantitySold.Text);
                 string chemistID = Session["UserID"] != null ? Session["UserID"].ToString() : "";
 
@@ -338,11 +466,8 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                 // Step 4: Commit Transaction
                 transaction.Commit();
 
-                string script = "<script type='text/javascript'>alert('Updated Success!'); window.location='PatientStockList.aspx';</script>";
+                string script = "<script type='text/javascript'>alert('Updated Successfully!'); window.location='PatientStockList.aspx';</script>";
                 ClientScript.RegisterStartupScript(this.GetType(), "UpdateSuccess", script);
-
-                //Response.Write("<script>alert('Updated Success!');</script>");
-                //Response.Redirect("PatientStockList.aspx");
             }
         }
         catch (Exception ex)
@@ -362,5 +487,6 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
             Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
         }
     }
+
 
 }
