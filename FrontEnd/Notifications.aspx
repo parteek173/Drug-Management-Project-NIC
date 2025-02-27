@@ -2,8 +2,20 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
+<<<<<<< HEAD
         <div class="container mx-auto p-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add Notification</h2>
+=======
+
+    <div class="container mx-auto p-4  flex flex-col">
+
+          <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center">
+              <span class="">Add Notification</span> 
+        </h1>
+
+        <div class="container mx-auto p-6">
+       <%-- <h2 class="text-2xl font-semibold text-gray-800 mb-4">Add Notification</h2>--%>
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
         <div class="bg-white p-6 rounded-lg shadow-md">
             <asp:Label ID="lblMessage" runat="server" CssClass="text-red-500"></asp:Label>
             <asp:TextBox ID="txtTitle" runat="server" CssClass="w-full p-2 border rounded mt-2" Placeholder="Title"></asp:TextBox>
@@ -24,6 +36,7 @@
         </div>
 
 
+<<<<<<< HEAD
             <h2 class="text-2xl font-semibold text-gray-800 mt-8">Notifications List</h2>
             <div class="overflow-x-auto mt-4">
              <asp:GridView ID="gvNotifications" runat="server" CssClass="min-w-full bg-white border border-gray-200 shadow-md rounded-lg text-left"
@@ -56,11 +69,18 @@
                 <AlternatingRowStyle CssClass="bg-gray-100" />
             </asp:GridView>
         </div>
+=======
+          
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
 
 
     </div>
 
+<<<<<<< HEAD
     
+=======
+    </div>
+>>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
 
 
 </asp:Content>

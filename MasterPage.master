@@ -20,6 +20,8 @@
     <link rel="manifest" href="Assets/site.webmanifest">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <link href="fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
 
 </head>
@@ -69,7 +71,6 @@
                         </svg>
                     </button>
                     <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-
                         <%-- Admin Navigations --%>
                         <ul class="flex flex-col font-medium md:flex-row md:space-x-8 md:mt-0" id="UlAdmin" runat="server">
                             <li><a href="Dashboard.aspx">Dashboard</a></li>
@@ -86,7 +87,7 @@
                                     </svg>
                                 </button>
                                 <!-- Dropdown menu -->
-                                <div id="dropdownNavbarChemists" class="absolute hidden font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
+                                <div id="dropdownNavbarChemists" class="absolute hidden group-hover:block font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
                                     <ul class="py-2 text-sm">
                                         <li><a href="InsertChemist.aspx" class="block px-4 py-2 hover:text-gray-300">Chemist Entry Form</a></li>
                                         <li><a href="ChemistList.aspx" class="block px-4 py-2 hover:text-gray-300">Chemist List</a></li>
@@ -111,13 +112,31 @@
                                     </svg>
                                 </button>
                                 <!-- Dropdown menu -->
-                                <div id="dropdownNavbar1" class="absolute hidden font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
+                                <div id="dropdownNavbar1" class="absolute hidden group-hover:block font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
                                     <ul class="py-2 text-sm">
                                         <li><a href="Drugsentry.aspx" class="block px-4 py-2 hover:text-gray-300">Drug Entry Form</a></li>
                                         <li><a href="Drugslist.aspx" class="block px-4 py-2 hover:text-gray-300">Drugs List</a></li>
                                     </ul>
                                 </div>
                             </li>
+
+                             <li class="relative group">
+                                  <button id="NavbarNotification" type="button" data-dropdown-toggle="dropdownNavbarNotification" class="flex items-center justify-between w-full py-2 px-3 text-white hover:text-gray-300 md:p-0">
+                                    Manage Notification 
+                                    <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                                    </svg>
+                                </button>
+
+                                 
+                                <div id="dropdownNavbarNotification" class="absolute hidden group-hover:block font-normal bg-blue-600 text-white rounded-lg shadow-md w-44">
+                                    <ul class="py-2 text-sm">
+                                        <li><a href="Notifications.aspx" class="block px-4 py-2 hover:text-gray-300">Add New Notification</a></li>
+                                        <li><a href="NotificationsList.aspx" class="block px-4 py-2 hover:text-gray-300">Notification List</a></li>
+                                    </ul>
+                                </div>
+
+                             </li>
 
 
 
@@ -130,7 +149,7 @@
                              <li><a href="ChemistDashboard.aspx">Dashboard</a></li>    
                             <li><a href="StockEntryForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock Entry Form</a></li>
                             <li><a href="DrugEntry.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Entry Form</a></li>
-                            
+                            <li><a href="SaleReturnForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Return Form</a></li>
                             
                             
                             

@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using System.IO;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class FrontEnd_Notifications : System.Web.UI.Page
+public partial class FrontEnd_NotificationsList : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
         if (!IsPostBack)
         {
-<<<<<<< HEAD
             LoadNotifications();
         }
 
@@ -39,70 +36,55 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
             }
         }
     }
-=======
-            
-        }
 
-    }
-  
->>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
 
-    protected void btnSubmit_Click(object sender, EventArgs e)
+    protected void DrugsGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
-        string connStr = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
-        string pdfPath = "";
+        // Retrieve the NotificationID from the data keys
+        int notificationID = Convert.ToInt32(gvNotifications.DataKeys[e.RowIndex].Value);
 
-        if (filePdf.HasFile)
-        {
-            string fileName = Path.GetFileName(filePdf.PostedFile.FileName);
-            pdfPath = "~/Uploads/" + fileName;
-            filePdf.SaveAs(Server.MapPath(pdfPath));
-        }
+        // Call method to delete the notification from the database
+        DeleteNotification(notificationID);
 
-        using (SqlConnection conn = new SqlConnection(connStr))
+        // Rebind the GridView after deletion
+        BindNotifications();
+    }
+
+    private void DeleteNotification(int notificationID)
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
+
+        using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "INSERT INTO Notifications (Title, Message, ChemistID, CreatedAt, SentBy, PdfFilePath) VALUES (@Title, @Message, @ChemistID, @CreatedAt, @SentBy, @PdfFilePath)";
+            string query = "DELETE FROM Notifications WHERE NotificationID = @NotificationID";
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@Title", txtTitle.Text);
-                cmd.Parameters.AddWithValue("@Message", txtMessage.Text);
-                cmd.Parameters.AddWithValue("@ChemistID", "0");
-
-
-                DateTime createdAt;
-                if (!DateTime.TryParse(txtCreatedAt.Text, out createdAt))
-                {
-                    lblMessage.Text = "Invalid date format.";
-                    return;
-                }
-                cmd.Parameters.AddWithValue("@CreatedAt", createdAt);
-
-
-               
-                
-                
-                cmd.Parameters.AddWithValue("@SentBy", 1);
-                cmd.Parameters.AddWithValue("@PdfFilePath", pdfPath);
-
+                cmd.Parameters.AddWithValue("@NotificationID", notificationID);
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                conn.Close();
             }
         }
-<<<<<<< HEAD
-        lblMessage.Text = "Notification added successfully!";
-        LoadNotifications();
-=======
-
-        lblMessage.Text = "Notification added successfully!";
-        Response.Redirect("NotificationsList.aspx");
-        
->>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
     }
 
+    private void BindNotifications()
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionString"].ConnectionString;
 
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            string query = "SELECT NotificationID, Title, Message, CreatedAt, PdfFilePath FROM Notifications";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                gvNotifications.DataSource = dt;
+                gvNotifications.DataBind();
+            }
+        }
+    }
 
-<<<<<<< HEAD
     protected void gvNotifications_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         if (e.CommandName == "DeleteNotification")
@@ -123,7 +105,5 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
             LoadNotifications();
         }
     }
-=======
-    
->>>>>>> 91d360ed93de4ec1b27c58e7a373614adf63b55f
+
 }
