@@ -310,7 +310,14 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
             {
-                string query = "SELECT DISTINCT BatchNumber FROM StockEntryForm WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID ORDER BY BatchNumber";
+
+                string query = "SELECT DISTINCT BatchNumber FROM StockEntryForm " +
+               "WHERE DrugName = @DrugName " +
+               "AND Category = @Category " +
+               "AND ChemistID = @ChemistID " +
+               "AND ExpiryDate >= CAST(GETDATE() AS DATE) " +
+               "ORDER BY BatchNumber";
+
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -355,7 +362,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
 
         using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
         {
-            string query = "SELECT Quantity FROM StockEntryForm WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber AND ChemistID = @ChemistID";
+            string query = "SELECT Quantity FROM TotalStockData WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber AND ChemistID = @ChemistID";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -369,11 +376,11 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                     con.Open();
                     object result = cmd.ExecuteScalar();
 
-                    int quantity;
-                    if (result != null && int.TryParse(result.ToString(), out quantity))
+                    int UpdatedQuantity;
+                    if (result != null && int.TryParse(result.ToString(), out UpdatedQuantity))
                     {
-                        txtQuantity.Text = quantity.ToString();
-                        if (TotalQuantityError != null) TotalQuantityError.Visible = (quantity == 0);
+                        txtQuantity.Text = UpdatedQuantity.ToString();
+                        if (TotalQuantityError != null) TotalQuantityError.Visible = (UpdatedQuantity == 0);
                     }
                     else
                     {
@@ -445,7 +452,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                     int result = cmd.ExecuteNonQuery();
                     if (result > 0)
                     {
-                        UpdateStock(drugName, quantitySold, categoryName, conn);
+                        UpdateStock(drugName, quantitySold, categoryName, batchNumber, conn);
                         //Response.Write("<script>alert('Sale entry success!');</script>");
                         resetForm();
                     }
@@ -462,8 +469,78 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         }
     }
 
+    //private void UpdateStock(string drugName, int quantitySold, string categoryName, SqlConnection conn)
+    //{
+    //    if (Session["UserID"] == null)
+    //    {
+    //        Response.Write("<script>alert('Error: Session expired. Please log in again.');</script>");
+    //        return;
+    //    }
 
-    private void UpdateStock(string drugName, int quantitySold, string categoryName, SqlConnection conn)
+    //    string chemistID = Session["UserID"].ToString(); // Get the logged-in ChemistID
+
+    //    try
+    //    {
+    //        // First, check if the record exists and fetch the available UpdatedQuantity
+    //        string getStockQuery = "SELECT UpdatedQuantity FROM StockEntryForm WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+    //        int availableQuantity = 0;
+
+    //        using (SqlCommand getStockCmd = new SqlCommand(getStockQuery, conn))
+    //        {
+    //            getStockCmd.Parameters.AddWithValue("@DrugName", drugName);
+    //            getStockCmd.Parameters.AddWithValue("@Category", categoryName);
+    //            getStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+    //            object result = getStockCmd.ExecuteScalar();
+
+    //            if (result != null)
+    //            {
+    //                availableQuantity = Convert.ToInt32(result);
+    //            }
+    //            else
+    //            {
+    //                Response.Write("<script>alert('Error: No stock found for the selected drug, category, and chemist.');</script>");
+    //                return;
+    //            }
+    //        }
+
+    //        // Check if enough stock is available
+    //        if (availableQuantity < quantitySold)
+    //        {
+    //            Response.Write("<script>alert('Error: Not enough stock available for the selected category.');</script>");
+    //            return;
+    //        }
+
+    //        // Update the StockEntryForm UpdatedQuantity field based on DrugName, Category, and ChemistID
+    //        string updateQuery = "UPDATE StockEntryForm SET UpdatedQuantity = UpdatedQuantity - @QuantitySold WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+
+    //        using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+    //        {
+    //            updateCmd.Parameters.AddWithValue("@QuantitySold", quantitySold);
+    //            updateCmd.Parameters.AddWithValue("@DrugName", drugName);
+    //            updateCmd.Parameters.AddWithValue("@Category", categoryName);
+    //            updateCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+
+    //            int rowsAffected = updateCmd.ExecuteNonQuery();
+
+    //            if (rowsAffected > 0)
+    //            {
+    //                //Response.Write("<script>alert('Stock updated successfully!');</script>");
+    //            }
+    //            else
+    //            {
+    //                Response.Write("<script>alert('Error updating stock quantity. No rows affected.');</script>");
+    //            }
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Response.Write("<script>alert('Exception: " + ex.Message.Replace("'", "\\'") + "');</script>");
+    //    }
+    //}
+
+
+    private void UpdateStock(string drugName, int quantitySold, string categoryName, string batchNumber, SqlConnection conn)
     {
         if (Session["UserID"] == null)
         {
@@ -475,8 +552,13 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
 
         try
         {
-            // First, check if the record exists and fetch the available quantity
-            string getStockQuery = "SELECT Quantity FROM TotalStockData WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+            // Check if the record exists and fetch available quantity for the given BatchNumber
+            string getStockQuery = @"SELECT Quantity FROM TotalStockData 
+                                 WHERE DrugName = @DrugName 
+                                 AND Category = @Category 
+                                 AND ChemistID = @ChemistID 
+                                 AND BatchNumber = @BatchNumber";
+
             int availableQuantity = 0;
 
             using (SqlCommand getStockCmd = new SqlCommand(getStockQuery, conn))
@@ -484,6 +566,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                 getStockCmd.Parameters.AddWithValue("@DrugName", drugName);
                 getStockCmd.Parameters.AddWithValue("@Category", categoryName);
                 getStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                getStockCmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
 
                 object result = getStockCmd.ExecuteScalar();
 
@@ -493,7 +576,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                 }
                 else
                 {
-                    Response.Write("<script>alert('Error: No stock found for the selected drug, category, and chemist.');</script>");
+                    Response.Write("<script>alert('Error: No stock found for the selected drug, category, chemist, and batch number.');</script>");
                     return;
                 }
             }
@@ -501,12 +584,17 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
             // Check if enough stock is available
             if (availableQuantity < quantitySold)
             {
-                Response.Write("<script>alert('Error: Not enough stock available for the selected category.');</script>");
+                Response.Write("<script>alert('Error: Not enough stock available for the selected batch.');</script>");
                 return;
             }
 
-            // Update the TotalStockData quantity based on DrugName, Category, and ChemistID
-            string updateQuery = "UPDATE TotalStockData SET Quantity = Quantity - @QuantitySold WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+            // Update the TotalStockData quantity based on DrugName, Category, ChemistID, and BatchNumber
+            string updateQuery = @"UPDATE TotalStockData 
+                               SET Quantity = Quantity - @QuantitySold 
+                               WHERE DrugName = @DrugName 
+                               AND Category = @Category 
+                               AND ChemistID = @ChemistID 
+                               AND BatchNumber = @BatchNumber";
 
             using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
             {
@@ -514,6 +602,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
                 updateCmd.Parameters.AddWithValue("@DrugName", drugName);
                 updateCmd.Parameters.AddWithValue("@Category", categoryName);
                 updateCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                updateCmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
 
                 int rowsAffected = updateCmd.ExecuteNonQuery();
 
@@ -532,6 +621,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
             Response.Write("<script>alert('Exception: " + ex.Message + "');</script>");
         }
     }
+
 
 
 

@@ -86,9 +86,10 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
             {
                 conn.Open();
 
-                // ✅ Always INSERT a new row in StockEntryForm (No Check for Existing Drug)
-                string insertStockQuery = "INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom) " +
-                                          "VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate , @BillNumber, @purchasedFrom)";
+                // ✅ Insert into StockEntryForm (Always insert new row)
+                string insertStockQuery = @"
+                INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom, UpdatedQuantity) 
+                VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate, @BillNumber, @PurchasedFrom, @UpdatedQuantity)";
 
                 using (SqlCommand insertStockCmd = new SqlCommand(insertStockQuery, conn))
                 {
@@ -96,41 +97,52 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                     insertStockCmd.Parameters.AddWithValue("@Quantity", quantity);
                     insertStockCmd.Parameters.AddWithValue("@Date", date);
                     insertStockCmd.Parameters.AddWithValue("@Category", category);
-                    insertStockCmd.Parameters.AddWithValue("@BatchNumber", batchNumber.Text.Trim());
-                    insertStockCmd.Parameters.AddWithValue("@BrandName", brandName.Text.Trim());
+                    insertStockCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
+                    insertStockCmd.Parameters.AddWithValue("@BrandName", BrandName);
                     insertStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
-                   // insertStockCmd.Parameters.AddWithValue("@currentDate", currentDate);
                     insertStockCmd.Parameters.AddWithValue("@BillDate", billDate);
                     insertStockCmd.Parameters.AddWithValue("@BillNumber", billNumber);
-                    insertStockCmd.Parameters.AddWithValue("@purchasedFrom", purchasedFrom);
+                    insertStockCmd.Parameters.AddWithValue("@PurchasedFrom", purchasedFrom);
+                    insertStockCmd.Parameters.AddWithValue("@UpdatedQuantity", quantity);
                     insertStockCmd.ExecuteNonQuery();
                 }
 
-                // ✅ Check if the DrugName & Category exist in TotalStockData
-                string checkTotalStockQuery = "SELECT Quantity FROM TotalStockData WHERE DrugName = @DrugName AND Category = @Category";
+                // ✅ Check if the DrugName, Category, and BatchNumber exist in TotalStockData
+                string checkTotalStockQuery = @"
+                SELECT Quantity FROM TotalStockData 
+                WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber";
+
                 using (SqlCommand checkTotalStockCmd = new SqlCommand(checkTotalStockQuery, conn))
                 {
                     checkTotalStockCmd.Parameters.AddWithValue("@DrugName", drugName);
                     checkTotalStockCmd.Parameters.AddWithValue("@Category", category);
+                    checkTotalStockCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
                     object existingQuantity = checkTotalStockCmd.ExecuteScalar();
 
                     if (existingQuantity != null) // If exists, update quantity
                     {
                         int updatedQuantity = quantity + Convert.ToInt32(existingQuantity);
-                        string updateTotalStockQuery = "UPDATE TotalStockData SET Quantity = @UpdatedQuantity WHERE DrugName = @DrugName AND Category = @Category";
+                        string updateTotalStockQuery = @"
+                        UPDATE TotalStockData 
+                        SET Quantity = @UpdatedQuantity, BillDate = @BillDate, BillNumber = @BillNumber 
+                        WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber";
 
                         using (SqlCommand updateTotalStockCmd = new SqlCommand(updateTotalStockQuery, conn))
                         {
                             updateTotalStockCmd.Parameters.AddWithValue("@UpdatedQuantity", updatedQuantity);
+                            updateTotalStockCmd.Parameters.AddWithValue("@BillDate", billDate);
+                            updateTotalStockCmd.Parameters.AddWithValue("@BillNumber", billNumber);
                             updateTotalStockCmd.Parameters.AddWithValue("@DrugName", drugName);
                             updateTotalStockCmd.Parameters.AddWithValue("@Category", category);
+                            updateTotalStockCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
                             updateTotalStockCmd.ExecuteNonQuery();
                         }
                     }
                     else // If not exists, insert a new row
                     {
-                        string insertTotalStockQuery = "INSERT INTO TotalStockData (DrugName, Category, Quantity, ChemistID) " +
-                                                       "VALUES (@DrugName, @Category, @Quantity, @ChemistID)";
+                        string insertTotalStockQuery = @"
+                        INSERT INTO TotalStockData (DrugName, Category, Quantity, ChemistID, BatchNumber, BillDate, BillNumber) 
+                        VALUES (@DrugName, @Category, @Quantity, @ChemistID, @BatchNumber, @BillDate, @BillNumber)";
 
                         using (SqlCommand insertTotalStockCmd = new SqlCommand(insertTotalStockQuery, conn))
                         {
@@ -138,13 +150,16 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
                             insertTotalStockCmd.Parameters.AddWithValue("@Category", category);
                             insertTotalStockCmd.Parameters.AddWithValue("@Quantity", quantity);
                             insertTotalStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                            insertTotalStockCmd.Parameters.AddWithValue("@BatchNumber", BatchNumber);
+                            insertTotalStockCmd.Parameters.AddWithValue("@BillDate", billDate);
+                            insertTotalStockCmd.Parameters.AddWithValue("@BillNumber", billNumber);
                             insertTotalStockCmd.ExecuteNonQuery();
                         }
                     }
                 }
 
-                //Response.Write("<script>alert('Stock added successfully!');</script>");
                 resetForm();
+                //Response.Write("<script>alert('Stock added successfully!');</script>");
             }
             catch (Exception ex)
             {

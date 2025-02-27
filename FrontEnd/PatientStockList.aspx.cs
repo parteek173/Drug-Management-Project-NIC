@@ -12,6 +12,7 @@ using System.IO;
 using System.Configuration;
 using System.Reflection.Emit;
 using System.Security.Policy;
+using System.Globalization;
 
 public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 {
@@ -128,25 +129,33 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"SELECT id, PatientName, DrugName, Category, QuantitySold, MobileNumber, 
-                             FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, BatchNumber, BillNumber,
-                             HospitalName, HospitalAddress 
-                             FROM [PatientEntryForm] 
-                             WHERE ChemistID = @ChemistID";
+                CONVERT(varchar, DateOFSale, 23) AS DateOFSale, 
+                CONVERT(varchar, CreatedDate, 120) AS CreatedDate,
+                PatientAddress, PrescribedBy, BatchNumber, BillNumber,
+                HospitalName, HospitalAddress 
+                FROM [PatientEntryForm] 
+                WHERE ChemistID = @ChemistID";
+
+
+            List<SqlParameter> parameters = new List<SqlParameter>
+        {
+            new SqlParameter("@ChemistID", chemistID)
+        };
 
             if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
+                DateTime from = DateTime.ParseExact(fromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime to = DateTime.ParseExact(toDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1).AddSeconds(-1); // Extend to full day
+
                 query += " AND DateOFSale BETWEEN @FromDate AND @ToDate";
+
+                parameters.Add(new SqlParameter("@FromDate", from));
+                parameters.Add(new SqlParameter("@ToDate", to));
             }
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
-
-                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
-                {
-                    cmd.Parameters.AddWithValue("@FromDate", DateTime.Parse(fromDate));
-                    cmd.Parameters.AddWithValue("@ToDate", DateTime.Parse(toDate));
-                }
+                cmd.Parameters.AddRange(parameters.ToArray());
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
@@ -155,5 +164,6 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
 
 }
