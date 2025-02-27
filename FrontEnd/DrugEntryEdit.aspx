@@ -16,7 +16,7 @@
 
                 <div>
                     <label for="txtBillNumber" class="block text-sm font-medium text-gray-600">Bill Number</label>
-                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="form-input"></asp:TextBox>
+                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="form-input" ReadOnly="true"></asp:TextBox>
                 </div>
 
                 <!-- Patient Name -->
@@ -40,7 +40,7 @@
                 <!-- Drug Name -->
                 <div>
                   <label for="ddlDrugName" class="block text-sm font-medium text-gray-600">Drug Name</label>
-                  <asp:DropDownList ID="DropDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" Enabled="false"></asp:DropDownList>
+                  <asp:DropDownList ID="DropDrugName" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true"></asp:DropDownList>
 
               </div>
 

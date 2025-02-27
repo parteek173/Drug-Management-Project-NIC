@@ -349,6 +349,134 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
     }
 
 
+    //protected void btnUpdate_Click(object sender, EventArgs e)
+    //{
+    //    SqlTransaction transaction = null;
+
+    //    try
+    //    {
+    //        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString()))
+    //        {
+    //            con.Open();
+    //            transaction = con.BeginTransaction();
+
+    //            // Step 1: Fetch previous Drug Name, Category, and QuantitySold
+    //            string oldDrugName = "", oldCategory = "";
+    //            int oldQuantitySold = 0;
+
+    //            string selectQuery = "SELECT DrugName, Category, QuantitySold FROM PatientEntryForm WHERE id = @PatientID";
+    //            using (SqlCommand selectCmd = new SqlCommand(selectQuery, con, transaction))
+    //            {
+    //                selectCmd.Parameters.AddWithValue("@PatientID", hfPatientID.Value);
+    //                using (SqlDataReader reader = selectCmd.ExecuteReader())
+    //                {
+    //                    if (reader.Read())
+    //                    {
+    //                        oldDrugName = reader["DrugName"].ToString();
+    //                        oldCategory = reader["Category"].ToString();
+    //                        oldQuantitySold = Convert.ToInt32(reader["QuantitySold"]);
+    //                    }
+    //                }
+    //            }
+
+    //            // Step 2: Update PatientEntryForm
+    //            string updateQuery = @"UPDATE PatientEntryForm SET 
+    //            BillNumber = @BillNumber, PatientName = @PatientName, MobileNumber = @MobileNumber, 
+    //            PatientAddress = @PatientAddress, Category = @Category, BatchNumber = @BatchNumber,
+    //            QuantitySold = @QuantitySold, PrescribedBy = @PrescribedBy, HospitalName = @HospitalName, 
+    //            HospitalAddress = @HospitalAddress 
+    //            WHERE id = @PatientID";
+
+    //            using (SqlCommand updateCmd = new SqlCommand(updateQuery, con, transaction))
+    //            {
+    //                updateCmd.Parameters.AddWithValue("@PatientID", hfPatientID.Value);
+    //                updateCmd.Parameters.AddWithValue("@BillNumber", txtBillNumber.Text);
+    //                updateCmd.Parameters.AddWithValue("@PatientName", txtPatientName.Text);
+    //                updateCmd.Parameters.AddWithValue("@MobileNumber", txtMobileNumber.Text);
+    //                updateCmd.Parameters.AddWithValue("@PatientAddress", txtPatientAddress.Text);
+    //                updateCmd.Parameters.AddWithValue("@Category", DropCategory.SelectedValue);
+    //                updateCmd.Parameters.AddWithValue("@BatchNumber", DropBatchNumber.SelectedValue);
+    //                updateCmd.Parameters.AddWithValue("@QuantitySold", txtQuantitySold.Text);
+    //                updateCmd.Parameters.AddWithValue("@PrescribedBy", txtPrescribedBy.Text);
+    //                updateCmd.Parameters.AddWithValue("@HospitalName", txtHospitalName.SelectedValue);
+    //                updateCmd.Parameters.AddWithValue("@HospitalAddress", txtHospitalAddress.Text);
+    //                updateCmd.ExecuteNonQuery();
+    //            }
+
+    //            // Step 3: Update StockEntryForm (UpdatedQuantity)
+    //            string newDrugName = DropDrugName.SelectedValue;
+    //            string newCategory = DropCategory.SelectedValue;
+    //            int newQuantitySold = Convert.ToInt32(txtQuantitySold.Text);
+    //            string chemistID = Session["UserID"] != null ? Session["UserID"].ToString() : "";
+
+    //            if (oldDrugName != newDrugName || oldCategory != newCategory)
+    //            {
+    //                // Revert stock for old drug
+    //                string revertOldStockQuery = "UPDATE StockEntryForm SET UpdatedQuantity = UpdatedQuantity + @OldQuantity WHERE DrugName = @OldDrug AND Category = @OldCategory AND ChemistID = @ChemistID";
+    //                using (SqlCommand revertCmd = new SqlCommand(revertOldStockQuery, con, transaction))
+    //                {
+    //                    revertCmd.Parameters.AddWithValue("@OldQuantity", oldQuantitySold);
+    //                    revertCmd.Parameters.AddWithValue("@OldDrug", oldDrugName);
+    //                    revertCmd.Parameters.AddWithValue("@OldCategory", oldCategory);
+    //                    revertCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                    revertCmd.ExecuteNonQuery();
+    //                }
+
+    //                // Deduct from new stock
+    //                string deductNewStockQuery = "UPDATE StockEntryForm SET UpdatedQuantity = UpdatedQuantity - @NewQuantity WHERE DrugName = @NewDrug AND Category = @NewCategory AND ChemistID = @ChemistID";
+    //                using (SqlCommand deductCmd = new SqlCommand(deductNewStockQuery, con, transaction))
+    //                {
+    //                    deductCmd.Parameters.AddWithValue("@NewQuantity", newQuantitySold);
+    //                    deductCmd.Parameters.AddWithValue("@NewDrug", newDrugName);
+    //                    deductCmd.Parameters.AddWithValue("@NewCategory", newCategory);
+    //                    deductCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                    deductCmd.ExecuteNonQuery();
+    //                }
+    //            }
+    //            else
+    //            {
+    //                // Adjust stock based on quantity difference
+    //                int quantityDifference = newQuantitySold - oldQuantitySold;
+    //                if (quantityDifference != 0)
+    //                {
+    //                    string updateStockQuery = "UPDATE StockEntryForm SET UpdatedQuantity = UpdatedQuantity - @QuantityDiff WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+    //                    using (SqlCommand updateStockCmd = new SqlCommand(updateStockQuery, con, transaction))
+    //                    {
+    //                        updateStockCmd.Parameters.AddWithValue("@QuantityDiff", quantityDifference);
+    //                        updateStockCmd.Parameters.AddWithValue("@DrugName", newDrugName);
+    //                        updateStockCmd.Parameters.AddWithValue("@Category", newCategory);
+    //                        updateStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                        updateStockCmd.ExecuteNonQuery();
+    //                    }
+    //                }
+    //            }
+
+    //            // Step 4: Commit Transaction
+    //            transaction.Commit();
+
+    //            string script = "<script type='text/javascript'>alert('Updated Successfully!'); window.location='PatientStockList.aspx';</script>";
+    //            ClientScript.RegisterStartupScript(this.GetType(), "UpdateSuccess", script);
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        try
+    //        {
+    //            if (transaction != null && transaction.Connection != null)
+    //            {
+    //                transaction.Rollback();
+    //            }
+    //        }
+    //        catch (Exception rollbackEx)
+    //        {
+    //            Response.Write("<script>alert('Rollback Error: " + rollbackEx.Message + "');</script>");
+    //        }
+
+    //        Response.Write("<script>alert('Error: " + ex.Message + "');</script>");
+    //    }
+    //}
+
+
 
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
@@ -361,11 +489,11 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                 con.Open();
                 transaction = con.BeginTransaction();
 
-                // Step 1: Fetch previous Drug Name, Category, and QuantitySold
-                string oldDrugName = "", oldCategory = "";
+                // Step 1: Fetch previous Drug Name, Category, BatchNumber, and QuantitySold
+                string oldDrugName = "", oldCategory = "", oldBatchNumber = "";
                 int oldQuantitySold = 0;
 
-                string selectQuery = "SELECT DrugName, Category, QuantitySold FROM PatientEntryForm WHERE id = @PatientID";
+                string selectQuery = "SELECT DrugName, Category, BatchNumber, QuantitySold FROM PatientEntryForm WHERE id = @PatientID";
                 using (SqlCommand selectCmd = new SqlCommand(selectQuery, con, transaction))
                 {
                     selectCmd.Parameters.AddWithValue("@PatientID", hfPatientID.Value);
@@ -375,6 +503,7 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                         {
                             oldDrugName = reader["DrugName"].ToString();
                             oldCategory = reader["Category"].ToString();
+                            oldBatchNumber = reader["BatchNumber"].ToString();
                             oldQuantitySold = Convert.ToInt32(reader["QuantitySold"]);
                         }
                     }
@@ -382,11 +511,11 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
 
                 // Step 2: Update PatientEntryForm
                 string updateQuery = @"UPDATE PatientEntryForm SET 
-                    BillNumber = @BillNumber, PatientName = @PatientName, MobileNumber = @MobileNumber, 
-                    PatientAddress = @PatientAddress, Category = @Category, BatchNumber = @BatchNumber,
-                    QuantitySold = @QuantitySold, PrescribedBy = @PrescribedBy, HospitalName = @HospitalName, 
-                    HospitalAddress = @HospitalAddress 
-                    WHERE id = @PatientID";
+                BillNumber = @BillNumber, PatientName = @PatientName, MobileNumber = @MobileNumber, 
+                PatientAddress = @PatientAddress, Category = @Category, BatchNumber = @BatchNumber,
+                QuantitySold = @QuantitySold, PrescribedBy = @PrescribedBy, HospitalName = @HospitalName, 
+                HospitalAddress = @HospitalAddress 
+                WHERE id = @PatientID";
 
                 using (SqlCommand updateCmd = new SqlCommand(updateQuery, con, transaction))
                 {
@@ -408,29 +537,32 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                 // Step 3: Update TotalStockData
                 string newDrugName = DropDrugName.SelectedValue;
                 string newCategory = DropCategory.SelectedValue;
+                string newBatchNumber = DropBatchNumber.SelectedValue;
                 int newQuantitySold = Convert.ToInt32(txtQuantitySold.Text);
                 string chemistID = Session["UserID"] != null ? Session["UserID"].ToString() : "";
 
-                if (oldDrugName != newDrugName || oldCategory != newCategory)
+                if (oldDrugName != newDrugName || oldCategory != newCategory || oldBatchNumber != newBatchNumber)
                 {
                     // Revert stock for old drug
-                    string revertOldStockQuery = "UPDATE TotalStockData SET Quantity = Quantity + @OldQuantity WHERE DrugName = @OldDrug AND Category = @OldCategory AND ChemistID = @ChemistID";
+                    string revertOldStockQuery = "UPDATE TotalStockData SET Quantity = Quantity + @OldQuantity WHERE DrugName = @OldDrug AND Category = @OldCategory AND BatchNumber = @OldBatch AND ChemistID = @ChemistID";
                     using (SqlCommand revertCmd = new SqlCommand(revertOldStockQuery, con, transaction))
                     {
                         revertCmd.Parameters.AddWithValue("@OldQuantity", oldQuantitySold);
                         revertCmd.Parameters.AddWithValue("@OldDrug", oldDrugName);
                         revertCmd.Parameters.AddWithValue("@OldCategory", oldCategory);
+                        revertCmd.Parameters.AddWithValue("@OldBatch", oldBatchNumber);
                         revertCmd.Parameters.AddWithValue("@ChemistID", chemistID);
                         revertCmd.ExecuteNonQuery();
                     }
 
                     // Deduct from new stock
-                    string deductNewStockQuery = "UPDATE TotalStockData SET Quantity = Quantity - @NewQuantity WHERE DrugName = @NewDrug AND Category = @NewCategory AND ChemistID = @ChemistID";
+                    string deductNewStockQuery = "UPDATE TotalStockData SET Quantity = Quantity - @NewQuantity WHERE DrugName = @NewDrug AND Category = @NewCategory AND BatchNumber = @NewBatch AND ChemistID = @ChemistID";
                     using (SqlCommand deductCmd = new SqlCommand(deductNewStockQuery, con, transaction))
                     {
                         deductCmd.Parameters.AddWithValue("@NewQuantity", newQuantitySold);
                         deductCmd.Parameters.AddWithValue("@NewDrug", newDrugName);
                         deductCmd.Parameters.AddWithValue("@NewCategory", newCategory);
+                        deductCmd.Parameters.AddWithValue("@NewBatch", newBatchNumber);
                         deductCmd.Parameters.AddWithValue("@ChemistID", chemistID);
 
                         int rowsAffected = deductCmd.ExecuteNonQuery();
@@ -446,12 +578,13 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                     int quantityDifference = newQuantitySold - oldQuantitySold;
                     if (quantityDifference != 0)
                     {
-                        string updateStockQuery = "UPDATE TotalStockData SET Quantity = Quantity - @QuantityDiff WHERE DrugName = @DrugName AND Category = @Category AND ChemistID = @ChemistID";
+                        string updateStockQuery = "UPDATE TotalStockData SET Quantity = Quantity - @QuantityDiff WHERE DrugName = @DrugName AND Category = @Category AND BatchNumber = @BatchNumber AND ChemistID = @ChemistID";
                         using (SqlCommand updateStockCmd = new SqlCommand(updateStockQuery, con, transaction))
                         {
                             updateStockCmd.Parameters.AddWithValue("@QuantityDiff", quantityDifference);
                             updateStockCmd.Parameters.AddWithValue("@DrugName", newDrugName);
                             updateStockCmd.Parameters.AddWithValue("@Category", newCategory);
+                            updateStockCmd.Parameters.AddWithValue("@BatchNumber", newBatchNumber);
                             updateStockCmd.Parameters.AddWithValue("@ChemistID", chemistID);
 
                             int rowsAffected = updateStockCmd.ExecuteNonQuery();
