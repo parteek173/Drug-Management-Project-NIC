@@ -16,7 +16,7 @@
 
                 <div>
                     <label for="txtBillNumber" class="block text-sm font-medium text-gray-600">Bill Number</label>
-                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="form-input" ReadOnly="true"></asp:TextBox>
+                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="form-input"></asp:TextBox>
                 </div>
 
                 <!-- Patient Name -->
@@ -46,13 +46,13 @@
 
               <div>
                   <label for="ddlCategory" class="block text-sm font-medium text-gray-600">Category</label>
-                  <asp:DropDownList ID="DropCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged"></asp:DropDownList>
+                  <asp:DropDownList ID="DropCategory" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged" ReadOnly="true"></asp:DropDownList>
 
               </div>
 
                 <div>
                     <label for="ddlBatchNumber" class="block text-sm font-medium text-gray-900">Batch Number <span class="text-red-500">*</span> </label>
-                   <asp:DropDownList ID="DropBatchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlBatchNumber_SelectedIndexChanged"></asp:DropDownList>
+                   <asp:DropDownList ID="DropBatchNumber" runat="server" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" AutoPostBack="true" OnSelectedIndexChanged="ddlBatchNumber_SelectedIndexChanged" ReadOnly="true"></asp:DropDownList>
 
                 </div>
 

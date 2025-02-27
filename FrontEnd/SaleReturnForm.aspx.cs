@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Activities.Expressions;
 
 public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
 {
@@ -35,9 +36,12 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
 
         using (SqlConnection conn = new SqlConnection(connString))
         {
-            string query = "SELECT * FROM PatientEntryForm WHERE (BillNumber = @BillNumber OR @BillNumber IS NULL) " +
-                           "AND (MobileNumber = @MobileNumber OR @MobileNumber IS NULL)";
-            SqlCommand cmd = new SqlCommand(query, conn);
+            string query = @"SELECT * FROM PatientEntryForm 
+                         WHERE (BillNumber = @BillNumber OR @BillNumber IS NULL) 
+                         AND (MobileNumber = @MobileNumber OR @MobileNumber IS NULL)
+                         AND QuantitySold > ReturnQuantity"; 
+    
+        SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@BillNumber", string.IsNullOrEmpty(billNumber) ? (object)DBNull.Value : billNumber);
             cmd.Parameters.AddWithValue("@MobileNumber", string.IsNullOrEmpty(mobileNumber) ? (object)DBNull.Value : mobileNumber);
 
@@ -54,6 +58,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
             }
         }
     }
+
 
     protected void gvPatientRecords_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -81,31 +86,117 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                 return;
             }
 
+            string userIPAddress = Request.UserHostAddress; // Get user IP
+
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                string insertQuery = @"INSERT INTO SaleReturnTable (PatientName, MobileNumber, PatientAddress, 
-                                        DrugName, Category, BatchNumber, QuantitySold, QuantityReturned, BillNumber) 
-                                        VALUES (@PatientName, @MobileNumber, @PatientAddress, 
-                                        @DrugName, @Category, @BatchNumber, @QuantitySold, @QuantityReturned, @BillNumber)";
-
-                SqlCommand cmd = new SqlCommand(insertQuery, conn);
-                cmd.Parameters.AddWithValue("@PatientName", patientName);
-                cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
-                cmd.Parameters.AddWithValue("@PatientAddress", patientAddress);
-                cmd.Parameters.AddWithValue("@DrugName", drugName);
-                cmd.Parameters.AddWithValue("@Category", category);
-                cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
-                cmd.Parameters.AddWithValue("@QuantitySold", quantitySold);
-                cmd.Parameters.AddWithValue("@QuantityReturned", quantityReturned);
-                cmd.Parameters.AddWithValue("@BillNumber", billNumber);
-
                 conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-            }
 
-            ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Stock return saved successfully.');", true);
-            btnSearch_Click(null, null); // Refresh Grid
+                // **Check if stock is already returned**
+                string checkReturnQuery = @"SELECT isReturned FROM PatientEntryForm 
+                                        WHERE PatientName = @PatientName 
+                                        AND MobileNumber = @MobileNumber 
+                                        AND DrugName = @DrugName 
+                                        AND Category = @Category 
+                                        AND BatchNumber = @BatchNumber 
+                                        AND BillNumber = @BillNumber";
+
+                using (SqlCommand checkCmd = new SqlCommand(checkReturnQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@PatientName", patientName);
+                    checkCmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
+                    checkCmd.Parameters.AddWithValue("@DrugName", drugName);
+                    checkCmd.Parameters.AddWithValue("@Category", category);
+                    checkCmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                    checkCmd.Parameters.AddWithValue("@BillNumber", billNumber);
+
+                    object result = checkCmd.ExecuteScalar();
+
+                    if (result != null && Convert.ToInt32(result) == 1)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Stock has already been returned for this entry.');", true);
+                        return;
+                    }
+                }
+
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // Insert into SaleReturnTable
+                    string insertQuery = @"INSERT INTO SaleReturnTable (PatientName, MobileNumber, PatientAddress, 
+                                     DrugName, Category, BatchNumber, QuantitySold, QuantityReturned, BillNumber) 
+                                     VALUES (@PatientName, @MobileNumber, @PatientAddress, 
+                                     @DrugName, @Category, @BatchNumber, @QuantitySold, @QuantityReturned, @BillNumber)";
+
+                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@PatientName", patientName);
+                        cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
+                        cmd.Parameters.AddWithValue("@PatientAddress", patientAddress);
+                        cmd.Parameters.AddWithValue("@DrugName", drugName);
+                        cmd.Parameters.AddWithValue("@Category", category);
+                        cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                        cmd.Parameters.AddWithValue("@QuantitySold", quantitySold);
+                        cmd.Parameters.AddWithValue("@QuantityReturned", quantityReturned);
+                        cmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Update PatientEntryForm
+                    string updatePatientQuery = @"UPDATE PatientEntryForm 
+                                          SET isReturned = 1, 
+                                              ReturnDate = GETDATE(), 
+                                              ReturnQuantity = @QuantityReturned, 
+                                              ReturnIPAddress = @ReturnIPAddress 
+                                          WHERE PatientName = @PatientName 
+                                              AND MobileNumber = @MobileNumber 
+                                              AND DrugName = @DrugName 
+                                              AND Category = @Category 
+                                              AND BatchNumber = @BatchNumber 
+                                              AND BillNumber = @BillNumber";
+
+                    using (SqlCommand cmd = new SqlCommand(updatePatientQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@QuantityReturned", quantityReturned);
+                        cmd.Parameters.AddWithValue("@ReturnIPAddress", userIPAddress);
+                        cmd.Parameters.AddWithValue("@PatientName", patientName);
+                        cmd.Parameters.AddWithValue("@MobileNumber", mobileNumber);
+                        cmd.Parameters.AddWithValue("@DrugName", drugName);
+                        cmd.Parameters.AddWithValue("@Category", category);
+                        cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                        cmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Update TotalStockData (Add return quantity to existing stock)
+                    string updateStockQuery = @"UPDATE TotalStockData 
+                                         SET Quantity = Quantity + @QuantityReturned 
+                                         WHERE DrugName = @DrugName 
+                                             AND Category = @Category 
+                                             AND BatchNumber = @BatchNumber";
+
+                    using (SqlCommand cmd = new SqlCommand(updateStockQuery, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@QuantityReturned", quantityReturned);
+                        cmd.Parameters.AddWithValue("@DrugName", drugName);
+                        cmd.Parameters.AddWithValue("@Category", category);
+                        cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Stock return saved successfully.');", true);
+                    btnSearch_Click(null, null); // Refresh Grid
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: " + ex.Message + "');", true);
+                }
+            }
         }
     }
+
+
 }

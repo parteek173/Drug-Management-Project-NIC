@@ -107,6 +107,8 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
                     }
 
                     DropDrugName.Enabled = false; // Make it Read-Only
+                    DropCategory.Enabled = false;
+                    DropBatchNumber.Enabled = false;
 
                     // Fetch Categories and Batch Numbers based on the drug name
                     FetchCategoriesAndBatchNumbers(drugName, category, batchNumber);
