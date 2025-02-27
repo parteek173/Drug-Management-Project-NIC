@@ -174,6 +174,8 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
 
 
 
+
+
     private void LoadLocations()
     {
         string query = "SELECT [SrNo],[Locations] FROM [ChdSectors]";
@@ -183,6 +185,8 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
         ddlLocation.DataTextField = "Locations";
         ddlLocation.DataValueField = "SrNo";
         ddlLocation.DataBind();
+
+        // Insert default option at the top
         ddlLocation.Items.Insert(0, new ListItem("-- Select Location --", ""));
     }
 

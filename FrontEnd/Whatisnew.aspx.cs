@@ -20,6 +20,23 @@ public partial class FrontEnd_Whatisnew : System.Web.UI.Page
     }
 
 
+    protected string GetTitleWithLink(object pdfFilePath, object title)
+    {
+        string pdfPath = pdfFilePath as string;
+        string titleText = title as string;
+
+        if (!string.IsNullOrEmpty(pdfPath))
+        {
+            return string.Format("<a href='{0}' class='text-blue-600 hover:underline' hreflang='en'>{1}</a>", ResolveUrl(pdfPath), titleText);
+        }
+        else
+        {
+            return titleText; // Show plain text if no PDF file is uploaded
+        }
+    }
+
+
+
     private void LoadNotifications()
     {
         string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;

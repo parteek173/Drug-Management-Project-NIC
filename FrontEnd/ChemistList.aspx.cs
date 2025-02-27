@@ -154,11 +154,13 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
     }
 
 
+ 
+
     private void BindChemistDataByLocation(string selectedLocation)
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT [chemist_id], LTRIM(RTRIM([Name_Firm])) AS Name_Firm, [Address],Sectors, [Mobile], [CreatedAt], [IsActive] " +
+            string query = "SELECT [chemist_id], LTRIM(RTRIM([Name_Firm])) AS Name_Firm, [Address], Sectors, [Mobile], [CreatedAt], [IsActive] " +
                            "FROM [chemist_tb] " +
                            "WHERE RoleType = 'Chemist' AND (@Location = '' OR Sectors = @Location) " +
                            "ORDER BY Name_Firm ASC";
@@ -170,8 +172,19 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                ChemistGridView.DataSource = dt;
-                ChemistGridView.DataBind();
+
+                if (dt.Rows.Count > 0)
+                {
+                    ChemistGridView.DataSource = dt;
+                    ChemistGridView.DataBind();
+                    MsgAlert.Visible = false; // Hide the alert when data exists
+                }
+                else
+                {
+                    ChemistGridView.DataSource = null;
+                    ChemistGridView.DataBind();
+                    MsgAlert.Visible = true; // Show alert when no data
+                }
             }
         }
     }

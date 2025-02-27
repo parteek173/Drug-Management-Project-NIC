@@ -2,32 +2,29 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-   <div class="container mx-auto mt-10">
-    <!-- Notification Scrolling Container with Increased Width -->
-    <div class="relative w-[900px] h-52 overflow-hidden bg-white shadow-lg rounded-lg p-4 mx-auto">
-        <div id="notification-list" class="absolute w-full space-y-2">
+  <div class="container mx-auto mt-10">
+    <!-- Notification Scrolling Container with Increased Width & Height -->
+    <div class="relative max-w-5xl h-96 overflow-hidden bg-white shadow-lg rounded-lg p-6 mx-auto border border-gray-200">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Latest Notifications</h2>
+
+        <div id="notification-list" class="overflow-y-auto h-80 space-y-4 pr-3 scrollbar-thin scrollbar-thumb-gray-300">
             <asp:Repeater ID="rptNotifications" runat="server">
                 <ItemTemplate>
-                    <div class="views-row border-b border-gray-300 py-2">
+                    <div class="p-5 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition duration-300">
                         <!-- Title Field -->
-                        <div class="views-field views-field-title">
-                            <strong class="field-content">
-                                <a href='<%# Eval("PdfFilePath") %>' class="text-blue-600 hover:underline" hreflang="en">
-                                    <%# Eval("Title") %>
-                                </a>
-                            </strong>
+                        <div class="font-bold text-blue-600 text-lg">
+                            <%# GetTitleWithLink(Eval("PdfFilePath"), Eval("Title")) %>
+                        </div>
 
-                            
-                        
-                        </div>
-                        <div>
-                             <%# Eval("Message") %>
-                        </div>
+                        <!-- Message Field -->
+                        <p class="text-gray-700 mt-2 text-base">
+                            <%# Eval("Message") %>
+                        </p>
+
                         <!-- Date Field -->
-                        <div class="views-field views-field-created text-gray-500 text-sm">
-                            <span class="field-content">
-                                <%# Convert.ToDateTime(Eval("CreatedAt")).ToString("dd-MM-yyyy") %>
-                            </span>
+                        <div class="text-gray-500 text-sm mt-3">
+                            <span class="font-medium">Published:</span>
+                            <%# Convert.ToDateTime(Eval("CreatedAt")).ToString("dd-MM-yyyy") %>
                         </div>
                     </div>
                 </ItemTemplate>
@@ -36,6 +33,7 @@
     </div>
 </div>
 
+<br /><br />
 
 
     <!-- jQuery for Scrolling Effect -->

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChemistList.aspx.cs" MaintainScrollPositionOnPostback="true" Inherits="FrontEnd_ChemistList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ChemistList.aspx.cs" MaintainScrollPositionOnPostback="true" Inherits="FrontEnd_ChemistList"  %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
@@ -44,6 +44,13 @@
                     <span class="font-medium">Alert!</span>  <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Visible="false"></asp:Label>
                   </div>
             </div>
+
+
+                 <!-- No Stock Alert -->
+                <div id="MsgAlert" runat="server" visible="false" class="border-l-4 border-orange-500 text-orange-700 p-4 mb-4">
+                    <p class="font-bold">⚠ No Data Available</p>
+                    <p><asp:Label ID="Label1" runat="server"></asp:Label></p>
+                </div>
 
             <asp:GridView ID="ChemistGridView" runat="server" AutoGenerateColumns="false" ShowHeader="false"
                 CssClass="display w-full table-auto text-sm" 
