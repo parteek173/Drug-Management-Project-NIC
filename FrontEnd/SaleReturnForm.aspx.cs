@@ -39,7 +39,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
             string query = @"SELECT * FROM PatientEntryForm 
                          WHERE (BillNumber = @BillNumber OR @BillNumber IS NULL) 
                          AND (MobileNumber = @MobileNumber OR @MobileNumber IS NULL)
-                         AND QuantitySold > ReturnQuantity"; 
+                         AND isReturned = 0"; 
     
         SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@BillNumber", string.IsNullOrEmpty(billNumber) ? (object)DBNull.Value : billNumber);
@@ -54,7 +54,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
 
             if (dt.Rows.Count == 0)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('No records found for the given details.');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('No Drug found for return');", true);
             }
         }
     }

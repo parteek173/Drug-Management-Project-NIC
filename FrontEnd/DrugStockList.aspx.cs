@@ -94,11 +94,22 @@ public partial class DrugStockList : System.Web.UI.Page
         {
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
-            string query = @"SELECT id, DrugName, Quantity, FORMAT(ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
-                         Category, BatchNumber, BrandName, CreatedDate, FORMAT(BillDate, 'dd-MM-yyyy') AS BillDate, BillNumber, PurchasedFrom
-                         FROM [StockEntryForm] 
-                         WHERE ChemistID = @ChemistID
-                         ORDER BY CreatedDate DESC";
+            string query = @"
+            SELECT s.id, s.DrugName, s.Quantity, FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
+                   s.Category, s.BatchNumber, s.BrandName, s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
+                   s.BillNumber, s.PurchasedFrom,
+                   CASE 
+                       WHEN EXISTS (
+                           SELECT 1 FROM PatientEntryForm p 
+                           WHERE p.DrugName = s.DrugName 
+                             AND p.Category = s.Category 
+                             AND p.BatchNumber = s.BatchNumber
+                       ) THEN 0
+                       ELSE 1
+                   END AS CanEdit
+            FROM [StockEntryForm] s
+            WHERE s.ChemistID = @ChemistID
+            ORDER BY s.CreatedDate DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -110,6 +121,7 @@ public partial class DrugStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
 
     [WebMethod]
     public static string GetFilteredStockData(string fromDate, string toDate)
