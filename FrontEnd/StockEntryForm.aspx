@@ -75,7 +75,7 @@
                  <!-- Quantity Field -->
                       <div>
                           <label for="txtQuantity" class="block text-sm font-medium text-gray-900">Quantity <span class="text-red-500">*</span> </label>
-                          <asp:TextBox ID="txtQuantity" runat="server" type="number" min="1" max="100000" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off"></asp:TextBox>
+                          <asp:TextBox ID="txtQuantity" runat="server" type="number" min="1" max="100000" CssClass="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter quantity" autocomplete="off" MaxLength="4"></asp:TextBox>
                           <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Quantity is required" CssClass="text-red-500"></asp:RequiredFieldValidator>
                           <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" ErrorMessage="Invalid quantity (only numbers)" ValidationExpression="^\d+$" CssClass="text-red-500"></asp:RegularExpressionValidator>
                           <span id="TotalQuantityError" class="text-red-500" style="display: none;">Quantity cannot be zero!</span>
@@ -122,6 +122,16 @@
             }
             return false; // Prevent form submission if any ASP.NET validation fails
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var txtQuantity = document.getElementById('<%= txtQuantity.ClientID %>');
+
+             txtQuantity.addEventListener("input", function () {
+                 if (this.value.length > 4) {
+                     this.value = this.value.slice(0, 4); // Restrict input to 4 digits
+                 }
+             });
+         });
     </script>
 
 </asp:Content>
