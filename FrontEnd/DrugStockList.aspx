@@ -93,7 +93,7 @@
                         "data": null,
                         "orderable": false,
                         "render": function (data, type, row) {
-                            if (!row.CreatedDate) return '';
+                            if (!row.CreatedDate || row.CanEdit == 0) return '';
 
                             var createdDate = new Date(row.CreatedDate);
                             var createdDateFormatted = createdDate.toISOString().split('T')[0]; // yyyy-MM-dd
@@ -101,9 +101,9 @@
 
                             if (createdDateFormatted === today) {
                                 return `
-                        <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">✏️</a>
-                        <a href="javascript:void(0);" onclick="deleteEntry('${row.id}')" class="text-red-500">❌</a>
-                    `;
+                <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">✏️</a>
+                <a href="javascript:void(0);" onclick="deleteEntry('${row.id}')" class="text-red-500">❌</a>
+            `;
                             }
                             return '';
                         }
