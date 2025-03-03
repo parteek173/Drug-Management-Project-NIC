@@ -182,7 +182,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity] FROM [TotalStockData] WHERE [ChemistID] = @ChemistID order by DrugName asc";
+        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity],BatchNumber,BillDate,BillNumber FROM [TotalStockData] WHERE [ChemistID] = @ChemistID order by DrugName asc";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 

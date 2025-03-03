@@ -66,6 +66,11 @@
                 <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="Category" HeaderText="Category" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="Quantity" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+
+                <asp:BoundField DataField="BillDate" HeaderText="Bill Date" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+
             </Columns>
         </asp:GridView>
     </div>
@@ -113,11 +118,15 @@
                  { title: "Sr.No" },
                  { title: "Drug Name" },
                  { title: "Category" },
-                 { title: "Stock in hand" }
+                 { title: "Stock in hand" },
+                 { title: "Batch Number" },
+                 { title: "Bill Date" },
+                 { title: "Bill Number" }
+
              ]
          });
      });
- </script>
+        </script>
         <script>
         $(document).ready(function () {
             $('#<%= ddlChemists.ClientID %>').select2({
