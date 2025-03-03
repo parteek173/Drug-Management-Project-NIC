@@ -46,7 +46,6 @@ public partial class FrontEnd_ExpiredStock : System.Web.UI.Page
         JavaScriptSerializer serializer = new JavaScriptSerializer();
         return serializer.Serialize(ConvertDataTableToList(dt));
     }
-
     private static object ConvertDataTableToList(DataTable dt)
     {
         var list = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, object>>();
@@ -61,5 +60,4 @@ public partial class FrontEnd_ExpiredStock : System.Web.UI.Page
         }
         return list;
     }
-
 }
