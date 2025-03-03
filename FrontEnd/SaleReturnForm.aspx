@@ -43,7 +43,8 @@
                     <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" />
                     <asp:TemplateField HeaderText="Return Quantity">
                         <ItemTemplate>
-                            <asp:TextBox ID="txtReturnQuantity" runat="server" CssClass="w-20 p-1 border rounded-lg text-center"></asp:TextBox>
+                                    <asp:TextBox ID="txtReturnQuantity" runat="server" CssClass="w-20 p-1 border rounded-lg text-center"
+                                        MaxLength="3" onkeypress="return isNumeric(event)" inputmode="numeric"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -64,6 +65,18 @@
         </div>
 
     </div>
+
+    <script type="text/javascript">
+    function isNumeric(event) {
+        var keyCode = event.which ? event.which : event.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+    </script>
+
 
   </asp:Content>
 
