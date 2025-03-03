@@ -17,20 +17,23 @@
         <div>
             <label for="txtFirmName" class="text-sm font-semibold text-gray-700">Firm Name:</label>
             <asp:TextBox ID="txtFirmName" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter firm name" />
-            <asp:RequiredFieldValidator ID="rfvFirmName" runat="server" ControlToValidate="txtFirmName" ErrorMessage="Firm Name is required." Display="Dynamic" CssClass="text-red-500 text-sm" />
+            <asp:RequiredFieldValidator ID="rfvFirmName" runat="server" ControlToValidate="txtFirmName" 
+                ErrorMessage="Firm Name is required." Display="Dynamic" CssClass="text-red-500 text-sm" />
         </div>
 
         <!-- Address -->
         <div>
-            <label for="txtAddress" class="text-sm font-semibold text-gray-700">Address Line 1:</label>
-            <asp:TextBox ID="txtAddress" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter address" />
+            <label for="txtAddress" class="text-sm font-semibold text-gray-700">Address:</label>
+            <asp:TextBox ID="txtAddress" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter address" TextMode="MultiLine" Rows="2" />
             <asp:RequiredFieldValidator ID="rfvAddress" runat="server" ControlToValidate="txtAddress" ErrorMessage="Address is required." Display="Dynamic" CssClass="text-red-500 text-sm" />
+           
         </div>
 
         <!-- Phone Number -->
         <div>
             <label for="txtPhoneNumber" class="text-sm font-semibold text-gray-700">Phone Number:</label>
-            <asp:TextBox ID="txtPhoneNumber" MaxLength="10" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter phone number" />
+            <asp:TextBox ID="txtPhoneNumber" runat="server" MaxLength="10" CssClass="mt-2 w-full p-2 border border-gray-300 rounded"
+            placeholder="Enter phone number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" ControlToValidate="txtPhoneNumber" ErrorMessage="Phone Number is required." Display="Dynamic" CssClass="text-red-500 text-sm" />
             <asp:RegularExpressionValidator ID="revPhoneNumber" runat="server" ControlToValidate="txtPhoneNumber" ValidationExpression="^\d{10}$" ErrorMessage="Phone Number must be 10 digits." Display="Dynamic" CssClass="text-red-500 text-sm" />
         </div>
@@ -39,8 +42,12 @@
         <div>
             <label for="ddlLocation" class="text-sm font-semibold text-gray-700">Select Location:</label>
             <asp:DropDownList ID="ddlLocation" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded"></asp:DropDownList>
-            <asp:RequiredFieldValidator ID="rfvLocation" runat="server" ControlToValidate="ddlLocation" InitialValue="Select Location" ErrorMessage="Please select a location." Display="Dynamic" CssClass="text-red-500 text-sm" />
+    
+            <asp:RequiredFieldValidator ID="rfvLocation" runat="server" ControlToValidate="ddlLocation"
+                InitialValue="" ErrorMessage="Please select a location." Display="Dynamic"
+                CssClass="text-red-500 text-sm" />
         </div>
+
 
         <!-- Is Active -->
         <div class="flex items-center gap-2">

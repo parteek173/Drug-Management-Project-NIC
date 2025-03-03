@@ -173,16 +173,15 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
     }
 
 
-
     private void LoadLocations()
     {
         string query = "SELECT [SrNo],[Locations] FROM [ChdSectors]";
         DataTable dt = GetData(query);
-
         ddlLocation.DataSource = dt;
         ddlLocation.DataTextField = "Locations";
         ddlLocation.DataValueField = "SrNo";
         ddlLocation.DataBind();
+        // Insert default option at the top
         ddlLocation.Items.Insert(0, new ListItem("-- Select Location --", ""));
     }
 
@@ -206,12 +205,5 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
             }
         }
     }
-
-
-
-  
-
-
-
 
 }
