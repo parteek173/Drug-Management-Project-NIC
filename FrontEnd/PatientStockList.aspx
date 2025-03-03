@@ -81,7 +81,6 @@
                     { "data": "PrescribedBy" },
                     { "data": "HospitalName" },
                     { "data": "HospitalAddress" },
-                    { "data": "CreatedDate", "visible": false }, // Keep CreatedDate hidden
                     {
                         "data": "CreatedDate",
                         "render": function (data, type, row) {

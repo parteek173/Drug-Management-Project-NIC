@@ -147,7 +147,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
 
                 // Update StockEntryForm table
                 string updateStockQuery = @"UPDATE StockEntryForm 
-                                        SET DrugName = @DrugName, Category = @Category, Quantity = @Quantity, 
+                                        SET DrugName = @DrugName, Category = @Category, Quantity = @Quantity, UpdatedQuantity = @UpdatedQuantity, 
                                             BatchNumber = @BatchNumber, BrandName = @BrandName, ExpiryDate = @ExpiryDate, BillDate = @BillDate, BillNumber = @BillNumber, PurchasedFrom = @purchasedFrom 
                                         WHERE id = @StockID";
                 using (SqlCommand cmd = new SqlCommand(updateStockQuery, conn, transaction))
@@ -155,6 +155,7 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@DrugName", newDrugName);
                     cmd.Parameters.AddWithValue("@Category", newCategory);
                     cmd.Parameters.AddWithValue("@Quantity", newQuantity);
+                    cmd.Parameters.AddWithValue("@UpdatedQuantity", newQuantity);
                     cmd.Parameters.AddWithValue("@BatchNumber", newBatchNumber);
                     cmd.Parameters.AddWithValue("@BrandName", newBrandName);
                     cmd.Parameters.AddWithValue("@ExpiryDate", newExpiryDate);
