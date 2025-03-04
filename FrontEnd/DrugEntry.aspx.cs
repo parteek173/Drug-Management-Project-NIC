@@ -641,7 +641,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
         ddlCategory.SelectedIndex = 0;        
         txtQuantity.Text = "";       
         txtQuantitySold.Text = "";
-        string script = "alert('Sale entry success!'); window.location='PatientStockList.aspx';";
+        string script = "alert('Sale entry success!'); window.location='DrugEntry.aspx';";
         ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
     }
 }
