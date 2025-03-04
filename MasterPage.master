@@ -181,6 +181,30 @@
 </html>
 
 
+<style>
+    #dropdownNavbar {
+    z-index: 1050 !important; /* Higher than DataTable */
+    position: absolute;
+    background-color: #2563eb; /* Tailwind blue-600 */
+    color: white;
+    border-radius: 0.375rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure DataTables search bar doesn't overlap */
+.dataTables_wrapper {
+    position: relative;
+    z-index: 1; /* Keep DataTable below the dropdown */
+}
+
+/* Ensure dropdown is not clipped by parent elements */
+#UlChemist {
+    position: relative;
+    z-index: 10;
+}
+
+</style>
+
 <script>
     $(document).ready(function () {
         // Apply Select2 to the dropdown
