@@ -11,11 +11,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Bill Number</label>
-                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="w-full p-2 border rounded-lg"></asp:TextBox>
+                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off"></asp:TextBox>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Mobile Number</label>
-                    <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="w-full p-2 border rounded-lg"></asp:TextBox>
+                    <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off"></asp:TextBox>
                 </div>
                 <div class="flex items-end">
                     <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" OnClick="btnSearch_Click" />
