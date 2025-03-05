@@ -72,11 +72,11 @@
                     { "data": "PatientName" },
                     { "data": "DrugName" },
                     { "data": "Category" },
-                    { "data": "BatchNumber" },                   
+                    { "data": "BatchNumber" },
                     { "data": "QuantitySold" },
                     { "data": "MobileNumber" },
                     { "data": "DateOFSale" },
-                    { "data": "BillNumber" }, 
+                    { "data": "BillNumber" },
                     { "data": "PatientAddress" },
                     { "data": "PrescribedBy" },
                     { "data": "HospitalName" },
@@ -99,15 +99,18 @@
                                 String(today.getMonth() + 1).padStart(2, '0') + '-' +
                                 today.getFullYear();
 
-                            // Compare CreatedDate with today's date
-                            if (data.startsWith(todayFormatted)) {
+                            // Convert isReturned to a number explicitly
+                            var isReturnedValue = Number(row.isReturned) || 0; // Default to 0 if null/undefined
+
+                            // Check if CreatedDate matches today's date AND isReturned is NOT 1
+                            if (data.startsWith(todayFormatted) && isReturnedValue !== 1) {
                                 return `
                         <a href="javascript:void(0);" onclick="editEntry('${row.id}')" class="text-blue-500 mr-3">
                             ✏️
                         </a>
                     `;
                             }
-                            return ''; // Hide icon if CreatedDate is not today
+                            return ''; // Hide icon if CreatedDate is not today or isReturned is 1
                         }
                     }
                 ],
@@ -117,6 +120,8 @@
                     { "orderable": false, "targets": -1 } // Disable sorting for last column (Action)
                 ]
             });
+
+
 
 
 

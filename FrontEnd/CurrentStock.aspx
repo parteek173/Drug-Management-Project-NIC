@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <div class="container mx-auto p-4  flex flex-col">
-        <h1 class="text-3xl font-bold text-center mb-6">Total Stock List</h1>
+        <h1 class="text-3xl font-bold text-center mb-6">Current Stock List</h1>
 
         <!-- Table for displaying stock data -->
         <div class="overflow-x-auto flex-grow">

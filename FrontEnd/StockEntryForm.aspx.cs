@@ -179,9 +179,10 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
         txtBillNumber.Text = "";
         batchNumber.Text = "";
         brandName.Text = "";
+        txtpurchasedFrom.Text = "";
         ddlCategory.SelectedIndex = 0; 
 
-        string script = "alert('Stock added successfully!'); window.location='DrugStockList.aspx';";
+        string script = "alert('Stock added successfully!'); window.location='StockEntryForm.aspx';";
         ClientScript.RegisterStartupScript(this.GetType(), "SuccessMessage", script, true);
     }
 }
