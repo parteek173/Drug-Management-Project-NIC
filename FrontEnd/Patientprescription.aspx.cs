@@ -104,7 +104,7 @@ public partial class FrontEnd_Patientprescription : System.Web.UI.Page
         {
             string query = "SELECT p.[id], p.[PatientName], p.[MobileNumber], p.[PatientAddress], p.[PrescribedBy], " +
                            "p.[HospitalName], p.[HospitalAddress], p.[DateOFSale], p.[QuantitySold], p.[DrugName], " +
-                           "p.[ChemistID], p.[Category], c.[Name_Firm] AS ChemistName " +
+                           "p.[ChemistID], p.[Category],p.[BatchNumber],p.[BillNumber], c.[Name_Firm] AS ChemistName " +
                            "FROM [PatientEntryForm] p " +
                            "LEFT JOIN [chemist_tb] c ON p.ChemistID = c.Chemist_id " +
                            "WHERE 1=1";
