@@ -101,12 +101,13 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             string query = @"SELECT id, PatientName, DrugName, Category, QuantitySold, MobileNumber, 
                          FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, 
                          HospitalName, HospitalAddress, BatchNumber, BillNumber,
-                         FORMAT(CreatedDate, 'dd-MM-yyyy HH:mm:ss') AS CreatedDate
+                         FORMAT(CreatedDate, 'dd-MM-yyyy HH:mm:ss') AS CreatedDate,
+                         isReturned
                          FROM [PatientEntryForm] 
                          WHERE ChemistID = @ChemistID
-                         ORDER BY CreatedDate DESC"; 
-    
-        using (SqlCommand cmd = new SqlCommand(query, con))
+                         ORDER BY CreatedDate DESC";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

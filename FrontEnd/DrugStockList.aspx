@@ -113,7 +113,18 @@
                 "columnDefs": [
                     { "targets": 8, "type": "date" },  // Ensure sorting works correctly
                     { "orderable": false, "targets": -1 }
-                ]
+                ],
+                "rowCallback": function (row, data) {
+                    if (data.ExpiryDate) {
+                        var dateParts = data.ExpiryDate.split('-'); // Format: dd-MM-yyyy
+                        var expiryDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]); // Year, Month (0-based), Day
+                        var today = new Date();
+
+                        if (expiryDate < today) {
+                            $(row).css({ "background-color": "orange", "color": "black" }); // Apply red background & white text
+                        }
+                    }
+                }
             });
 
 
