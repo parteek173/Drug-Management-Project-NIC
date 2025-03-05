@@ -20,7 +20,7 @@
         <div class="logo-bx ">
              <img src="/Assets/chd-logo.png" width="100" alt="Chandigarh Administration Logo" class="mr-3" />
       <h1 class="text-3xl font-bold text-gray-800"><%=System.Configuration.ConfigurationManager.AppSettings["ProjectName"] %></h1>
-                      </h1>
+                      
  </div>
         <h2>Login</h2>
             <p class="text-center  ">

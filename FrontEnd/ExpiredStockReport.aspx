@@ -1,16 +1,15 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="StockList.aspx.cs" Inherits="FrontEnd_StockList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ExpiredStockReport.aspx.cs" Inherits="FrontEnd_ExpiredStockReport" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-
- <div class="container mx-auto p-4 min-h-screen flex flex-col">
+    <div class="container mx-auto p-4 min-h-screen flex flex-col">
     
     <!-- Title Section -->
     <h1 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl text-center mb-6">
         <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
-            Available Drug
+            Expired Stock 
         </span>
-        Inventory
+        Report
     </h1>
     
     <!-- Chemist Selection and Drug Stock Section -->
@@ -68,16 +67,17 @@
                 <asp:BoundField DataField="Quantity" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
 
-                
-                <asp:TemplateField HeaderText="Bill Date">
-                    <ItemTemplate>
-                        <%# Convert.ToDateTime(Eval("BillDate")).ToString("dd-MM-yyyy") %>
-                    </ItemTemplate>
-                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-bold text-gray-700"/>
-                </asp:TemplateField>
-
+                <asp:BoundField DataField="BillDate" HeaderText="Bill Date" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+
+
+              
+                 <asp:TemplateField HeaderText="Expiry Date">
+                    <ItemTemplate>
+                        <%# Convert.ToDateTime(Eval("ExpiryDate")).ToString("dd-MM-yyyy") %>
+                    </ItemTemplate>
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-bold text-red-700"/>
+                </asp:TemplateField>
 
             </Columns>
         </asp:GridView>
@@ -130,7 +130,7 @@
                  { title: "Batch Number" },
                  { title: "Bill Date" },
                  { title: "Bill Number" },
-                 { title: "Batch Number" }
+                 { title: "Expiry Date" }
 
              ]
          });
@@ -144,7 +144,7 @@
                 allowClear: true
             });
         });
-</script>
+        </script>
         <style>
     /* Adjust the overall width of the DataTables length menu select box */
     .dataTables_length select {

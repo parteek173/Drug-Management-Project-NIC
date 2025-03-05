@@ -182,7 +182,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT [ID],[DrugName],[Category],[ChemistID],[Quantity],BatchNumber,BillDate,BillNumber FROM [TotalStockData] WHERE [ChemistID] = @ChemistID order by DrugName asc";
+        string query = "SELECT T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE()";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 
