@@ -88,8 +88,23 @@
                 <asp:BoundField DataField="MobileNumber" HeaderText="Mobile Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="PatientAddress" HeaderText="Patient Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="ChemistName" HeaderText="Chemist Name" SortExpression="ChemistName" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:TemplateField HeaderText="Drug Name">
+                        <ItemTemplate>
+                            <%# Eval("DrugName") + " - " + Eval("Category") %>
+                        </ItemTemplate>
+                        <ItemStyle CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                 </asp:TemplateField>
                 <asp:BoundField DataField="QuantitySold" HeaderText="Quantity Sold" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:TemplateField HeaderText="Date OF Sale">
+                    <ItemTemplate>
+                        <%# Convert.ToDateTime(Eval("DateOFSale")).ToString("dd-MM-yyyy") %>
+                    </ItemTemplate>
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                </asp:TemplateField>
+                
+                <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+
                 <asp:BoundField DataField="HospitalName" HeaderText="Hospital Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
             </Columns>
         </asp:GridView>
@@ -115,7 +130,10 @@
                  { title: "Chemist Name" },
                  { title: "Drug Name" },
                  { title: "Quantity Sold" },
-                 { title: "Hospital Name" },
+                 { title: "Date OF Sale" },
+                 { title: "Batch Number" },
+                 { title: "Bill Number" },
+                 { title: "Hospital Name" }
              ]
          });
      });

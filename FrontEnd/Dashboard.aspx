@@ -31,6 +31,7 @@
                         <a href="ChemistList.aspx" class="hover:underline hover:text-gray-800 font-medium"><i class="fa fa-angle-right" aria-hidden="true"></i> Chemist List</a>
                         <a href="Drugsentry.aspx" class="hover:underline hover:text-gray-800 font-medium"><i class="fa fa-angle-right" aria-hidden="true"></i> Drug Entry</a>
                         <a href="Drugslist.aspx" class="hover:underline hover:text-gray-800 font-medium"><i class="fa fa-angle-right" aria-hidden="true"></i> Drugs List</a>
+                        <a href="ExpiredStockReport.aspx" class="hover:underline hover:text-gray-800 font-medium"><i class="fa fa-angle-right" aria-hidden="true"></i> Expired Stock</a>
                        
                     </div>
                 </div>
