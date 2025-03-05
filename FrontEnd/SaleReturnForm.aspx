@@ -44,7 +44,7 @@
                     <asp:TemplateField HeaderText="Return Quantity">
                         <ItemTemplate>
                                     <asp:TextBox ID="txtReturnQuantity" runat="server" CssClass="w-20 p-1 border rounded-lg text-center"
-                                        MaxLength="3" onkeypress="return isNumeric(event)" inputmode="numeric"></asp:TextBox>
+                                        MaxLength="3" onkeypress="return isNumeric(event)" inputmode="numeric" autocomplete="off"></asp:TextBox>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>

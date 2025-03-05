@@ -140,7 +140,7 @@ public partial class DrugStockList : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
-                query += " AND CreatedDate BETWEEN @FromDate AND @ToDate";
+                query += " AND BillDate BETWEEN @FromDate AND @ToDate";
             }
 
             using (SqlCommand cmd = new SqlCommand(query, con))
@@ -149,8 +149,24 @@ public partial class DrugStockList : System.Web.UI.Page
 
                 if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
                 {
-                    cmd.Parameters.AddWithValue("@FromDate", DateTime.Parse(fromDate));
-                    cmd.Parameters.AddWithValue("@ToDate", DateTime.Parse(toDate));
+                    // Convert to DateTime using TryParse (safe conversion)
+                    DateTime fromDateTime, toDateTime;
+
+                    if (!DateTime.TryParse(fromDate, out fromDateTime))
+                    {
+                        throw new Exception("Invalid From Date format.");
+                    }
+
+                    if (!DateTime.TryParse(toDate, out toDateTime))
+                    {
+                        throw new Exception("Invalid To Date format.");
+                    }
+
+                    // Ensure toDate includes the full day
+                    toDateTime = toDateTime.AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(999);
+
+                    cmd.Parameters.AddWithValue("@FromDate", fromDateTime);
+                    cmd.Parameters.AddWithValue("@ToDate", toDateTime);
                 }
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -160,6 +176,8 @@ public partial class DrugStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
+
 
     [WebMethod]
     public static string DeleteStockEntry(int id)
