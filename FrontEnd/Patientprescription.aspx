@@ -104,8 +104,25 @@
                 
                 <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-
                 <asp:BoundField DataField="HospitalName" HeaderText="Hospital Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+
+               <asp:TemplateField HeaderText="Is Returned">
+                    <ItemTemplate>
+                        <%# Convert.ToBoolean(Eval("isReturned")) ? "Yes" : "No" %>
+                    </ItemTemplate>
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
+                </asp:TemplateField>
+
+                   
+
+                <asp:TemplateField HeaderText="Return Quantity">
+                    <ItemTemplate>
+                        <%# Eval("ReturnQuantity") == DBNull.Value || Eval("ReturnQuantity") == null ? "0" : Eval("ReturnQuantity") %>
+                    </ItemTemplate>
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" />
+                </asp:TemplateField>
+
+
             </Columns>
         </asp:GridView>
     </div>
@@ -133,7 +150,9 @@
                  { title: "Date OF Sale" },
                  { title: "Batch Number" },
                  { title: "Bill Number" },
-                 { title: "Hospital Name" }
+                 { title: "Hospital Name" },
+                 { title: "Is Returned" },
+                 { title: "Return Quantity" }
              ]
          });
      });
