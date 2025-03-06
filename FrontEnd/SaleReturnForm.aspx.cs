@@ -64,6 +64,13 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
     {
         if (e.CommandName == "ReturnStock")
         {
+            if (Session["UserID"] == null)
+            {
+                Response.Write("<script>alert('Session expired. Please log in again.');</script>");
+                return;
+            }
+
+            string chemistID = Session["UserID"].ToString(); // Fetch chemist ID from session
             int rowIndex = Convert.ToInt32(e.CommandArgument);
             GridViewRow row = gvPatientRecords.Rows[rowIndex];
 
@@ -92,14 +99,15 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
             {
                 conn.Open();
 
-                // **Check if stock is already returned**
+                // **Check if stock is already returned for this chemistID**
                 string checkReturnQuery = @"SELECT isReturned FROM PatientEntryForm 
                                         WHERE PatientName = @PatientName 
                                         AND MobileNumber = @MobileNumber 
                                         AND DrugName = @DrugName 
                                         AND Category = @Category 
                                         AND BatchNumber = @BatchNumber 
-                                        AND BillNumber = @BillNumber";
+                                        AND BillNumber = @BillNumber
+                                        AND ChemistID = @ChemistID";
 
                 using (SqlCommand checkCmd = new SqlCommand(checkReturnQuery, conn))
                 {
@@ -109,6 +117,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                     checkCmd.Parameters.AddWithValue("@Category", category);
                     checkCmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
                     checkCmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                    checkCmd.Parameters.AddWithValue("@ChemistID", chemistID);
 
                     object result = checkCmd.ExecuteScalar();
 
@@ -125,9 +134,9 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                 {
                     // Insert into SaleReturnTable
                     string insertQuery = @"INSERT INTO SaleReturnTable (PatientName, MobileNumber, PatientAddress, 
-                                     DrugName, Category, BatchNumber, QuantitySold, QuantityReturned, BillNumber) 
-                                     VALUES (@PatientName, @MobileNumber, @PatientAddress, 
-                                     @DrugName, @Category, @BatchNumber, @QuantitySold, @QuantityReturned, @BillNumber)";
+                                   DrugName, Category, BatchNumber, QuantitySold, QuantityReturned, BillNumber, ChemistID) 
+                                   VALUES (@PatientName, @MobileNumber, @PatientAddress, 
+                                   @DrugName, @Category, @BatchNumber, @QuantitySold, @QuantityReturned, @BillNumber, @ChemistID)";
 
                     using (SqlCommand cmd = new SqlCommand(insertQuery, conn, transaction))
                     {
@@ -140,21 +149,23 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                         cmd.Parameters.AddWithValue("@QuantitySold", quantitySold);
                         cmd.Parameters.AddWithValue("@QuantityReturned", quantityReturned);
                         cmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                        cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                         cmd.ExecuteNonQuery();
                     }
 
                     // Update PatientEntryForm
                     string updatePatientQuery = @"UPDATE PatientEntryForm 
-                                          SET isReturned = 1, 
-                                              ReturnDate = GETDATE(), 
-                                              ReturnQuantity = @QuantityReturned, 
-                                              ReturnIPAddress = @ReturnIPAddress 
-                                          WHERE PatientName = @PatientName 
-                                              AND MobileNumber = @MobileNumber 
-                                              AND DrugName = @DrugName 
-                                              AND Category = @Category 
-                                              AND BatchNumber = @BatchNumber 
-                                              AND BillNumber = @BillNumber";
+                                        SET isReturned = 1, 
+                                            ReturnDate = GETDATE(), 
+                                            ReturnQuantity = @QuantityReturned, 
+                                            ReturnIPAddress = @ReturnIPAddress 
+                                        WHERE PatientName = @PatientName 
+                                            AND MobileNumber = @MobileNumber 
+                                            AND DrugName = @DrugName 
+                                            AND Category = @Category 
+                                            AND BatchNumber = @BatchNumber 
+                                            AND BillNumber = @BillNumber
+                                            AND ChemistID = @ChemistID";
 
                     using (SqlCommand cmd = new SqlCommand(updatePatientQuery, conn, transaction))
                     {
@@ -166,15 +177,17 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                         cmd.Parameters.AddWithValue("@Category", category);
                         cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
                         cmd.Parameters.AddWithValue("@BillNumber", billNumber);
+                        cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                         cmd.ExecuteNonQuery();
                     }
 
-                    // Update TotalStockData (Add return quantity to existing stock)
+                    // Update TotalStockData (Add return quantity to existing stock where ChemistID matches)
                     string updateStockQuery = @"UPDATE TotalStockData 
-                                         SET Quantity = Quantity + @QuantityReturned 
-                                         WHERE DrugName = @DrugName 
-                                             AND Category = @Category 
-                                             AND BatchNumber = @BatchNumber";
+                                       SET Quantity = Quantity + @QuantityReturned 
+                                       WHERE DrugName = @DrugName 
+                                           AND Category = @Category 
+                                           AND BatchNumber = @BatchNumber
+                                           AND ChemistID = @ChemistID";
 
                     using (SqlCommand cmd = new SqlCommand(updateStockQuery, conn, transaction))
                     {
@@ -182,6 +195,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                         cmd.Parameters.AddWithValue("@DrugName", drugName);
                         cmd.Parameters.AddWithValue("@Category", category);
                         cmd.Parameters.AddWithValue("@BatchNumber", batchNumber);
+                        cmd.Parameters.AddWithValue("@ChemistID", chemistID);
                         cmd.ExecuteNonQuery();
                     }
 
