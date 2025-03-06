@@ -121,7 +121,8 @@
                         var today = new Date();
 
                         if (expiryDate < today) {
-                            $(row).css({ "background-color": "orange", "color": "black" }); // Apply red background & white text
+                            $(row).css({ "background-color": "orange", "color": "black" }); // Apply background color & white text
+                            $('td:eq(8)', row).css({ "background-color": "orange", "color": "black" });
                         }
                     }
                 }
