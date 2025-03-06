@@ -77,7 +77,12 @@
                     { "data": "Category" },
                     { "data": "BatchNumber" },
                     { "data": "QuantitySold" },
-                    { "data": "ReturnQuantity" },                    
+                    {
+                        "data": "ReturnQuantity",
+                        "render": function (data, type, row) {
+                            return data == null ? 0 : data; // Show 0 if null
+                        }
+                    },                   
                     { "data": "MobileNumber" },                   
                     { "data": "PatientAddress" },
                     { "data": "PrescribedBy" },
