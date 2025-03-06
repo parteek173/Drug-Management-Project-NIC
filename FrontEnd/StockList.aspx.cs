@@ -63,7 +63,9 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 conn.Open(); // Ensure connection is opened before executing query
-                string query = "SELECT TOP 5 DrugName, Quantity FROM TotalStockData WHERE ChemistID = @ChemistID ORDER BY Quantity DESC";
+
+                string query = "SELECT TOP 5 T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE() and T.ChemistID= T.ChemistID";
+                //string query = "SELECT TOP 5 DrugName, Quantity FROM TotalStockData WHERE ChemistID = @ChemistID ORDER BY Quantity DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {

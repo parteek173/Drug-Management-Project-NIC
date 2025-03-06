@@ -11,6 +11,24 @@ public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.Cache.SetExpires(DateTime.Now);
+        Response.AddHeader("Cache-control", "no-store, must-revalidate, no-cache");
+        Response.AddHeader("Pragma", "no-cache");
+        Response.AddHeader("Expires", "0");
+        Response.AddHeader("Pragma", "no-cache");
+        Response.CacheControl = "no-cache";
+        Response.Cache.SetAllowResponseInBrowserHistory(false);
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.Cache.SetNoStore();
+        Response.Expires = -1;
+        HttpContext.Current.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+        HttpContext.Current.Response.Cache.SetValidUntilExpires(false);
+        HttpContext.Current.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+        HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        HttpContext.Current.Response.Cache.SetNoStore();
+
         if (Session["IsLoggedIn"] == null || !(bool)Session["IsLoggedIn"])
         {
             Response.Redirect("~/FrontEnd/Default.aspx");

@@ -137,7 +137,6 @@ public partial class FrontEnd_Default : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@IPAddress", ipAddress);
                 cmd.Parameters.AddWithValue("@DeviceDetails", ""); // Optionally, you can capture device details
                 cmd.Parameters.AddWithValue("@UserAgent", userAgent);
-
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
