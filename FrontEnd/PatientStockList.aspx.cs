@@ -102,7 +102,7 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
                          FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, 
                          HospitalName, HospitalAddress, BatchNumber, BillNumber,
                          FORMAT(CreatedDate, 'dd-MM-yyyy HH:mm:ss') AS CreatedDate,
-                         isReturned
+                         isReturned,ReturnQuantity
                          FROM [PatientEntryForm] 
                          WHERE ChemistID = @ChemistID
                          ORDER BY CreatedDate DESC";
@@ -133,7 +133,7 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
                 CONVERT(varchar, DateOFSale, 23) AS DateOFSale, 
                 CONVERT(varchar, CreatedDate, 120) AS CreatedDate,
                 PatientAddress, PrescribedBy, BatchNumber, BillNumber,
-                HospitalName, HospitalAddress 
+                HospitalName, HospitalAddress, ReturnQuantity
                 FROM [PatientEntryForm] 
                 WHERE ChemistID = @ChemistID";
 
