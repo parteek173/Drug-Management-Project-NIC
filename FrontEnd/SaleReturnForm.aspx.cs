@@ -24,6 +24,14 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
+        if (Session["UserID"] == null)
+        {
+            Response.Write("<script>alert('Session expired. Please log in again.');</script>");
+            return;
+        }
+
+        string chemistID = Session["UserID"].ToString();
+           
         string billNumber = txtBillNumber.Text.Trim();
         string mobileNumber = txtMobileNumber.Text.Trim();
 
@@ -39,11 +47,13 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
             string query = @"SELECT * FROM PatientEntryForm 
                          WHERE (BillNumber = @BillNumber OR @BillNumber IS NULL) 
                          AND (MobileNumber = @MobileNumber OR @MobileNumber IS NULL)
-                         AND isReturned = 0"; 
+                         AND isReturned = 0
+                         AND ChemistID = @ChemistID"; 
     
         SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@BillNumber", string.IsNullOrEmpty(billNumber) ? (object)DBNull.Value : billNumber);
             cmd.Parameters.AddWithValue("@MobileNumber", string.IsNullOrEmpty(mobileNumber) ? (object)DBNull.Value : mobileNumber);
+            cmd.Parameters.AddWithValue("@ChemistID", chemistID);
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
