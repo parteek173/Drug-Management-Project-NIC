@@ -15,6 +15,12 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["UserID"] == null || string.IsNullOrEmpty(Session["UserID"].ToString()))
+        {
+            Response.Redirect("Default.aspx");
+            return;
+        }
+
         if (!IsPostBack)
         {
             gvPatientRecords.DataSource = null;
