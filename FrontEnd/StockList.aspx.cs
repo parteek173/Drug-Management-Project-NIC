@@ -64,12 +64,17 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             {
                 conn.Open(); // Ensure connection is opened before executing query
 
-                string query = "SELECT TOP 5 T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE() and T.ChemistID= T.ChemistID";
-                //string query = "SELECT TOP 5 DrugName, Quantity FROM TotalStockData WHERE ChemistID = @ChemistID ORDER BY Quantity DESC";
+                string query = @"
+                SELECT TOP 5 T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, 
+                               T.BatchNumber, T.BillDate, T.BillNumber 
+                FROM TotalStockData T 
+                INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber 
+                WHERE S.ExpiryDate > GETDATE() 
+                AND T.ChemistID = @ChemistID";  // Corrected filter condition
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);  // Use parameter correctly
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
@@ -81,18 +86,17 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
             // Convert DataTable to JSON using Newtonsoft.Json
             string jsonData = JsonConvert.SerializeObject(dt, Formatting.None);
 
-            // Pass JSON data to JavaScript (without string interpolation)
+            // Pass JSON data to JavaScript
             string script = "var drugStockData = " + jsonData + ";";
             ClientScript.RegisterStartupScript(this.GetType(), "drugStockData", script, true);
         }
         catch (Exception ex)
         {
-            // Show error using JavaScript alert (without string interpolation)
+            // Show error using JavaScript alert
             string errorMessage = "alert('Error loading drug stock: " + ex.Message + "');";
             ClientScript.RegisterStartupScript(this.GetType(), "errorAlert", errorMessage, true);
         }
     }
-
 
 
 
@@ -184,7 +188,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE()";
+        string query = "SELECT T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE() AND T.ChemistID = @ChemistID";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 

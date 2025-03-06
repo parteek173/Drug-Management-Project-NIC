@@ -102,12 +102,11 @@ public partial class FrontEnd_Patientprescription : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT p.[id], p.[PatientName], p.[MobileNumber], p.[PatientAddress], p.[PrescribedBy], " +
-                           "p.[HospitalName], p.[HospitalAddress], p.[DateOFSale], p.[QuantitySold], p.[DrugName], " +
-                           "p.[ChemistID], p.[Category],p.[BatchNumber],p.[BillNumber],p.isReturned,p.ReturnQuantity, c.[Name_Firm] AS ChemistName " +
-                           "FROM [PatientEntryForm] p " +
-                           "LEFT JOIN [chemist_tb] c ON p.ChemistID = c.Chemist_id " +
-                           "WHERE 1=1";
+            string query = @"SELECT p.[id], p.[PatientName], p.[MobileNumber], p.[PatientAddress], p.[PrescribedBy],
+                            p.[HospitalName], p.[HospitalAddress], p.[DateOFSale], p.[QuantitySold], p.[DrugName], 
+                            p.[ChemistID], p.[Category],p.[BatchNumber],p.[BillNumber],p.isReturned,p.ReturnQuantity, c.[Name_Firm] AS ChemistName 
+                            FROM [PatientEntryForm] p 
+                            LEFT JOIN [chemist_tb] c ON p.ChemistID = c.Chemist_id WHERE 1=1";
 
             List<SqlParameter> parameters = new List<SqlParameter>();
 
