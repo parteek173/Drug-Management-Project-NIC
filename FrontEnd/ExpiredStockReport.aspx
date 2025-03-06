@@ -66,18 +66,18 @@
                 <asp:BoundField DataField="Category" HeaderText="Category" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="Quantity" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-
                 <asp:BoundField DataField="BillDate" HeaderText="Bill Date" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BillNumber" HeaderText="Bill Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-
-
-              
-                 <asp:TemplateField HeaderText="Expiry Date">
+                 
+                <asp:TemplateField HeaderText="Expiry Date">
                     <ItemTemplate>
                         <%# Convert.ToDateTime(Eval("ExpiryDate")).ToString("dd-MM-yyyy") %>
                     </ItemTemplate>
-                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-bold text-red-700"/>
+                    
+                    <ItemStyle CssClass="text-left px-4 py-2 border-b font-bold text-red-700 bg-yellow-200" />
+
                 </asp:TemplateField>
+
 
             </Columns>
         </asp:GridView>
