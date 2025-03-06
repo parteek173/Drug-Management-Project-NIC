@@ -15,6 +15,12 @@ public partial class DrugStockList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["UserID"] == null || string.IsNullOrEmpty(Session["UserID"].ToString()))
+        {
+            Response.Redirect("Default.aspx");
+            return;
+        }
+
         if (!IsPostBack)
         {
             if (Request.QueryString["export"] == "1")
