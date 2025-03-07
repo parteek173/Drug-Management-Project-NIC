@@ -7,21 +7,31 @@
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">Sale Return Form</h2>
 
         <!-- Search Form -->
-        <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Bill Number</label>
-                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off" MaxLength="20"></asp:TextBox>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Mobile Number</label>
-                    <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off" MaxLength="10"></asp:TextBox>
-                </div>
-                <div class="flex items-end">
-                    <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" OnClick="btnSearch_Click" />
-                </div>
+     <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-4">
+        <div class="flex items-end gap-2">
+            <!-- Bill Number -->
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-600">Bill Number</label>
+                <asp:TextBox ID="txtBillNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off" MaxLength="20"></asp:TextBox>
+            </div>
+
+            <!-- OR Text (Minimal Space) -->
+            <div class="text-gray-500 font-semibold text-lg">OR</div>
+
+            <!-- Mobile Number -->
+            <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-600">Mobile Number</label>
+                <asp:TextBox ID="txtMobileNumber" runat="server" CssClass="w-full p-2 border rounded-lg" autocomplete="off" MaxLength="10"></asp:TextBox>
+            </div>
+
+            <!-- Search Button -->
+            <div>
+                <asp:Button ID="btnSearch" runat="server" Text="Search" CssClass="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" OnClick="btnSearch_Click" />
             </div>
         </div>
+    </div>
+
+
 
         <!-- GridView for Patient Records -->
         <div class="overflow-x-auto">
