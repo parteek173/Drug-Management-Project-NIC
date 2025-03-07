@@ -1,5 +1,4 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage"  %>
-
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -69,11 +68,8 @@
                         <%-- Admin Navigations --%>
                         <ul class="flex flex-col font-medium md:flex-row md:space-x-8 md:mt-0" id="UlAdmin" runat="server">
                             <li><a href="Dashboard.aspx">Dashboard</a></li>
-
                             <li><a href="StockList.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock List</a></li>
                             <li><a href="Patientprescription.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Patient List</a></li>
-                            
-                           
                              <li class="relative group">
                                 <button id="dropdownNavbarLinkChemists" type="button" data-dropdown-toggle="dropdownNavbarChemists" class="flex items-center justify-between w-full py-2 px-3 text-white hover:text-gray-300 md:p-0">
                                     Manage Chemists
@@ -88,11 +84,7 @@
                                         <li><a href="ChemistList.aspx" class="block px-4 py-2 hover:text-gray-300">Chemist List</a></li>
                                     </ul>
                                 </div>
-
-                                 
                             </li>
-                           
-
                              <li class="relative group">
                                 <button id="dropdownNavbarLink1" type="button" data-dropdown-toggle="dropdownNavbar1" class="flex items-center justify-between w-full py-2 px-3 text-white hover:text-gray-300 md:p-0">
                                     Manage Drugs 
@@ -129,19 +121,18 @@
 
 
 
-                            <li><asp:LinkButton ID="LinkButton1" ValidationGroup="logout" runat="server" CssClass="block py-2 px-3 text-white hover:text-gray-300 md:p-0" OnClick="btnLogout_Click">Logout</asp:LinkButton></li>
+                            <li><asp:LinkButton ID="LinkButton1" ValidationGroup="logout" runat="server" 
+                                CssClass="block py-2 px-3 text-white hover:text-gray-300 md:p-0" 
+                                OnClick="btnLogout_Click">Logout</asp:LinkButton></li>
                         </ul>
 
                         <%-- Chemist Navigations --%>
                         <ul class="flex flex-col font-medium md:flex-row md:space-x-8 md:mt-0" id="UlChemist" runat="server">
                             
-                             <li><a href="ChemistDashboard.aspx">Dashboard</a></li>    
+                            <li><a href="ChemistDashboard.aspx">Dashboard</a></li>    
                             <li><a href="StockEntryForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Stock Entry Form</a></li>
                             <li><a href="DrugEntry.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Entry Form</a></li>
                             <li><a href="SaleReturnForm.aspx" class="block py-2 px-3 text-white hover:text-gray-300 md:p-0">Sale Return Form</a></li>
-                            
-                            
-                            
                             <li class="relative group">
                                 <button id="dropdownNavbarLink" type="button" data-dropdown-toggle="dropdownNavbar" class="flex items-center justify-between w-full py-2 px-3 text-white hover:text-gray-300 md:p-0">
                                     Reports
@@ -161,6 +152,7 @@
                             </li>
                             <li><asp:LinkButton ID="btnLogout" ValidationGroup="logout" runat="server" CssClass="block py-2 px-3 text-white hover:text-gray-300 md:p-0" OnClick="btnLogout_Click">Logout</asp:LinkButton></li>
                         </ul>
+
                     </div>
                 </div>
             </nav>

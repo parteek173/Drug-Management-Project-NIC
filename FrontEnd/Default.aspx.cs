@@ -12,7 +12,13 @@ public partial class FrontEnd_Default : System.Web.UI.Page
     private static string GeneratedOTP;
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        if (Session["AdminUserID"] != null || (Session["UserID"] != null))
+        {
+            AlreadyLogin.Visible = true;
+            OTPPanel.Visible = false;
+            MobilePanel.Visible = false;
+            firstpanel.Visible= false;
+        }
     }
 
 
@@ -150,4 +156,11 @@ public partial class FrontEnd_Default : System.Web.UI.Page
         return random.Next(100000, 999999).ToString(); // 6-digit OTP
     }
 
+
+    protected void LinkButton1_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        
+        Response.Redirect("~/FrontEnd/Default.aspx");
+    }
 }

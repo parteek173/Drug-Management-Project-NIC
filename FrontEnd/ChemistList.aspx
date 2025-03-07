@@ -67,15 +67,20 @@
                                 <ItemStyle CssClass="text-center px-4 py-2 border-b" Width="5%" />
                             </asp:TemplateField>
 
-                        <asp:TemplateField HeaderText="Firm Name">
-                            <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="15%" />
-                            <ItemTemplate>
-                                <a href='StockList.aspx?ChemistID=<%# Eval("chemist_id") %>' class="font-semibold text-gray-700">
-                                    <%# Eval("Name_Firm") %>
-                                </a>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                  
+                                    <asp:TemplateField HeaderText="Firm Name">
+                                        <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="15%" />
+                                        <ItemTemplate>
+                                            <a href='StockList.aspx?ChemistID=<%# Eval("chemist_id") %>' class="font-semibold text-gray-700">
+                                                <%# Eval("Name_Firm") %>
+                                            </a>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                            
+
+                               
+
+
+
                             <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="30%" />
                             
                             <asp:BoundField DataField="Sectors" HeaderText="Sectors" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="10%" />

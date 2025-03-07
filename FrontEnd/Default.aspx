@@ -17,16 +17,18 @@
   <form id="form1" runat="server" class="w-full max-w-md">
     <div class="bg-white px-4 py-6 rounded-lg shadow-lg">
       <!-- Page Header -->
-        <div class="logo-bx ">
+        <div class="logo-bx">
              <img src="/Assets/chd-logo.png" width="100" alt="Chandigarh Administration Logo" class="mr-3" />
       <h1 class="text-3xl font-bold text-gray-800"><%=System.Configuration.ConfigurationManager.AppSettings["ProjectName"] %></h1>
                       
  </div>
+        <asp:Panel ID="firstpanel" runat="server">
         <h2>Login</h2>
             <p class="text-center  ">
          Enter your mobile number to receive an OTP and log in to your account.
       </p>
 
+            </asp:Panel>
       <!-- Error Message -->
       <asp:Label ID="lblMessage" runat="server" CssClass="block text-center text-red-500 font-semibold mb-4"></asp:Label>
 
@@ -91,6 +93,20 @@
             OnClick="btnLogin_Click" />
         </div>
       </asp:Panel>
+    
+        <asp:Panel ID="AlreadyLogin" runat="server" Visible="false" >
+        <div class="text-center bg-white p-6 rounded-lg shadow-lg">
+            <label for="otp" class="block text-gray-800 font-medium mb-4 text-lg">
+                You Are Already Logged In
+            </label> 
+            <asp:LinkButton ID="LinkButton1" ValidationGroup="logout" runat="server" 
+                CssClass="bg-green-800 text-white font-medium px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-md transition-transform transform hover:scale-105" 
+                OnClick="LinkButton1_Click">Logout</asp:LinkButton>
+        </div>
+    </asp:Panel>
+
+    
+    
     </div>
 
   </form>
