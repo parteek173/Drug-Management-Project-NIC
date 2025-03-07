@@ -31,7 +31,6 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
                 if (Request.QueryString["ChemistID"] != null)
                 {
-                   
                     BindStocklistbyID();
                     chemistbox.Visible = true;
                     DrugChart.Visible = true;
@@ -40,7 +39,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
                     SelectChemist(chemistID);
                     LoadDrugStockChart();
 
-            }
+                }
 
                 else
                 {

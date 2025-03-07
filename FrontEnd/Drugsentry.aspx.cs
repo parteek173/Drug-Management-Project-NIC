@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -20,13 +21,29 @@ public partial class FrontEnd_Drugsentry : System.Web.UI.Page
         if (!IsPostBack)
         {
             txtCreatedDate.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // Set current date
-            string drugId = Request.QueryString["drugId"];
-            int drugIdValue;
 
-            if (!string.IsNullOrEmpty(drugId) && int.TryParse(drugId, out drugIdValue))
+            if (Request.QueryString["drugId"] != null)
             {
-                LoadDrugDetails(drugIdValue);
+
+                string encodedId = Request.QueryString["drugId"];
+                string decodedId = Encoding.UTF8.GetString(Convert.FromBase64String(encodedId));
+
+                //int drugId = Convert.ToInt32(decodedId); // Correct variable usage
+                string drugId = decodedId;
+                int drugIdValue;
+
+                if (!string.IsNullOrEmpty(drugId) && int.TryParse(drugId, out drugIdValue))
+                {
+
+
+                    LoadDrugDetails(drugIdValue);
+                }
+
             }
+
+                
+
+            
         }
     }
 

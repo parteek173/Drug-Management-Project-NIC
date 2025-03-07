@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Text;
 
 public partial class FrontEnd_ChemistList : System.Web.UI.Page
 {
@@ -71,11 +72,14 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
             
             Response.Redirect("InsertChemist.aspx?chemistId=" + chemistId); 
         }
-        //else if (e.CommandName == "Delete")
-        //{
-        //    int chemistId = Convert.ToInt32(e.CommandArgument);
-        //    // Delete logic here
-        //}
+        else if (e.CommandName == "Firmdetails")
+        {
+
+            int chemistId = Convert.ToInt32(e.CommandArgument);
+            string encodedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(chemistId.ToString()));
+            Response.Redirect("StockList.aspx?ChemistID=" + HttpUtility.UrlEncode(encodedId));
+
+        }
     }
 
 

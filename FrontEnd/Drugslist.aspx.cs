@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text;
 
 public partial class FrontEnd_Drugslist : System.Web.UI.Page
 {
@@ -75,7 +76,9 @@ public partial class FrontEnd_Drugslist : System.Web.UI.Page
         else if (e.CommandName == "Edit")
         {
             int drugId = Convert.ToInt32(e.CommandArgument);
-            Response.Redirect("Drugsentry.aspx?drugId=" + drugId); // Redirect to an edit page
+
+            string encodedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(drugId.ToString()));
+            Response.Redirect("Drugsentry.aspx?drugId=" + HttpUtility.UrlEncode(encodedId));
             
         }
     }
