@@ -13,11 +13,11 @@
     <body class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 min-h-screen flex items-center justify-center login-bg-color">
         <form id="form1" runat="server" class="w-full max-w-md">
          
-
-            <div class="container mx-auto mt-10 px-6 max-w-5xl">
-             <div class="grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-10 items-start justify-center">
-        <!-- Left Column: Login Section -->
-        <div class="bg-white px-8 py-10 rounded-lg shadow-lg min-w-[380px] w-full">
+            <div class="container mx-auto mt-10 px-4 max-w-6xl">
+             <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1.8fr] gap-8">
+        
+            <!-- Left Column: Login Section -->
+            <div class="bg-white px-6 py-8 rounded-lg shadow-lg min-w-[350px]">
             <!-- Page Header -->
             <div class="flex items-center space-x-4 mb-6">
                 <img src="/Assets/chd-logo.png" width="80" alt="Chandigarh Administration Logo" />
@@ -109,8 +109,8 @@
             </asp:Panel>
         </div>
 
-        <!-- Right Column: Notification Section -->
-        <div class="bg-white shadow-lg rounded-lg p-6 border border-gray-200 w-full min-w-[420px]">
+            <!-- Right Column: Notification Section -->
+            <div class="relative bg-white shadow-lg rounded-lg p-6 border border-gray-200 min-w-[400px]">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Latest Notifications</h2>
 
             <div id="notification-list" class="overflow-y-auto h-80 space-y-4 pr-3 scrollbar-thin scrollbar-thumb-gray-300">
@@ -137,10 +137,10 @@
                 </asp:Repeater>
             </div>
         </div>
-    </div>
-            </div>
 
-            
+    </div>
+</div>
+
             <br /><br />
 
             <!-- jQuery for Scrolling Effect -->

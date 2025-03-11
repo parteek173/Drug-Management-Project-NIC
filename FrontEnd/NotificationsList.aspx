@@ -2,11 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-
     <div class="container mx-auto p-4  flex flex-col">
-    
-
-
     <!-- Table for displaying stock data -->
     <div class="overflow-x-auto flex-grow mt-6">
         <div id="DeleteAlert" runat="server" visible="false" class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
@@ -38,9 +34,6 @@
             RowStyle-CssClass="text-center px-4 py-2 border-b" EmptyDataText="No notifications found." 
                 OnRowCommand="gvNotifications_RowCommand"
                        >
-
-
-            
                 <Columns>
                     <asp:TemplateField HeaderText="Sr. No.">
                         <ItemTemplate>
@@ -51,23 +44,18 @@
                     <asp:BoundField DataField="Title" HeaderText="Title" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="20%" />
                     <asp:BoundField DataField="Message" HeaderText="Message" ItemStyle-CssClass="px-4 py-2 border-b text-left" ItemStyle-Width="20%" />
                     <asp:BoundField DataField="CreatedAt" HeaderText="Created At" DataFormatString="{0:dd-MM-yyyy HH:mm}" ItemStyle-CssClass="px-4 py-2 border-b text-left" ItemStyle-Width="20%" />
-
-
+                    
                     <asp:TemplateField HeaderText="PDF" ItemStyle-Width="10%">
                         <ItemTemplate>
-                           
                             <asp:HyperLink ID="HyperLink1" runat="server" 
                                 NavigateUrl='<%# string.IsNullOrEmpty(Eval("PdfFilePath") as string) ? "#" : Eval("PdfFilePath") %>' 
                                 Text='<%# string.IsNullOrEmpty(Eval("PdfFilePath") as string) ? "N/A" : "View PDF" %>' 
                                 CssClass="text-blue-600 hover:underline">
                             </asp:HyperLink>
-
-
                         </ItemTemplate>
                         <ItemStyle CssClass="px-4 py-2 border-b text-center" />
                     </asp:TemplateField>
-                    
-                    
+
                     <asp:TemplateField HeaderText="Actions" ItemStyle-Width="10%">
                         <ItemTemplate>
                             <asp:Button ID="btnDelete" runat="server" CommandName="DeleteNotification" CommandArgument='<%# Eval("NotificationID") %>'

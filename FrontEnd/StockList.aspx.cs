@@ -38,9 +38,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
                     string chemistID = Request.QueryString["ChemistID"];
                     SelectChemist(chemistID);
                     LoadDrugStockChart();
-
                 }
-
                 else
                 {
                     //BindStocklist();
@@ -187,7 +185,7 @@ public partial class FrontEnd_StockList : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT T.ID, T.DrugName, T.Category, T.Quantity, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE() AND T.ChemistID = @ChemistID";
+        string query = "SELECT T.ID, T.DrugName, T.Category, T.Quantity As CurrentStockQty, T.ChemistID, T.BatchNumber, T.BillDate, T.BillNumber,s.Quantity As PurchasedQuantity FROM TotalStockData T INNER JOIN StockEntryForm S ON T.BatchNumber = S.BatchNumber WHERE S.ExpiryDate > GETDATE() AND T.ChemistID = @ChemistID";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 
