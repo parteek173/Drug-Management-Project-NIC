@@ -19,6 +19,7 @@
                         <th>Bill Number</th>
                         <th>Drug Entry Date</th>
                         <th>Drug Purchased From</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -54,6 +55,12 @@
                     { "data": "BillNumber" },
                     { "data": "CreatedDate" }, 
                     { "data": "PurchasedFrom" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `<a href="javascript:void(0);" onclick="disposeEntry('${row.id}')" class="text-red-500">🗑️</a>`;
+                        }
+                    }
                 ],
                 "order": [[9, "desc"]],  
                 "columnDefs": [
@@ -125,6 +132,32 @@
 
 
     </style>
+
+    <script>
+        function disposeEntry(drugId) {
+            if (confirm("Are you sure you want to dispose of this drug?")) {
+                $.ajax({
+                    url: "ExpiredStock.aspx/DisposeDrug",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ id: drugId }),
+                    success: function (response) {
+                        if (response.d === "Success") {
+                            alert("Drug disposed successfully!");
+                            $('#stockTable').DataTable().ajax.reload(); 
+                        } else {
+                            alert("Failed to dispose drug. Please try again.");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while disposing of the drug.");
+                    }
+                });
+            }
+        }
+
+    </script>
 
 
 </asp:Content>

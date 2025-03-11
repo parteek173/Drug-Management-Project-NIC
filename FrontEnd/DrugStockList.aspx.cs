@@ -32,6 +32,9 @@ public partial class DrugStockList : System.Web.UI.Page
 
     private void ExportToExcel()
     {
+        string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
+        string chemistName = GetChemistName(chemistID); // Fetch Chemist Name
+
         DataTable dt = GetExportData(); // Fetch data for export
         if (dt == null || dt.Rows.Count == 0)
         {
@@ -52,6 +55,21 @@ public partial class DrugStockList : System.Web.UI.Page
                 GridView gv = new GridView();
                 gv.DataSource = dt;
                 gv.DataBind();
+
+                sw.WriteLine("<table border='1'>");
+
+                // ✅ Add Chemist Name as Title in the Middle
+                sw.WriteLine("<tr><td colspan='" + gv.Columns.Count + "' align='center' style='font-size:16px;font-weight:bold;'>");
+                sw.WriteLine("Report for Chemist: " + chemistName);
+                sw.WriteLine("</td></tr>");
+
+                // ✅ Add Export Date
+                sw.WriteLine("<tr><td colspan='" + gv.Columns.Count + "' align='center' style='font-size:12px;'>");
+                sw.WriteLine("Exported on: " + DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                sw.WriteLine("</td></tr>");
+
+                sw.WriteLine("</table>");
+
                 gv.RenderControl(hw);
 
                 Response.Output.Write(sw.ToString());
@@ -59,6 +77,33 @@ public partial class DrugStockList : System.Web.UI.Page
                 Response.End();
             }
         }
+    }
+
+
+    private string GetChemistName(string chemistID)
+    {
+        string chemistName = "Unknown Chemist"; // Default value
+
+        if (string.IsNullOrEmpty(chemistID))
+            return chemistName;
+
+        string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        string query = "SELECT Name_Firm FROM chemist_tb WHERE chemist_id = @ChemistID";
+
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    chemistName = result.ToString();
+                }
+            }
+        }
+        return chemistName;
     }
 
     private DataTable GetExportData()
@@ -72,7 +117,24 @@ public partial class DrugStockList : System.Web.UI.Page
             return dt; // Return empty table if no user is logged in
         }
 
-        string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate, BillDate, BillNumber, PurchasedFrom FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY CreatedDate DESC";
+        //string query = "SELECT DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, CreatedDate, BillDate, BillNumber, PurchasedFrom FROM StockEntryForm WHERE ChemistID = @ChemistID ORDER BY CreatedDate DESC";
+
+        string query = @"SELECT s.id, s.DrugName, s.Quantity, 
+                                 FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
+                                 s.Category, s.BatchNumber, s.BrandName, 
+                                 s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
+                                 s.BillNumber, s.PurchasedFrom,
+                                 COALESCE(t.Quantity, 0) AS QuantityLeft  
+                          FROM [StockEntryForm] s
+                          LEFT JOIN [TotalStockData] t
+                              ON s.DrugName = t.DrugName 
+                              AND s.Category = t.Category 
+                              AND s.ChemistID = t.ChemistID
+                              AND s.BatchNumber = t.BatchNumber
+                              AND s.BillNumber = t.BillNumber
+                          WHERE s.ChemistID = @ChemistID
+                          ORDER BY s.CreatedDate DESC";
+
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
@@ -101,21 +163,30 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"
-            SELECT s.id, s.DrugName, s.Quantity, FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
-                   s.Category, s.BatchNumber, s.BrandName, s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
-                   s.BillNumber, s.PurchasedFrom,
-                   CASE 
-                       WHEN EXISTS (
-                           SELECT 1 FROM PatientEntryForm p 
-                           WHERE p.DrugName = s.DrugName 
-                             AND p.Category = s.Category 
-                             AND p.BatchNumber = s.BatchNumber
-                       ) THEN 0
-                       ELSE 1
-                   END AS CanEdit
-            FROM [StockEntryForm] s
-            WHERE s.ChemistID = @ChemistID
-            ORDER BY s.CreatedDate DESC";
+        SELECT s.id, s.DrugName, s.Quantity, 
+               FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
+               s.Category, s.BatchNumber, s.BrandName, 
+               s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
+               s.BillNumber, s.PurchasedFrom,
+               COALESCE(t.Quantity, 0) AS QuantityLeft,  
+               CASE 
+                   WHEN EXISTS (
+                       SELECT 1 FROM PatientEntryForm p 
+                       WHERE p.DrugName = s.DrugName 
+                         AND p.Category = s.Category 
+                         AND p.BatchNumber = s.BatchNumber
+                   ) THEN 0
+                   ELSE 1
+               END AS CanEdit
+        FROM [StockEntryForm] s
+        LEFT JOIN [TotalStockData] t
+            ON s.DrugName = t.DrugName 
+            AND s.Category = t.Category 
+            AND s.ChemistID = t.ChemistID
+            AND s.BatchNumber = t.BatchNumber
+            AND s.BillNumber = t.BillNumber
+        WHERE s.ChemistID = @ChemistID
+        ORDER BY s.CreatedDate DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -127,6 +198,7 @@ public partial class DrugStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
 
 
     [WebMethod]

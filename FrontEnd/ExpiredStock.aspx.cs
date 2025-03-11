@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -30,11 +31,11 @@ public partial class FrontEnd_ExpiredStock : System.Web.UI.Page
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = @"SELECT [DrugName], [Category], [Quantity], CONVERT(varchar, [ExpiryDate], 23) AS ExpiryDate,
+            string query = @"SELECT [id], [DrugName], [Category], [Quantity], CONVERT(varchar, [ExpiryDate], 23) AS ExpiryDate,
                                     [BatchNumber], [BrandName], CONVERT(varchar, [BillDate], 23) AS BillDate,
                                     [BillNumber], [PurchasedFrom], CONVERT(varchar, [CreatedDate], 23) AS CreatedDate
                             FROM [StockEntryForm]
-                            WHERE [ExpiryDate] < GETDATE() AND [ChemistID] = @ChemistID
+                            WHERE [ExpiryDate] < GETDATE() AND [ChemistID] = @ChemistID AND isDisposed = 0
                             ORDER BY [CreatedDate] DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
@@ -63,5 +64,42 @@ public partial class FrontEnd_ExpiredStock : System.Web.UI.Page
             list.Add(dict);
         }
         return list;
+    }
+
+    [WebMethod]
+    public static string DisposeDrug(int id)
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
+
+        if (string.IsNullOrEmpty(chemistID))
+        {
+            return "SessionExpired"; 
+        }
+
+        try
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"UPDATE StockEntryForm 
+                                 SET isDisposed = 1, DisposedDateTime = GETDATE() 
+                                 WHERE id = @id";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+
+                    return rowsAffected > 0 ? "Success" : "Failure";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return "Error: " + ex.Message;
+        }
     }
 }
