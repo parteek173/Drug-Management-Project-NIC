@@ -37,6 +37,9 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
 
     private void ExportToExcel()
     {
+        string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
+        string chemistName = GetChemistName(chemistID); // Fetch Chemist Name
+
         DataTable dt = GetExportData(); // Fetch data for export
         if (dt == null || dt.Rows.Count == 0)
         {
@@ -57,6 +60,21 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
                 GridView gv = new GridView();
                 gv.DataSource = dt;
                 gv.DataBind();
+
+                sw.WriteLine("<table border='1'>");
+
+                // ✅ Add Chemist Name as Title in the Middle
+                sw.WriteLine("<tr><td colspan='" + gv.Columns.Count + "' align='center' style='font-size:16px;font-weight:bold;'>");
+                sw.WriteLine("Report for Chemist: " + chemistName);
+                sw.WriteLine("</td></tr>");
+
+                // ✅ Add Export Date
+                sw.WriteLine("<tr><td colspan='" + gv.Columns.Count + "' align='center' style='font-size:12px;'>");
+                sw.WriteLine("Exported on: " + DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                sw.WriteLine("</td></tr>");
+
+                sw.WriteLine("</table>");
+
                 gv.RenderControl(hw);
 
                 Response.Output.Write(sw.ToString());
@@ -65,6 +83,34 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             }
         }
     }
+
+
+    private string GetChemistName(string chemistID)
+    {
+        string chemistName = "Unknown Chemist"; // Default value
+
+        if (string.IsNullOrEmpty(chemistID))
+            return chemistName;
+
+        string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+        string query = "SELECT Name_Firm FROM chemist_tb WHERE chemist_id = @ChemistID";
+
+        using (SqlConnection con = new SqlConnection(connectionString))
+        {
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+                con.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    chemistName = result.ToString();
+                }
+            }
+        }
+        return chemistName;
+    }
+
 
     private DataTable GetExportData()
     {
