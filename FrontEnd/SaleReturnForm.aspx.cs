@@ -109,7 +109,7 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                 return;
             }
 
-            string userIPAddress = Request.UserHostAddress; // Get user IP
+            string userIPAddress = HttpContext.Current.Request.UserHostAddress; // Get user IP
 
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -218,6 +218,8 @@ public partial class FrontEnd_SaleReturnForm : System.Web.UI.Page
                     transaction.Commit();
                     ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Stock return saved successfully.');", true);
                     btnSearch_Click(null, null); // Refresh Grid
+                    txtBillNumber.Text = "";
+                    txtMobileNumber.Text = "";
                 }
                 catch (Exception ex)
                 {

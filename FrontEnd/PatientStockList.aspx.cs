@@ -77,7 +77,16 @@ public partial class FrontEnd_PatientStockList : System.Web.UI.Page
             return dt; // Return empty table if no user is logged in
         }
 
-        string query = "SELECT * FROM PatientEntryForm  WHERE ChemistID = @ChemistID"; 
+        // string query = "SELECT * FROM PatientEntryForm  WHERE ChemistID = @ChemistID"; 
+
+        string query = @"SELECT id, PatientName, DrugName, Category, QuantitySold, MobileNumber, 
+                         FORMAT(DateOFSale, 'dd-MM-yyyy') AS DateOFSale, PatientAddress, PrescribedBy, 
+                         HospitalName, HospitalAddress, BatchNumber, BillNumber,
+                         FORMAT(CreatedDate, 'dd-MM-yyyy HH:mm:ss') AS CreatedDate,
+                         isReturned,ReturnQuantity
+                         FROM [PatientEntryForm] 
+                         WHERE ChemistID = @ChemistID
+                         ORDER BY CreatedDate DESC";
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
