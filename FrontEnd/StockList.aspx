@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="StockList.aspx.cs" Inherits="FrontEnd_StockList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="StockList.aspx.cs" Inherits="FrontEnd_StockList" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
@@ -65,7 +65,8 @@
                 </asp:TemplateField>
                 <asp:BoundField DataField="DrugName" HeaderText="Drug Name" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="Category" HeaderText="Category" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
-                <asp:BoundField DataField="Quantity" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="CurrentStockQty" HeaderText="Stock Inhand" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
+                <asp:BoundField DataField="PurchasedQuantity" HeaderText="Purchased Quantity " ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
                 <asp:BoundField DataField="BatchNumber" HeaderText="Batch Number" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700"/>
 
                 
@@ -127,6 +128,7 @@
                  { title: "Drug Name" },
                  { title: "Category" },
                  { title: "Stock in hand" },
+                 { title: "Purchased Quantity" },
                  { title: "Batch Number" },
                  { title: "Bill Date" },
                  { title: "Bill Number" },
