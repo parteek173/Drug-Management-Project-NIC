@@ -145,7 +145,7 @@
                                     <ul class="py-2 text-sm">
                                         <li><a href="PatientStockList.aspx" class="block px-4 py-2 hover:text-gray-300">Sale List</a></li>
                                         <li><a href="DrugStockList.aspx" class="block px-4 py-2 hover:text-gray-300">Drug Stock List</a></li>
-                                        <li><a href="CurrentStock.aspx" class="block px-4 py-2 hover:text-gray-300">Current Stock</a></li>
+                                        <%--<li><a href="CurrentStock.aspx" class="block px-4 py-2 hover:text-gray-300">Current Stock</a></li>--%>
                                         <li><a href="ExpiredStock.aspx" class="block px-4 py-2 hover:text-gray-300">Expired Stock</a></li>
                                     </ul>
                                 </div>
