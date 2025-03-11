@@ -101,21 +101,30 @@ public partial class DrugStockList : System.Web.UI.Page
             string chemistID = HttpContext.Current.Session["UserID"] != null ? HttpContext.Current.Session["UserID"].ToString() : string.Empty;
 
             string query = @"
-            SELECT s.id, s.DrugName, s.Quantity, FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
-                   s.Category, s.BatchNumber, s.BrandName, s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
-                   s.BillNumber, s.PurchasedFrom,
-                   CASE 
-                       WHEN EXISTS (
-                           SELECT 1 FROM PatientEntryForm p 
-                           WHERE p.DrugName = s.DrugName 
-                             AND p.Category = s.Category 
-                             AND p.BatchNumber = s.BatchNumber
-                       ) THEN 0
-                       ELSE 1
-                   END AS CanEdit
-            FROM [StockEntryForm] s
-            WHERE s.ChemistID = @ChemistID
-            ORDER BY s.CreatedDate DESC";
+        SELECT s.id, s.DrugName, s.Quantity, 
+               FORMAT(s.ExpiryDate, 'dd-MM-yyyy') AS ExpiryDate, 
+               s.Category, s.BatchNumber, s.BrandName, 
+               s.CreatedDate, FORMAT(s.BillDate, 'dd-MM-yyyy') AS BillDate, 
+               s.BillNumber, s.PurchasedFrom,
+               COALESCE(t.Quantity, 0) AS QuantityLeft,  
+               CASE 
+                   WHEN EXISTS (
+                       SELECT 1 FROM PatientEntryForm p 
+                       WHERE p.DrugName = s.DrugName 
+                         AND p.Category = s.Category 
+                         AND p.BatchNumber = s.BatchNumber
+                   ) THEN 0
+                   ELSE 1
+               END AS CanEdit
+        FROM [StockEntryForm] s
+        LEFT JOIN [TotalStockData] t
+            ON s.DrugName = t.DrugName 
+            AND s.Category = t.Category 
+            AND s.ChemistID = t.ChemistID
+            AND s.BatchNumber = t.BatchNumber
+            AND s.BillNumber = t.BillNumber
+        WHERE s.ChemistID = @ChemistID
+        ORDER BY s.CreatedDate DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -127,6 +136,7 @@ public partial class DrugStockList : System.Web.UI.Page
 
         return JsonConvert.SerializeObject(dt);
     }
+
 
 
     [WebMethod]

@@ -32,7 +32,8 @@
                     <tr class=" text-gray-700">
                         <th>Drug Name</th>
                         <th>Category</th>
-                        <th>Quantity</th>
+                        <th>Quantity Purchased</th>
+                        <th>Quantity Left</th>
                         <th>Expiry Date</th>
                         <th>Batch Number</th>
                         <th>Brand Name</th>
@@ -70,6 +71,7 @@
                     { "data": "DrugName" },
                     { "data": "Category" },
                     { "data": "Quantity" },
+                    { "data": "QuantityLeft" },
                     { "data": "ExpiryDate" },
                     { "data": "BatchNumber" },
                     { "data": "BrandName" },
@@ -109,9 +111,9 @@
                         }
                     }
                 ],
-                "order": [[8, "desc"]],  // Sort by CreatedDate (latest first)
+                "order": [[9, "desc"]],  // Sort by CreatedDate (latest first)
                 "columnDefs": [
-                    { "targets": 8, "type": "date" },  // Ensure sorting works correctly
+                    { "targets": 9, "type": "date" },  // Ensure sorting works correctly
                     { "orderable": false, "targets": -1 }
                 ],
                 "rowCallback": function (row, data) {
@@ -122,7 +124,7 @@
 
                         if (expiryDate < today) {
                             $(row).css({ "background-color": "orange", "color": "black" }); // Apply background color & white text
-                            $('td:eq(8)', row).css({ "background-color": "orange", "color": "black" });
+                            $('td:eq(9)', row).css({ "background-color": "orange", "color": "black" });
                         }
                     }
                 }
