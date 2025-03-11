@@ -94,8 +94,8 @@ public partial class FrontEnd_StockEntryForm : System.Web.UI.Page
 
                 // ✅ Insert into StockEntryForm (Always insert new row)
                 string insertStockQuery = @"
-                INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom, UpdatedQuantity) 
-                VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate, @BillNumber, @PurchasedFrom, @UpdatedQuantity)";
+                INSERT INTO StockEntryForm (DrugName, Quantity, ExpiryDate, Category, BatchNumber, BrandName, ChemistID, BillDate, BillNumber, PurchasedFrom, UpdatedQuantity, isDisposed, DisposedDateTime) 
+                VALUES (@DrugName, @Quantity, @Date, @Category, @BatchNumber, @BrandName, @ChemistID, @BillDate, @BillNumber, @PurchasedFrom, @UpdatedQuantity, 0, NULL)";
 
                 using (SqlCommand insertStockCmd = new SqlCommand(insertStockQuery, conn))
                 {
