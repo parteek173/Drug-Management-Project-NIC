@@ -17,19 +17,12 @@ public partial class FrontEnd_ExpiredStockReport : System.Web.UI.Page
         if (Session["AdminUserID"] == null)
         {
             Response.Redirect("default.aspx");
-
         }
 
         if (!IsPostBack)
         {
             LoadChemists();
-
-            
         }
-
-
-
-
     }
 
 
@@ -94,7 +87,7 @@ public partial class FrontEnd_ExpiredStockReport : System.Web.UI.Page
 
     private void LoadInventory(string chemistId)
     {
-        string query = "SELECT [Category],BillDate,BillNumber,ChemistID,DrugName, BatchNumber, ExpiryDate, Quantity FROM StockEntryForm WHERE ExpiryDate < CAST(GETDATE() AS DATE) and ChemistID=@ChemistID ORDER BY ExpiryDate ASC";
+        string query = "SELECT [Category],BillDate,BillNumber,ChemistID,DrugName, BatchNumber, ExpiryDate, Quantity FROM StockEntryForm WHERE ExpiryDate < CAST(GETDATE() AS DATE) and ChemistID=@ChemistID and isDisposed='0' ORDER BY ExpiryDate ASC";
 
         DataTable dt = GetData(query, new SqlParameter("@ChemistID", chemistId));
 

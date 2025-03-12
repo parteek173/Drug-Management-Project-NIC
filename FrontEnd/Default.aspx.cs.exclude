@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class FrontEnd_Default2 : System.Web.UI.Page
+public partial class FrontEnd_Default : System.Web.UI.Page
 {
     private static string GeneratedOTP;
     protected void Page_Load(object sender, EventArgs e)
@@ -36,15 +36,13 @@ public partial class FrontEnd_Default2 : System.Web.UI.Page
             AlreadyLogin.Visible = true;
             OTPPanel.Visible = false;
             MobilePanel.Visible = false;
-            firstpanel.Visible = false;
+            firstpanel.Visible= false;
 
         }
 
         LoadNotifications();
-
-
-
     }
+
 
     protected string GetTitleWithLink(object pdfFilePath, object title)
     {
@@ -215,7 +213,7 @@ public partial class FrontEnd_Default2 : System.Web.UI.Page
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
         Session.Clear();
-
+        
         Response.Redirect("~/FrontEnd/Default.aspx");
     }
 
