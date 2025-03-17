@@ -266,6 +266,7 @@ public partial class FrontEnd_DrugEntry : System.Web.UI.Page
     {
         ddlCategory.Items.Clear();
         ddlBatchNumber.Items.Clear();
+        txtQuantity.Text= "";
 
         if (Session["UserID"] == null)
         {
