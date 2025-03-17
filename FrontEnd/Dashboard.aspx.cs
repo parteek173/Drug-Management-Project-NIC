@@ -31,6 +31,8 @@ public partial class Dashboard : System.Web.UI.Page
             GetTotalChemists();
             LoadDrugStockChart();
 
+            LoadTopSaleDrugs();
+
         }
 
     }
@@ -79,6 +81,56 @@ public partial class Dashboard : System.Web.UI.Page
             // Show error using JavaScript alert
             string errorMessage = "alert('Error loading drug stock: " + ex.Message + "');";
             ClientScript.RegisterStartupScript(this.GetType(), "errorAlert", errorMessage, true);
+        }
+    }
+
+
+
+    private void LoadTopSaleDrugs()
+    {
+        try
+        {
+            string connString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
+            DataTable dt = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open(); // Ensure connection is opened before executing query
+
+                string query = @"
+            SELECT TOP 5 
+                p.QuantitySold,
+                p.DrugName,
+                p.Category,
+                p.ChemistID,
+                c.Name_Firm AS ChemistName
+            FROM PatientEntryForm p
+            JOIN chemist_tb c ON p.ChemistID = c.Chemist_ID
+            ORDER BY p.QuantitySold DESC";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            // Convert DataTable to JSON using Newtonsoft.Json
+            string jsonData = JsonConvert.SerializeObject(dt, Formatting.None);
+
+            // Properly format the script without string interpolation
+            string script = "var topSaleData = " + jsonData + ";";
+
+            // Use ScriptManager for better compatibility (especially with UpdatePanel)
+            ScriptManager.RegisterStartupScript(this, GetType(), "topSaleData", script, true);
+        }
+        catch (Exception ex)
+        {
+            // Escape single quotes in error message
+            string errorMessage = "alert('Error loading drug stock: " + ex.Message.Replace("'", "\\'") + "');";
+            ScriptManager.RegisterStartupScript(this, GetType(), "errorAlert", errorMessage, true);
         }
     }
 

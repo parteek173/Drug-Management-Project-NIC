@@ -14,10 +14,10 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <link href="css/CustomDesign.css" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="Assets/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="Assets/favicon-16x16.png"/>
-    <link rel="manifest" href="Assets/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../Assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../Assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../Assets/favicon-16x16.png"/>
+    <link rel="manifest" href="../Assets/site.webmanifest" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
@@ -29,15 +29,15 @@
         <div class=" bg-white-100 py-4 shadow-lg border-b border-blue-300">
             <div class="container mx-auto flex items-center justify-between px-6">
                 <!-- Left Section (Logo & Title) -->
-                <div class="flex items-center space-x-4 w-full">
-                    <!-- Logo -->
-                    <img src="/Assets/chd-logo.png" class="h-20" alt="Chandigarh Administration Logo" />
-                    <!-- Title Section -->
-                    <div class="flex flex-col inr-dash">
-                        <h1 class="text-2xl font-bold text-blue-800 tracking-wide com-blue"><%=System.Configuration.ConfigurationManager.AppSettings["ProjectTitle"] %></h1>
-                        <p class="text-gray-700 text-sm font-medium">Health Department, Chandigarh Administration</p>
+                    <div class="flex items-center space-x-4 w-full">
+                        <!-- Logo -->
+                        <img src="/Assets/chd-logo.png" class="h-20" alt="Chandigarh Administration Logo" />
+                        <!-- Title Section -->
+                        <div class="flex flex-col inr-dash">
+                            <h1 class="text-2xl font-bold text-blue-800 tracking-wide com-blue"><%=System.Configuration.ConfigurationManager.AppSettings["ProjectTitle"] %></h1>
+                            <p class="text-gray-700 text-sm font-medium">Health Department, Chandigarh Administration</p>
+                        </div>
                     </div>
-                </div>
                  <img src="/Assets/emblem.png"  width="80" alt="Emblem" />
             </div>
         </div>
@@ -126,6 +126,11 @@
                     <asp:LinkButton ID="LinkButton1" ValidationGroup="logout" runat="server" 
                         CssClass="bg-red-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition-transform transform hover:scale-105" 
                         OnClick="LinkButton1_Click">Logout</asp:LinkButton>
+
+
+                    <a href="Dashboard.aspx"  class="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition-transform transform hover:scale-105"
+                        >Dashboard</a>
+
                 </div>
             </asp:Panel>
         </div>
