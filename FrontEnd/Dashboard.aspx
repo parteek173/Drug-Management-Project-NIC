@@ -80,71 +80,135 @@
 
 
         
-        <section class="bg-white p-8 rounded-lg shadow-lg mt-6">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-4">
-                    <asp:Label ID="Label1" runat="server"></asp:Label>
-                </h2>
-                <!-- Drug-wise Stock Chart -->
-                <div id="DrugChart" runat="server"  class="flex-1 bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        💊 Drug-wise Stock
-                    </h2>
-                    <p class="text-gray-600 mb-3">Top 5 Drugs Stockist Quantity</p>
-                    <canvas id="drugStockChart"></canvas>
-                </div>
-         </section>
-
-
-
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <!-- Drug-wise Stock Chart -->
+            <section class="bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">
+            <asp:Label ID="Label1" runat="server"></asp:Label>
+        </h2>
+        <div id="DrugChart" runat="server" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">💊 Drug-wise Stock</h2>
+            <p class="text-gray-600 mb-3">
+                This graph displays the Top 5 Drugs Stockist Quantity, highlighting which drug has the highest stock and which chemist holds it.
+            </p>
+            <canvas id="drugStockChart"></canvas>
         </div>
+    </section>
+            <!-- Drug-wise Sale Chart -->
+            <section class="bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">
+            <asp:Label ID="Label3" runat="server"></asp:Label>
+        </h2>
+        <div id="Div1" runat="server" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">💊 Drug-wise Sale</h2>
+            <p class="text-gray-600 mb-3">
+                This graph highlights the Top 5 Sold Drugs, providing insights into the quantity sold, drug name, category, and the associated chemist.
+            </p>
+            <canvas id="TopSale"></canvas>
+        </div>
+    </section>
+        </div>
+
+
+     </div>
 </main>
 
    
 
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        if (typeof drugStockData !== "undefined" && drugStockData.length > 0) {
-            // Combine Drug Name and Chemist Name for better clarity
-            let drugLabels = drugStockData.map(item => `${item.DrugName} - ${item.Category} `);
-            let drugStock = drugStockData.map(item => item.Quantity);
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            var ctx2 = document.getElementById("drugStockChart").getContext("2d");
-            new Chart(ctx2, {
-                type: "bar",  // bar , line , radar , doughnut, polarArea , bubble , scatter
-                data: {
-                    labels: drugLabels,
-                    datasets: [{
-                        label: "Stock Quantity",
-                        data: drugStock,
-                        backgroundColor: ["#EF4444", "#3B82F6", "#10B981", "#FBBF24", "#A855F7"]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    let dataIndex = tooltipItem.dataIndex;
-                                    let chemistName = drugStockData[dataIndex].ChemistName;
-                                    let Category = drugStockData[dataIndex].Category;
-                                    return `Stock: ${tooltipItem.raw} (Chemist: ${chemistName})`;
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof drugStockData !== "undefined" && drugStockData.length > 0) {
+                // Combine Drug Name and Chemist Name for better clarity
+                let drugLabels = drugStockData.map(item => `${item.DrugName} - ${item.Category} `);
+                let drugStock = drugStockData.map(item => item.Quantity);
+
+                var ctx2 = document.getElementById("drugStockChart").getContext("2d");
+                new Chart(ctx2, {
+                    type: "bar",  // bar , line , radar , doughnut, polarArea , bubble , scatter
+                    data: {
+                        labels: drugLabels,
+                        datasets: [{
+                            label: "Stock Quantity",
+                            data: drugStock,
+                            backgroundColor: ["#EF4444", "#3B82F6", "#10B981", "#FBBF24", "#A855F7"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (tooltipItem) {
+                                        let dataIndex = tooltipItem.dataIndex;
+                                        let chemistName = drugStockData[dataIndex].ChemistName;
+                                        let Category = drugStockData[dataIndex].Category;
+                                        return `Stock: ${tooltipItem.raw} (Chemist: ${chemistName})`;
+                                    }
                                 }
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
                         }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
                     }
+                });
+            }
+        });
+    </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Ensure topSaleData is defined before proceeding
+                if (typeof topSaleData !== "undefined" && Array.isArray(topSaleData) && topSaleData.length > 0) {
+
+                    // Extract relevant data
+                    let drugLabels = topSaleData.map(item => `${item.DrugName} - ${item.Category}`);
+                    let drugStock = topSaleData.map(item => item.QuantitySold);
+
+                    // Get canvas context
+                    var ctx2 = document.getElementById("TopSale").getContext("2d");
+
+                    // Create Chart
+                    new Chart(ctx2, {
+                        type: "bar",
+                        data: {
+                            labels: drugLabels,
+                            datasets: [{
+                                label: "Stock Quantity",
+                                data: drugStock,
+                                backgroundColor: ["#EF4444", "#3B82F6", "#10B981", "#FBBF24", "#A855F7"]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (tooltipItem) {
+                                            let dataIndex = tooltipItem.dataIndex;
+                                            let chemistName = topSaleData[dataIndex]?.ChemistName || "Unknown";
+                                            return `Quantity: ${tooltipItem.raw} (Chemist: ${chemistName})`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: { beginAtZero: true }
+                            }
+                        }
+                    });
+                } else {
+                    console.warn("topSaleData is undefined or empty.");
                 }
             });
-        }
-    });
-</script>
+        </script>
 
-
+    
 </asp:Content>
 
