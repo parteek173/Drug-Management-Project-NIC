@@ -3,12 +3,34 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
 {
+    //protected void Page_Load(object sender, EventArgs e)
+    //{
+    //    if (Session["UserID"] == null || string.IsNullOrEmpty(Session["UserID"].ToString()))
+    //    {
+    //        Response.Redirect("Default.aspx");
+    //        return;
+    //    }
+
+    //    if (!IsPostBack)
+    //    {
+    //        PopulateDrugDropdown(); 
+
+    //        if (!string.IsNullOrEmpty(Request.QueryString["PatientID"]))
+    //        {
+    //            string patientID = Request.QueryString["PatientID"];
+    //            hfPatientID.Value = patientID;
+    //            LoadPatientData(patientID); 
+    //        }
+    //    }
+    //}
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["UserID"] == null || string.IsNullOrEmpty(Session["UserID"].ToString()))
@@ -19,16 +41,29 @@ public partial class FrontEnd_DrugEntryEdit : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            PopulateDrugDropdown(); // Populate Drug Dropdown on Initial Load
+            PopulateDrugDropdown();
 
-            if (!string.IsNullOrEmpty(Request.QueryString["PatientID"]))
+            string encryptedPatientID = Request.QueryString["PatientID"];
+            if (!string.IsNullOrEmpty(encryptedPatientID))
             {
-                string patientID = Request.QueryString["PatientID"];
-                hfPatientID.Value = patientID;
-                LoadPatientData(patientID); // Load patient details and set default values
+                try
+                {
+                    byte[] data = Convert.FromBase64String(encryptedPatientID);
+                    string patientID = Encoding.UTF8.GetString(data);
+
+                    hfPatientID.Value = patientID;
+                    LoadPatientData(patientID);
+                }
+                catch (FormatException)
+                {
+                    // Invalid format (possible tampering), redirect to a safe page
+                    Response.Redirect("PatientStockList.aspx");
+                    return;
+                }
             }
         }
     }
+
 
     //private void PopulateDrugNames()
     //{

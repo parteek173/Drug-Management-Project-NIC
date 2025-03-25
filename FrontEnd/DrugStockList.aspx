@@ -132,8 +132,13 @@
 
 
 
+            //window.editEntry = function (id) {
+            //    window.location.href = "StockListEdit.aspx?StockID=" + id;
+            //};
+
             window.editEntry = function (id) {
-                window.location.href = "StockListEdit.aspx?StockID=" + id;
+                var encryptedID = btoa(id); // Base64 encode the ID
+                window.location.href = "StockListEdit.aspx?StockID=" + encodeURIComponent(encryptedID);
             };
 
             // Function to Delete Entry
