@@ -167,7 +167,8 @@
         }
 
         function editEntry(patientID) {
-            window.location.href = "DrugEntryEdit.aspx?PatientID=" + encodeURIComponent(patientID);
+            var encryptedID = btoa(patientID);
+            window.location.href = "DrugEntryEdit.aspx?PatientID=" + encodeURIComponent(encryptedID);
         }
 
         function deleteEntry(patientName) {
