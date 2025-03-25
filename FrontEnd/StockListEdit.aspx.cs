@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -40,71 +41,106 @@ public partial class FrontEnd_StockListEdit : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            string stockID = Request.QueryString["StockID"];
-            if (!string.IsNullOrEmpty(stockID))
+            string encryptedStockID = Request.QueryString["StockID"];
+            if (!string.IsNullOrEmpty(encryptedStockID))
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString();
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                try
                 {
-                    conn.Open();
-                    string chemistID = Session["UserID"].ToString();
-                    DateTime today = DateTime.Now.Date;
+                    byte[] data = Convert.FromBase64String(encryptedStockID);
+                    string stockID = Encoding.UTF8.GetString(data);
 
-                    // 1️⃣ Check if CreatedDate is NOT today's date
-                    string checkDateQuery = @"
-                    SELECT CreatedDate FROM StockEntryForm 
-                    WHERE id = @StockID AND ChemistID = @ChemistID";
-
-                    using (SqlCommand cmd = new SqlCommand(checkDateQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@StockID", stockID);
-                        cmd.Parameters.AddWithValue("@ChemistID", chemistID);
-                        object createdDateObj = cmd.ExecuteScalar();
-
-                        DateTime createdDate;
-
-                        if (createdDateObj != null && DateTime.TryParse(createdDateObj.ToString(), out createdDate))
-                        {
-                            if (createdDate.Date != today)
-                            {
-                                ShowAlertAndRedirect("Stock cannot be edited because it was not created today.");
-                                return;
-                            }
-                        }
-                    }
-
-                    // 2️⃣ Check if the stock matches any record in PatientEntryForm
-                    string checkPatientQuery = @"
-                    SELECT 1 FROM PatientEntryForm p
-                    INNER JOIN StockEntryForm s ON 
-                        p.DrugName = s.DrugName 
-                        AND p.Category = s.Category 
-                        AND p.BatchNumber = s.BatchNumber 
-                    WHERE s.id = @StockID AND s.ChemistID = @ChemistID";
-
-                    using (SqlCommand cmd = new SqlCommand(checkPatientQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@StockID", stockID);
-                        cmd.Parameters.AddWithValue("@ChemistID", chemistID);
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null) // If a match is found
-                        {
-                            ShowAlertAndRedirect("Stock cannot be edited because it is associated with patient entries.");
-                            return;
-                        }
-                    }
+                    hiddenStockID.Value = stockID;
+                    LoadStockDetails(stockID);
                 }
-
-                // If validations pass, load stock details
-                hiddenStockID.Value = stockID;
-                LoadStockDetails(stockID);
+                catch (FormatException)
+                {
+                    // Invalid format (possible tampering), redirect to a safe page
+                    Response.Redirect("DrugStockList.aspx");
+                    return;
+                }
             }
 
             PopulateDrugNames();
             txtDate.Attributes["min"] = DateTime.Now.ToString("yyyy-MM-dd");
         }
     }
+
+
+    //protected void Page_Load(object sender, EventArgs e)
+    //{
+    //    if (Session["UserID"] == null || string.IsNullOrEmpty(Session["UserID"].ToString()))
+    //    {
+    //        Response.Redirect("Default.aspx");
+    //        return;
+    //    }
+
+    //    if (!IsPostBack)
+    //    {
+    //        string stockID = Request.QueryString["StockID"];
+    //        if (!string.IsNullOrEmpty(stockID))
+    //        {
+    //            string connectionString = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ToString();
+    //            using (SqlConnection conn = new SqlConnection(connectionString))
+    //            {
+    //                conn.Open();
+    //                string chemistID = Session["UserID"].ToString();
+    //                DateTime today = DateTime.Now.Date;
+
+    //                // 1️⃣ Check if CreatedDate is NOT today's date
+    //                string checkDateQuery = @"
+    //                SELECT CreatedDate FROM StockEntryForm 
+    //                WHERE id = @StockID AND ChemistID = @ChemistID";
+
+    //                using (SqlCommand cmd = new SqlCommand(checkDateQuery, conn))
+    //                {
+    //                    cmd.Parameters.AddWithValue("@StockID", stockID);
+    //                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                    object createdDateObj = cmd.ExecuteScalar();
+
+    //                    DateTime createdDate;
+
+    //                    if (createdDateObj != null && DateTime.TryParse(createdDateObj.ToString(), out createdDate))
+    //                    {
+    //                        if (createdDate.Date != today)
+    //                        {
+    //                            ShowAlertAndRedirect("Stock cannot be edited because it was not created today.");
+    //                            return;
+    //                        }
+    //                    }
+    //                }
+
+    //                // 2️⃣ Check if the stock matches any record in PatientEntryForm
+    //                string checkPatientQuery = @"
+    //                SELECT 1 FROM PatientEntryForm p
+    //                INNER JOIN StockEntryForm s ON 
+    //                    p.DrugName = s.DrugName 
+    //                    AND p.Category = s.Category 
+    //                    AND p.BatchNumber = s.BatchNumber 
+    //                WHERE s.id = @StockID AND s.ChemistID = @ChemistID";
+
+    //                using (SqlCommand cmd = new SqlCommand(checkPatientQuery, conn))
+    //                {
+    //                    cmd.Parameters.AddWithValue("@StockID", stockID);
+    //                    cmd.Parameters.AddWithValue("@ChemistID", chemistID);
+    //                    object result = cmd.ExecuteScalar();
+
+    //                    if (result != null) // If a match is found
+    //                    {
+    //                        ShowAlertAndRedirect("Stock cannot be edited because it is associated with patient entries.");
+    //                        return;
+    //                    }
+    //                }
+    //            }
+
+    //            // If validations pass, load stock details
+    //            hiddenStockID.Value = stockID;
+    //            LoadStockDetails(stockID);
+    //        }
+
+    //        PopulateDrugNames();
+    //        txtDate.Attributes["min"] = DateTime.Now.ToString("yyyy-MM-dd");
+    //    }
+    //}
 
     // **Helper function to show alert and redirect**
     private void ShowAlertAndRedirect(string message)
