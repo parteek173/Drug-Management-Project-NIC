@@ -89,7 +89,7 @@
         <div id="DrugChart" runat="server" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
             <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">💊 Drug-wise Stock</h2>
             <p class="text-gray-600 mb-3">
-                This graph displays the Top 5 Drugs Stockist Quantity, highlighting which drug has the highest stock and which chemist holds it.
+                This graph displays the <b>Top 5 Drugs Stockist Quantity</b>, highlighting which drug has the highest stock and which chemist holds it.
             </p>
             <canvas id="drugStockChart"></canvas>
         </div>
@@ -102,7 +102,7 @@
         <div id="Div1" runat="server" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col justify-between">
             <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">💊 Drug-wise Sale</h2>
             <p class="text-gray-600 mb-3">
-                This graph highlights the Top 5 Sold Drugs, providing insights into the quantity sold, drug name, category, and the associated chemist.
+                This graph highlights the <b>Top 5 Sold Drugs </b>, providing insights into the quantity sold, drug name, category, and the associated chemist.
             </p>
             <canvas id="TopSale"></canvas>
         </div>
