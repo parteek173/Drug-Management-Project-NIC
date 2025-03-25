@@ -198,9 +198,6 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
 
     protected void ddlLocation_SelectedIndexChanged(object sender, EventArgs e)
     {
-
-        
-
         if(ddlLocation.SelectedItem.Text == "-- Select Location --")
         {
             BindChemistData();

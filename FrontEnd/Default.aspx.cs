@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 public partial class FrontEnd_Default2 : System.Web.UI.Page
 {
     private static string GeneratedOTP;
+    
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -31,18 +32,26 @@ public partial class FrontEnd_Default2 : System.Web.UI.Page
         HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
         HttpContext.Current.Response.Cache.SetNoStore();
 
-        if (Session["AdminUserID"] != null || (Session["UserID"] != null))
+        if (!IsPostBack)
         {
-            AlreadyLogin.Visible = true;
-            OTPPanel.Visible = false;
-            MobilePanel.Visible = false;
-            firstpanel.Visible = false;
-
+            if (Session["OTP"] != null && Session["OTPExpiryTime"] != null)
+            {
+                // OTP session exists, let the user enter OTP
+                //OTPPanel.Visible = true;
+                MobilePanel.Visible = true;
+            }
+            else
+            {
+                // If no OTP is set, reset all sessions to avoid unwanted login
+                Session["AdminUserID"] = null;
+                Session["UserID"] = null;
+                AlreadyLogin.Visible = false;
+                MobilePanel.Visible = true;
+                OTPPanel.Visible = false;
+            }
         }
 
         LoadNotifications();
-
-
 
     }
 
@@ -144,14 +153,7 @@ public partial class FrontEnd_Default2 : System.Web.UI.Page
                         string userId = reader["chemist_id"].ToString();
                         string roleType = reader["RoleType"].ToString();
 
-                        if (roleType == "administrator")
-                        {
-                            Session["AdminUserID"] = userId; // Create a different session for admin
-                        }
-                        else
-                        {
-                            Session["UserID"] = userId; // Regular user session
-                        }
+                        
 
                         // Generate OTP
                         GeneratedOTP = GenerateOTP();
@@ -162,9 +164,17 @@ public partial class FrontEnd_Default2 : System.Web.UI.Page
                         LogOTPRequest(mobileNumber, GeneratedOTP, DateTime.Now.AddMinutes(10), Request.UserHostAddress, Request.UserAgent);
 
 
+                        if (roleType == "administrator")
+                        {
+                            Session["AdminUserID"] = userId; // Create a different session for admin
+                        }
+                        else
+                        {
+                            Session["UserID"] = userId; // Regular user session
+                        }
 
-                        lblMessage.Text = "Your OTP is: " + GeneratedOTP;
-                        lblMessage.CssClass = "text-green-500 font-semibold";
+                        //lblMessage.Text = "Your OTP is: " + GeneratedOTP;
+                        //lblMessage.CssClass = "text-green-500 font-semibold";
                         txtOTP.Text = GeneratedOTP;
                         // Show OTP input field
                         MobilePanel.Visible = false;
