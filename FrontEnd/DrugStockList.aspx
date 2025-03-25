@@ -41,7 +41,7 @@
                         <th>Bill Number</th>
                         <th>Drug Entry Date</th>
                         <th>Drug Purchased From</th>
-                        <th>Action</th>
+                        <th style="width:60px;">Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
