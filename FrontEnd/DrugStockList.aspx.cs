@@ -186,6 +186,7 @@ public partial class DrugStockList : System.Web.UI.Page
             AND s.BatchNumber = t.BatchNumber
             AND s.BillNumber = t.BillNumber
         WHERE s.ChemistID = @ChemistID
+        AND s.ExpiryDate > CAST(GETDATE() AS DATE)
         ORDER BY s.CreatedDate DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, con))
@@ -225,7 +226,8 @@ public partial class DrugStockList : System.Web.UI.Page
             AND s.ChemistID = t.ChemistID
             AND s.BatchNumber = t.BatchNumber
             AND s.BillNumber = t.BillNumber
-        WHERE s.ChemistID = @ChemistID";
+            WHERE s.ChemistID = @ChemistID
+            AND s.ExpiryDate > CAST(GETDATE() AS DATE)";
 
             if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {

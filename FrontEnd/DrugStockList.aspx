@@ -126,8 +126,8 @@
                         threeMonthsLater.setMonth(today.getMonth() + 3);
 
                         if (expiryDate < today) {
-                            $(row).css({ "background-color": "orange", "color": "black" }); // Apply background color & white text
-                            $('td:eq(9)', row).css({ "background-color": "orange", "color": "black" });
+                            $(row).css({ "background-color": "#FF4500", "color": "black" }); // Apply background color & white text
+                            $('td:eq(9)', row).css({ "background-color": "#FF4500", "color": "black" });
                         }
                         else if (expiryDate >= today && expiryDate <= threeMonthsLater) {
                             // Expiry within 3 months: Apply orange and black
