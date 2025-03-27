@@ -24,7 +24,7 @@
         <!-- Address -->
         <div>
             <label for="txtAddress" class="text-sm font-semibold text-gray-700">Address:</label>
-            <asp:TextBox ID="txtAddress" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter address" TextMode="MultiLine" Rows="2" />
+            <asp:TextBox ID="txtAddress" runat="server" CssClass="mt-2 w-full p-2 border border-gray-300 rounded" placeholder="Enter address" TextMode="MultiLine" Rows="6" />
             <asp:RequiredFieldValidator ID="rfvAddress" runat="server" ControlToValidate="txtAddress" ErrorMessage="Address is required." Display="Dynamic" CssClass="text-red-500 text-sm" />
            
         </div>

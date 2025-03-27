@@ -70,7 +70,10 @@ public partial class FrontEnd_ChemistList : System.Web.UI.Page
         {
             int chemistId = Convert.ToInt32(e.CommandArgument);
             
-            Response.Redirect("InsertChemist.aspx?chemistId=" + chemistId); 
+            string encodedId = Convert.ToBase64String(Encoding.UTF8.GetBytes(chemistId.ToString()));
+            Response.Redirect("InsertChemist.aspx?chemistId=" + HttpUtility.UrlEncode(encodedId));
+
+
         }
         else if (e.CommandName == "Firmdetails")
         {
