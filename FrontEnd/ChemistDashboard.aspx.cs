@@ -61,7 +61,7 @@ public partial class FrontEnd_ChemistDashboard : System.Web.UI.Page
 
         using (SqlConnection con = new SqlConnection(connectionString))
         {
-            string query = "SELECT COUNT(*) FROM [StockEntryForm] WHERE ChemistID = @ChemistID";
+            string query = "SELECT COUNT(*) FROM [StockEntryForm] WHERE ChemistID = @ChemistID AND ExpiryDate > CAST(GETDATE() AS DATE)";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@ChemistID", chemistID);
