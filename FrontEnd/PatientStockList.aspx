@@ -44,7 +44,7 @@
                 <th>Hospital Name</th>
                 <th>Hospital Address</th>
                 <th style="display: none;">Created Date</th> 
-                <th>Action</th> 
+                <th style="width:60px;">Action</th> 
             </tr>
                 </thead>
                 <tbody></tbody>
