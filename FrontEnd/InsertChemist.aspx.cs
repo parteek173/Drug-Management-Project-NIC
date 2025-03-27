@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -26,13 +27,19 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
         {
             txtCreatedAt.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             LoadLocations();
-            // FOR EDIT the chemist
-            string chemistId = Request.QueryString["chemistId"];
-            int chemistIdValue;
 
-            if (!string.IsNullOrEmpty(chemistId) && int.TryParse(chemistId, out chemistIdValue))
+            // FOR EDIT the chemist
+            if (Request.QueryString["chemistId"] != null)
             {
-                LoadChemistDetails(chemistIdValue);
+                string chemistId = Request.QueryString["chemistId"];
+                string decodedId = Encoding.UTF8.GetString(Convert.FromBase64String(chemistId));
+                int chemistIdValue;
+
+                if (!string.IsNullOrEmpty(decodedId) && int.TryParse(decodedId, out chemistIdValue))
+                {
+                    LoadChemistDetails(chemistIdValue);
+                }
+
             }
         }
 
@@ -72,12 +79,12 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
             ListItem item = ddlLocation.Items.FindByText(chemistlocation);
             if (item != null)
             {
-                ddlLocation.SelectedValue = chemistlocation;
-                //Response.Write("Selected ChemistID: " + chemistID); // Debugging
+                ddlLocation.ClearSelection(); // Ensure previous selection is cleared
+                item.Selected = true; // Select the correct item
             }
         }
-        
     }
+
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -152,7 +159,7 @@ public partial class FrontEnd_InsertChemist : System.Web.UI.Page
                         insertCmd.Parameters.AddWithValue("@IsActive", isActive);
                         insertCmd.Parameters.AddWithValue("@CreatedAt", createdAt);
                         insertCmd.Parameters.AddWithValue("@RoleType", "Chemist");
-                        insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Value);
+                        insertCmd.Parameters.AddWithValue("@Sectors", ddlLocation.SelectedItem.Text);
                         insertCmd.ExecuteNonQuery();
                     }
 

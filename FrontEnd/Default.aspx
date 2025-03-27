@@ -42,9 +42,8 @@
             </div>
         </div>
 
-
         <div class="container mx-auto mt-10 px-6 max-w-5xl">
-    <div class="grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-10 items-stretch justify-center">
+          <div class="grid grid-cols-1 md:grid-cols-[1.5fr_2fr] gap-10 items-stretch justify-center">
         <!-- Left Column: Login Section -->
         <div class="bg-white shadow-lg rounded-lg p-6 border border-gray-200 w-full min-w-[420px] h-full flex flex-col">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">What's New / Latest Notifications</h2>
@@ -135,12 +134,8 @@
             </asp:Panel>
         </div>
 
-        
-        
-    </div>
-</div>
-
-
+        </div>
+        </div>
             
             <br /><br />
 

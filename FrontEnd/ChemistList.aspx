@@ -75,10 +75,6 @@
                                             </a>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                            
-
-                               
-
 
 
                             <asp:BoundField DataField="Address" HeaderText="Address" ItemStyle-CssClass="text-left px-4 py-2 border-b font-semibold text-gray-700" ItemStyle-Width="30%" />
@@ -97,9 +93,7 @@
                                         CommandArgument='<%# Eval("chemist_id") %>' CommandName="ToggleStatus"
                                         OnCommand="ToggleStatus_Click"
                                         Text='<%# Convert.ToBoolean(Eval("IsActive")) ? "Active" : "Inactive" %>'
-                                        
                                         BackColor='<%# Convert.ToBoolean(Eval("IsActive")) ? System.Drawing.Color.Green : System.Drawing.Color.Red %>'
-
                                         />
                                 </ItemTemplate>
                             </asp:TemplateField>
@@ -111,16 +105,20 @@
                                     <header CssClass="text-center"></header>
                                     <ItemStyle CssClass="text-left px-4 py-2 border-b" Width="10%" />
 
-                                    <!-- Edit Button with Hover Effect -->
-                                    <asp:Button ID="btnEdit" runat="server" Text="Edit" CommandArgument='<%# Eval("chemist_id") %>' 
-                                        CommandName="Edit" CssClass="px-4 py-2 rounded-md text-white bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105" />
+                                    <asp:Button ID="Button1" runat="server" Text="Edit" CommandName="Edit" CommandArgument='<%# Eval("chemist_id") %>' CssClass="px-4 py-2 rounded-md text-white bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105" />
 
+                                    <!-- Edit Button with Hover Effect -->
+                                    <%--<asp:Button ID="btnEdit" runat="server" Text="Edit" CommandArgument='<%# Eval("chemist_id") %>' 
+                                        CommandName="Edit" CssClass="px-4 py-2 rounded-md text-white bg-blue-600 font-semibold hover:bg-blue-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105" />--%>
                                     <!-- Delete Button with Hover Effect -->
                                     <asp:Button ID="btnDelete" runat="server" Visible="false" Text="Delete" CommandArgument='<%# Eval("chemist_id") %>' 
                                         CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" 
                                         CssClass="px-4 py-2 rounded-md text-white bg-red-600 font-semibold hover:bg-red-700 focus:outline-none transition duration-300 ease-in-out transform hover:scale-105 ml-2" />
                                 </ItemTemplate>
                             </asp:TemplateField>
+
+
+                            
 
 
                 </Columns>
