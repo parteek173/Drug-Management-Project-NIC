@@ -14,6 +14,7 @@ public partial class FrontEnd_Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
+        Response.Redirect("FrontEnd/Default.aspx");
         Response.Cache.SetCacheability(HttpCacheability.NoCache);
         Response.Cache.SetExpires(DateTime.Now);
         Response.AddHeader("Cache-control", "no-store, must-revalidate, no-cache");
