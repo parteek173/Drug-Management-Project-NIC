@@ -35,6 +35,13 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
 
         if (filePdf.HasFile)
         {
+            string fileExt = Path.GetExtension(filePdf.PostedFile.FileName).ToLower();
+            if (fileExt != ".pdf" && fileExt != ".doc")
+            {
+                lblMessage.Text = "Only PDF or DOC files are allowed.";
+                return;
+            }
+
             string fileName = Path.GetFileName(filePdf.PostedFile.FileName);
             pdfPath = "~/Uploads/" + fileName;
             filePdf.SaveAs(Server.MapPath(pdfPath));
