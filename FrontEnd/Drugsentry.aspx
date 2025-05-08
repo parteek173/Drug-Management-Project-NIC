@@ -2,7 +2,8 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 
-    <div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-20 shadow-blue-900/50">
+    <div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 mb-10 shadow-blue-900/50" >
+
       <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
        <span class="">Add New  </span> Drug</h1>
 
@@ -10,7 +11,7 @@
            Drugs liable to be misused (Schedule H & H1)
         </p>
 
-    <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6"></h2>
+     <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6"></h2>
 
         <!-- Message Label -->
     <div class="mt-4 text-center">

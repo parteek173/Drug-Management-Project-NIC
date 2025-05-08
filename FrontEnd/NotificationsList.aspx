@@ -24,8 +24,6 @@
         </h1>
 
             <div class="overflow-x-auto mt-4">
-
-
                    <asp:GridView ID="gvNotifications" runat="server" AutoGenerateColumns="false" ShowHeader="false"
             CssClass="display w-full table-auto text-sm"  
             OnRowDeleting="DrugsGridView_RowDeleting"
