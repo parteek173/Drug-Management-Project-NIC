@@ -8,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
+
 
 public partial class FrontEnd_Notifications : System.Web.UI.Page
 {
@@ -33,8 +35,24 @@ public partial class FrontEnd_Notifications : System.Web.UI.Page
         string connStr = ConfigurationManager.ConnectionStrings["NarcoticsDB"].ConnectionString;
         string pdfPath = "";
 
+        string title = txtTitle.Text.Trim();
+        string message = txtMessage.Text.Trim();
+
+        if (!Regex.IsMatch(title, @"^[a-zA-Z0-9\s.,!?()-]+$") || !Regex.IsMatch(message, @"^[a-zA-Z0-9\s.,!?()-]+$"))
+        {
+            lblMessage.Text = "Special characters are not allowed in Title or Message.";
+            return;
+        }
+
         if (filePdf.HasFile)
         {
+            string fileExt = Path.GetExtension(filePdf.PostedFile.FileName).ToLower();
+            if (fileExt != ".pdf" && fileExt != ".doc")
+            {
+                lblMessage.Text = "Only PDF or DOC files are allowed.";
+                return;
+            }
+
             string fileName = Path.GetFileName(filePdf.PostedFile.FileName);
             pdfPath = "~/Uploads/" + fileName;
             filePdf.SaveAs(Server.MapPath(pdfPath));
